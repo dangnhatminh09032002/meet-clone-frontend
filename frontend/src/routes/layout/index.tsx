@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { HomePage, RoomPage } from "../../pages";
+import { HomeContainer } from "../../containers";
 
 import { AppContext } from "../../App";
 
@@ -11,10 +11,10 @@ export const Layout = () => {
 
   return (
     <Routes>
-      <Route path='/home' element={<HomePage />} />
+      <Route path="/home" element={<HomeContainer />} />
       {/* <Route path='/waitting' element={<WaittingPage />} /> */}
-      <Route path='/room/:roomName' element={<RoomPage />} />
-      <Route path='/*' element={<Navigate to='/home' />} />
+      <Route path="/room/:roomName" element={<HomeContainer />} />
+      <Route path="/*" element={<Navigate to="/home" />} />
     </Routes>
   );
 };
