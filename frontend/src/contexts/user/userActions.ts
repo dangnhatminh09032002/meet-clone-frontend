@@ -1,10 +1,10 @@
-import { CommonError } from "../types";
+import { CommonError } from '../types';
 import {
-  USER_DETAIL_FETCH,
-  USER_DETAIL_DATA,
-  USER_DETAIL_ERROR,
-} from "./user.constants";
-import { IUser, UserDetailState } from "./user.types";
+    USER_DETAIL_FETCH,
+    USER_DETAIL_DATA,
+    USER_DETAIL_ERROR,
+} from './userConstants';
+import { IUser, UserDetailState } from './userTypes';
 
 // User detail action insterface
 export interface UserDetailFetch {
@@ -29,22 +29,22 @@ export type UserDetailActions =
 
 // User detail actions methods
 export const userDetailFetch = (
-  payload: UserDetailFetch["payload"]
+    payload: UserDetailFetch['payload']
 ): UserDetailFetch => ({
-  type: USER_DETAIL_FETCH,
-  payload,
+    type: USER_DETAIL_FETCH,
+    payload,
 });
 
 export const userDetailData = (
-  payload: UserDetailData["payload"]
+    payload: UserDetailData['payload']
 ): UserDetailData => ({
-  type: USER_DETAIL_DATA,
-  payload,
+    type: USER_DETAIL_DATA,
+    payload,
 });
 
 export const userDetailError = (
-  payload: UserDetailError["error"]
+    payload: UserDetailError['error']
 ): UserDetailError => ({
-  type: USER_DETAIL_ERROR,
-  error: payload,
+    type: USER_DETAIL_ERROR,
+    error: payload,
 });

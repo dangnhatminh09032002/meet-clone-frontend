@@ -1,19 +1,6 @@
-import React, { createContext, useReducer } from "react";
-import { userDetailReducer, initialUserDetail } from "../../contexts/user";
+import React from 'react';
+import { HomePage } from '../../pages/home/HomePage';
 
-import { HomePage } from "../../pages/home/HomePage";
-
-const UserContext = createContext({});
-
-export const HomeContainer = (props: any) => {
-  const [userDetailState, userDetailDispatch] = useReducer(
-    userDetailReducer,
-    initialUserDetail
-  );
-
-  return (
-    <UserContext.Provider value={{ userDetailState, userDetailDispatch }}>
-      <HomePage />
-    </UserContext.Provider>
-  );
+export const HomeContainer = () => {
+    return <HomePage />;
 };

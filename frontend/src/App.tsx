@@ -1,42 +1,26 @@
-import React, { useState, createContext } from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { useState, createContext } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+
+import GlobalProvider from '../src/contexts/provider';
 
 const LayoutContainer = React.lazy(() =>
-  import("./routes").then(({ Layout }) => ({ default: Layout }))
+    import('./routes').then(({ Layout }) => ({ default: Layout }))
 );
 
-export const AppContext = createContext({
-  isLogin: false,
-  setIsLoginState: (val: boolean): void => {
-    return;
-  },
-  user: {},
-  setUser: (val: object): void => {
-    return;
-  },
-});
-
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState<object>({});
+    return (
+        <BrowserRouter>
+            <GlobalProvider>
+                <React.Suspense fallback={<h1>Loading...</h1>}>
+                    {/* <SideBar></SideBar> */}
+                    <LayoutContainer />
+                    {/* </Header> */}
 
-  const setIsLoginState = (val: boolean): void => {
-    return setIsLogin(val);
-  };
-
-  return (
-    <BrowserRouter>
-      <AppContext.Provider value={{ isLogin, setIsLoginState, user, setUser }}>
-        <React.Suspense fallback={<h1>Loading...</h1>}>
-          {/* <SideBar></SideBar> */}
-          <LayoutContainer />
-          {/* </Header> */}
-
-          {/* <Banner></Banner> */}
-        </React.Suspense>
-      </AppContext.Provider>
-    </BrowserRouter>
-  );
+                    {/* <Banner></Banner> */}
+                </React.Suspense>
+            </GlobalProvider>
+        </BrowserRouter>
+    );
 }
 
 export default App;

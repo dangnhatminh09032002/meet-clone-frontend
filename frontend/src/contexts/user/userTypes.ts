@@ -1,4 +1,4 @@
-import { CommonState } from "../types";
+import { CommonState } from '../types';
 
 export interface IUser {
   id?: string;
