@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 // import ChatIcon from '@material-ui/icons/Chat';
-import { Widget, toggleMsgLoader, addResponseMessage } from 'react-chat-widget';
+import { Widget, addResponseMessage } from 'react-chat-widget';
 import { RoomEvent, DataPacket_Kind, Participant } from 'livekit-client';
 import { LiveKitRoom } from 'livekit-react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -9,14 +9,20 @@ import './roompage.css';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import {GlobalContext} from '../../contexts/provider';
+import FrameChat from '../../containers/app/frameChat';
+import FrameControl from '../../containers/app/frameControl';
+
 
 export function RoomPage() {
     const navigate = useNavigate();
-    const [message, setMessage] = useState<any>();
+    const [message, setMessage] = useState<any>([]);
     const { roomName = '' } = useParams();
     const [room, setRoom] = useState<any>();
+    const globalState = useContext<any>(GlobalContext);
 
-    console.log(room);
+    const { chatDetailState } = globalState;
+    console.log(chatDetailState);
 
     useEffect(() => {
         if (room) {
@@ -55,19 +61,17 @@ export function RoomPage() {
     }, [room]);
 
     const handleNewUserMessage = (newMessage: any) => {
-        console.log(`New message incoming! ${newMessage}`);
-        const dataSend = {
-            userIdentity: room.localParticipant.participantInfo.identity,
-            timeSpan: new Date(),
-            inputMessage: newMessage,
-        };
-        setMessage(dataSend);
-        const strData = JSON.stringify(dataSend);
-        const encoder = new TextEncoder();
-        const data = encoder.encode(strData);
-
-        // send message
-        room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
+        // const dataSend = {
+        //     userIdentity: room.localParticipant.participantInfo.identity,
+        //     timeSpan: new Date(),
+        //     inputMessage: newMessage,
+        // };
+        // setMessage(dataSend);
+        // const strData = JSON.stringify(dataSend);
+        // const encoder = new TextEncoder();
+        // const data = encoder.encode(strData);
+        // // send message
+        // room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
     };
 
     async function onConnected(room: any) {
@@ -76,7 +80,7 @@ export function RoomPage() {
     }
 
     return (
-        <div>
+        <div className="roomPageWrapper">
             <Container maxWidth='xl'>
                 <h1>ROOM: {roomName}</h1>{' '}
                 <Box>
@@ -84,6 +88,7 @@ export function RoomPage() {
                         url={'ws://localhost:7880'}
                         token={roomName}
                         onConnected={(room) => {
+                            console.log(room);
                             return onConnected(room);
                         }}
                     />
@@ -94,15 +99,17 @@ export function RoomPage() {
                         navigate('/');
                     }}
                 >
-          Leave
+                Leave
                 </Button>
             </Container>
-            <Widget
-                title='Google Meet'
-                subtitle='Welcome to the room'
-                emojis
+            <FrameChat />
+            {/* <Widget 
+                title="Welcome"
+                subtitle="Welcome to the room"
                 handleNewUserMessage={handleNewUserMessage}
-            />
+                emojis
+            /> */}
+            <FrameControl/>
         </div>
     );
 }

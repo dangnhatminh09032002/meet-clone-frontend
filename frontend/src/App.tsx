@@ -1,7 +1,6 @@
-import React, { useState, createContext } from 'react';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-
-import GlobalProvider from '../src/contexts/provider';
+import './App.css';
 
 const LayoutContainer = React.lazy(() =>
     import('./routes').then(({ Layout }) => ({ default: Layout }))
@@ -10,15 +9,13 @@ const LayoutContainer = React.lazy(() =>
 function App() {
     return (
         <BrowserRouter>
-            <GlobalProvider>
-                <React.Suspense fallback={<h1>Loading...</h1>}>
-                    {/* <SideBar></SideBar> */}
-                    <LayoutContainer />
-                    {/* </Header> */}
+            <React.Suspense fallback={<h1>Loading...</h1>}>
+                {/* <SideBar></SideBar> */}
+                <LayoutContainer />
+                {/* </Header> */}
 
-                    {/* <Banner></Banner> */}
-                </React.Suspense>
-            </GlobalProvider>
+                {/* <Banner></Banner> */}
+            </React.Suspense>
         </BrowserRouter>
     );
 }

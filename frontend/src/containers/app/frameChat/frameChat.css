@@ -1,0 +1,152 @@
+.frameChat {
+    height: calc(100% - 96px);
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 360px;
+    border-radius:8px;
+    overflow-x: hidden;
+    border-left: 1px solid #f1f3f4;
+}
+
+.headerFrameChat {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 64px;
+    min-height: 64px;
+    padding-left: 24px;
+}
+
+.headerTitle {
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.5rem;
+    box-flex: 1;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+}
+
+.headerIcon {
+    color: #5f6368;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 4px;
+    padding: 0 0 0 100px;
+}
+.headerTitleWrap{
+    width: 50%;
+}
+.headerIcon{
+    width: 50%;
+}
+.glo-icon-close{
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+.glo-icon-close:hover{
+    background-color: #F1F3F4;
+    border-radius: 100%;
+}
+/* kksssssss */
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltiptext {
+visibility: hidden;
+background-color: #555;
+color: #fff;
+text-align: center;
+border-radius: 4px;
+padding: 5px;
+position: absolute;
+z-index: 1;
+top: 110%;
+right: 1px;
+opacity: 0;
+transition: opacity 0.3s;
+font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+visibility: visible;
+opacity: 1;
+}
+
+.bodyFrameChat {
+    box-sizing: border-box;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 8px;
+    -webkit-user-select: text;
+    width: 100%
+}
+
+.footerFrameChat{
+    align-items: center;
+    background: #f1f3f4;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: row;
+    min-height: 36px;
+    margin: 15px;
+}
+
+.footerFrameChat .formSendMessage {
+    display: flex;
+}
+
+.footerFrameChat .footerInputChat input {
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+    flex: 1;
+    border-radius: 25px;
+    border: 1px solid #F1F3F4;
+    padding: 0;
+    height: 100px;
+}
+
+.footerFrameChat .footerInputChat input {
+    border: none;
+    background: #f1f3f4;
+    height: 100%;
+    width: 280px;
+    padding-left: 20px;
+}
+
+.footerFrameChat .footerInputChat input:focus{
+    outline: none;
+}
+
+.footerFrameChat .formSendMessage .footerChatIconSend {
+    display: inline-flex;
+    position: absolute;
+    right: 20px;
+    color: #ACAFB0;
+}
+
+.footerFrameChat .formSendMessage .footerChatIconSend .iconActive {
+    color: #ACAFB0;
+}
+
+.footerInputChat {
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    height: auto;
+    padding: 0;
+    transition: none;
+}
