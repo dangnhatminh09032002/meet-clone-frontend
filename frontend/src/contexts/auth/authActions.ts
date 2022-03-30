@@ -1,10 +1,6 @@
 import { CommonError } from '../types';
-import {
-    AUTH_DETAIL_FETCH,
-    AUTH_DETAIL_DATA,
-    AUTH_DETAIL_ERROR,
-    AUTH_LOGOUT,
-} from './authConstants';
+import { IAuth } from './authTypes';
+import { AUTH_DETAIL_FETCH, AUTH_DETAIL_DATA, AUTH_DETAIL_ERROR, AUTH_LOGOUT } from './authConstants';
 
 // interface of action
 export interface AuthDetailFetch {
@@ -13,6 +9,7 @@ export interface AuthDetailFetch {
 
 export interface AuthDetailData {
   type: typeof AUTH_DETAIL_DATA;
+  payload: IAuth;
 }
 
 export interface AuthDetailError {
@@ -37,8 +34,10 @@ export const authDetailFetch = (
 });
 
 export const authDetailData = (
+    payload: AuthDetailData['payload']
 ): AuthDetailActions => ({
     type: AUTH_DETAIL_DATA,
+    payload,
 });
 
 export const authLogout = (

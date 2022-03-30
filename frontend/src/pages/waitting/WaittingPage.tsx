@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './waittingpage.css';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/HomeHeader/HomeHeader';
 
 export function WaittingPage() {
     const [toggleMic, setToggleMic] = useState(true);
@@ -20,7 +21,7 @@ export function WaittingPage() {
     }
     return (
         <div className='container-waitting'>
-            <div className='header-waitting'>
+            {/* <div className='header-waitting'>
                 <div className='header-wapper-waitting'>
                     <div className='logo-waitting'>
                         <img
@@ -35,7 +36,8 @@ export function WaittingPage() {
                         />
                     </div>
                 </div>
-            </div>
+            </div> */}
+            <Header/>
 
             <div className='controll-waitting'>
                 <div className='wapper-mic-camera'>

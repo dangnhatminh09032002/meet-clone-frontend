@@ -14,7 +14,7 @@ export interface UserDetailFetch {
 
 export interface UserDetailData {
   type: typeof USER_DETAIL_DATA;
-  payload: UserDetailState;
+  payload: IUser;
 }
 
 export interface UserDetailError {

@@ -9,19 +9,17 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 import { auth } from '../../configs/firebase-config';
 import { authDetailData, authLogout } from '../../contexts/auth';
+import { userDetailData } from '../../contexts/user';
 import { GlobalContext } from './../../contexts/provider';
 import './homeHeader.css';
 
 export function Header() {
-    const navigate = useNavigate();
     const authProvider = useContext<any>(GlobalContext);
-    const {authDetailState, authDetailDispatch} = authProvider;
-   
+    const {authDetailState, authDetailDispatch, userDetailState, userDetailDispatch} = authProvider;   
     
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -33,37 +31,40 @@ export function Header() {
         setAnchorElUser(null);
     };
 
-    const [hasLogin, setHasLogin] = useState<boolean>(false);
-    const [avaURL, setAvaURL] = useState<any>('');
+    const [avatarURL, setAvatarURL] = useState<any>();
 
     const signInWithGoogle = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then(async (result) => {
-                const urlAvatar = result.user.photoURL;
-                setAvaURL(urlAvatar);
                 const idToken = await auth.currentUser?.getIdToken(true);
                 const res = await axios.post(
                     'http://localhost:8080/api/auth/google',
                     { idToken },
                     { withCredentials: true }
                 )
-                    .then( async (response) => {
-                        await authDetailDispatch(authDetailData());
+                    .then( async () => {
+                        await authDetailDispatch(authDetailData({isLogin: true}));
+                        await userDetailDispatch(userDetailData({
+                            uid_google: result.user.uid,
+                            full_name: `${result.user.displayName}`,
+                            avaURL: `${result.user.photoURL}`,
+                        }));
                     });
-                setHasLogin(!authDetailState.payload.isLogin);
-                
-                navigate('/home');
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
+    useEffect(()=> {
+        setAvatarURL(userDetailState.payload.avaURL);
+    },[userDetailState.payload.avaURL]);
+    
     const [ cookies, setCookie, removeCookie ] = useCookies(['sid']);
 
     const handleLogout = () => {
-        setHasLogin(authDetailDispatch(authLogout()));
+        authDetailDispatch(authLogout());
         removeCookie('sid'); 
     };
 
@@ -77,12 +78,12 @@ export function Header() {
                 <span className="help-text">Unicorn</span>
             </div>
             <div className="">
-                {hasLogin === true ? (
+                {authDetailState.payload.isLogin === true ? (
                     <Container maxWidth="xl">
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Ava" src={avaURL} />
+                                    <Avatar alt="Ava" src={avatarURL} />
                                 </IconButton>
                             </Tooltip>
                             <Menu

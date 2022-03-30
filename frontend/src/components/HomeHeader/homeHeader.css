@@ -11,6 +11,9 @@
   align-items: center;
   width: 40px;
 }
+.header .logo:hover {
+  cursor: pointer;
+}
 .header .logo img {
   width: 100%;
 }
