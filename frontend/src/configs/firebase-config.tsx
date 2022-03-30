@@ -8,7 +8,7 @@ const firebaseConfig = {
     storageBucket: 'meet-clone-v1.appspot.com',
     messagingSenderId: '825820055456',
     appId: '1:825820055456:web:a2c0047f05d0ddadcf86c5',
-    //   measurementId: "G-E4QHWH6E3K",
+    measurementId: 'G-E4QHWH6E3K',
 };
 
 // Initialize Firebase

@@ -20,9 +20,9 @@ export const userDetailReducer = (
     case USER_DETAIL_FETCH:
         return { ...state };
     case USER_DETAIL_DATA:
-        return { ...state };
+        return { ...state, payload: {id: '', uid_google: '', full_name: '', avaURL: ''} };
     case USER_DETAIL_ERROR:
-        return { ...state };
+        return { ...state, payload: {id: '', uid_google: '', full_name: '', avaURL: ''} };
     default:
         return state;
     }

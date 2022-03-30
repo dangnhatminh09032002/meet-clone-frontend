@@ -14,17 +14,10 @@ body {
   height: calc(100vh - 100px);
 }
 .home-page .body .left-side {
-  max-width: 500px;
+  max-width: 550px;
+  margin-bottom: 5%;
 }
-/* .home-page .body .left-side .content h2 {
-  margin: 0;
-  font-family: "Google Sans Display", Roboto, Arial, sans-serif;
-  font-size: 2.75rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 3.25rem;
-  padding-bottom: 0.5em;
-} */
+
 .home-page .body .left-side .content p {
   font-size: 18px;
   font-weight: 300;
@@ -116,9 +109,10 @@ body {
 }
 .home-page .body .right-side .content {
   border: 1px solid #eee;
+  margin-bottom: 15%;
   padding: 30px;
   width: 100%;
-  max-width: 650px;
+  max-width: 800px;
   border-radius: 5px;
   box-sizing: border-box;
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302),
@@ -136,6 +130,7 @@ body {
 }
 
 .btn-conversations {
+  text-align: left;
   color: #000;
   border: none;
   padding: 10px;

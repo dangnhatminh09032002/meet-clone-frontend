@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
 import { faKeyboard, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Popover from '@mui/material/Popover';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 import './homepage.css';
-import { useNavigate } from 'react-router-dom';
 
 export function HomePage() {
     const [roomName, setRoomName] = useState('');
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-        null
-    );
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -20,12 +18,12 @@ export function HomePage() {
         setAnchorEl(null);
     };
 
-    const navigate = useNavigate();
-    const redirectUrL = (url: any) => {
-        navigate('/room/' + url);
-    };
-
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
+
+    const hanleJoin = () => {
+        navigate('/waitting');
+    };
 
     return (
         <div className="home-page">
@@ -35,8 +33,7 @@ export function HomePage() {
                     <div className="content">
                         <h1>Premium video meetings. Now free for everyone.</h1>
                         <p>
-              We re-engineered the service we built for secure business
-              meetings, Google Meet, to make it free and available for all.
+                        Unicorn for you, We&apos;re here to help you connect, communicate, and express your ideas so you can get more done together.
                         </p>
                         <div className="action-btn">
                             <button className="btn green" onClick={handleClick}>
@@ -72,7 +69,7 @@ export function HomePage() {
                                 </div>
                                 <button
                                     className="btn no-bg btn-join"
-                                    onClick={() => redirectUrL(roomName)}
+                                    onClick={() => hanleJoin()}
                                 >
                   Join
                                 </button>
@@ -80,13 +77,13 @@ export function HomePage() {
                         </div>
                     </div>
                     <div className="help-text">
-                        <a href="##">Learn more</a> about Google Meet
+                        <a href="##">Learn more</a> about Unicorn
                     </div>
                 </div>
                 <div className="right-side">
                     <div className="content">
                         <img
-                            src="https://www.gstatic.com/meet/google_meet_marketing_ongoing_meeting_grid_427cbb32d746b1d0133b898b50115e96.jpg"
+                            src="https://res.cloudinary.com/boo-it/image/upload/v1648520776/test/zyweybprgst4qtus8y3e.png"
                             alt=""
                         />
                     </div>

@@ -30,14 +30,14 @@ export type UserDetailActions =
 // User detail actions methods
 export const userDetailFetch = (
     payload: UserDetailFetch['payload']
-): UserDetailFetch => ({
+): UserDetailActions => ({
     type: USER_DETAIL_FETCH,
     payload,
 });
 
 export const userDetailData = (
     payload: UserDetailData['payload']
-): UserDetailData => ({
+): UserDetailActions => ({
     type: USER_DETAIL_DATA,
     payload,
 });

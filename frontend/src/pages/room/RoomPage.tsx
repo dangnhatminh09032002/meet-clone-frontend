@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-// import ChatIcon from '@material-ui/icons/Chat';
-import { Widget, addResponseMessage } from 'react-chat-widget';
+import { Widget, toggleMsgLoader, addResponseMessage } from 'react-chat-widget';
 import { RoomEvent, DataPacket_Kind, Participant } from 'livekit-client';
 import { LiveKitRoom } from 'livekit-react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -61,17 +60,19 @@ export function RoomPage() {
     }, [room]);
 
     const handleNewUserMessage = (newMessage: any) => {
-        // const dataSend = {
-        //     userIdentity: room.localParticipant.participantInfo.identity,
-        //     timeSpan: new Date(),
-        //     inputMessage: newMessage,
-        // };
-        // setMessage(dataSend);
-        // const strData = JSON.stringify(dataSend);
-        // const encoder = new TextEncoder();
-        // const data = encoder.encode(strData);
-        // // send message
-        // room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
+        console.log(`New message incoming! ${newMessage}`);
+        const dataSend = {
+            userIdentity: room.localParticipant.participantInfo.identity,
+            timeSpan: new Date(),
+            inputMessage: newMessage,
+        };
+        setMessage(dataSend);
+        const strData = JSON.stringify(dataSend);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(strData);
+
+        // send message
+        room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
     };
 
     async function onConnected(room: any) {
@@ -80,7 +81,7 @@ export function RoomPage() {
     }
 
     return (
-        <div className="roomPageWrapper">
+        <div>
             <Container maxWidth='xl'>
                 <h1>ROOM: {roomName}</h1>{' '}
                 <Box>
@@ -88,7 +89,6 @@ export function RoomPage() {
                         url={'ws://localhost:7880'}
                         token={roomName}
                         onConnected={(room) => {
-                            console.log(room);
                             return onConnected(room);
                         }}
                     />
@@ -99,17 +99,15 @@ export function RoomPage() {
                         navigate('/');
                     }}
                 >
-                Leave
+          Leave
                 </Button>
             </Container>
-            <FrameChat />
-            {/* <Widget 
-                title="Welcome"
-                subtitle="Welcome to the room"
-                handleNewUserMessage={handleNewUserMessage}
+            <Widget
+                title='Google Meet'
+                subtitle='Welcome to the room'
                 emojis
-            /> */}
-            <FrameControl/>
+                handleNewUserMessage={handleNewUserMessage}
+            />
         </div>
     );
 }
