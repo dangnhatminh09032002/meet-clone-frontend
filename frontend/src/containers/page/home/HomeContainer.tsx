@@ -4,3 +4,4 @@ import { HomePage } from '../../../pages/home/HomePage';
 export const HomeContainer = () => {
     return <HomePage />;
 };
+
