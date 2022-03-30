@@ -1,0 +1,2 @@
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const SET_MESSAGE_INPUT = 'SET_MESSAGE_INPUT';

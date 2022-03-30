@@ -1,0 +1,44 @@
+.frameControl {
+    align-items: center;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    height: 80px;
+    margin-bottom: 0;
+    position: fixed;
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+    z-index: 100;
+    color: #fff;
+}
+
+.frameControlLeft {
+    margin-left: 12px;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+    flex: 1 1 25%;
+    height:100%;
+}
+
+.frameControlCenter {
+    align-items: center;
+    display: flex;
+    flex: 1 1 25%;
+}
+
+.frameControlRight {
+    justify-content: flex-end;
+    margin-right: 18px;
+    align-items: center;
+    display: flex;
+    flex: 1 1 25%;
+}
+.glo-color{
+    color: #fff;
+}
