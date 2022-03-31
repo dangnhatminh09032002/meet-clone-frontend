@@ -1,0 +1,143 @@
+.container-waitting {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.header-waitting {
+    display: flex;
+    min-height: 40px;
+    padding: 16px 16px 0 16px;
+    text-align: right;
+}
+
+.header-wapper-waitting {
+    display: flex;
+    flex: 1 1 0%;
+}
+
+.logo-waitting {
+    display: flex;
+    text-align: left;
+}
+
+.logo-waitting img {
+    height: 40px;
+}
+
+.avatar-waitting {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: row-reverse;
+}
+
+.avatar-waitting img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+}
+
+.controll-waitting {
+    display: flex;
+    width: 100%;
+    height: 500px;
+    margin-top: 10%;
+}
+
+.wapper-mic-camera {
+    background: black;
+    height: 100%;
+    width: 60%;
+    margin: 0 16px 0 16px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.toggle-controll-btn button:first-child {
+    position: absolute;
+    top: 85%;
+    left: 45%;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+.toggle-controll-btn button:last-child {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+.mic-btn i,
+.camera-btn i {
+    color: white;
+    font-size: 28px;
+}
+
+.camera-btn i {
+    margin-left: 8px;
+}
+
+.wapper-participant {
+    height: 100%;
+    width: 40%;
+    margin-top: 4%;
+    padding-left: 48px;
+}
+
+.wapper-participant h3 {
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wapper-participant span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.view-participant {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.view-participant i {
+    font-size: 20px;
+}
+
+.join-room {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+}
+
+.join-room button {
+    width: 20%;
+    height: 40px;
+    background: #1a73e8;
+    color: white;
+    border-radius: 24px;
+    border: none;
+    outline: none;
+}
+
+.join-room button:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.hold-join h3{
+    text-align: center;
+    margin-top: 8px;
+    display: none;
+}
