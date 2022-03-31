@@ -1,16 +1,16 @@
 import { faKeyboard, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Popover from '@mui/material/Popover';
-import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-import './homepage.css';
-import { GlobalContext } from './../../contexts/provider';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import axios from 'axios';
 import { auth } from '../../configs/firebase-config';
 import { authDetailData } from '../../contexts/auth';
 import { userDetailData } from '../../contexts/user';
+import { GlobalContext } from './../../contexts/provider';
+import './homepage.css';
 
 export function HomePage() {
     const [roomName, setRoomName] = useState('');
@@ -18,13 +18,16 @@ export function HomePage() {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const open = Boolean(anchorEl);
     const authProvider = useContext<any>(GlobalContext);
-    const {authDetailState, authDetailDispatch, userDetailState, userDetailDispatch} = authProvider;
-
+    const {authDetailState, authDetailDispatch, userDetailDispatch} = authProvider;
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const joinRoomURL = (url: any) => {
+        navigate('/waitting/' + url);
     };
 
     const signInWithGoogle = () => {
@@ -127,12 +130,22 @@ export function HomePage() {
                                         onChange={(e) => setRoomName(e.target.value)}
                                     />
                                 </div>
-                                <button
-                                    className="btn no-bg btn-join"
-                                    onClick={() => hanleJoin()}
-                                >
+                                {authDetailState.payload.isLogin === true ? (
+                                    <button
+                                        className="btn no-bg btn-join"
+                                        onClick={() => joinRoomURL(roomName)}
+                                    >
                                     Join
-                                </button>
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn no-bg btn-join"
+                                        onClick={() => hanleJoin()}
+                                    >
+                                    Join
+                                    </button>
+                                )}
+                                
                             </div>
                         </div>
                     </div>
@@ -143,7 +156,7 @@ export function HomePage() {
                 <div className="right-side">
                     <div className="content">
                         <img
-                            src="https://res.cloudinary.com/boo-it/image/upload/v1648520776/test/zyweybprgst4qtus8y3e.png"
+                            src="https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png"
                             alt=""
                         />
                     </div>

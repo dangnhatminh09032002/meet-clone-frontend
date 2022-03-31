@@ -22,7 +22,6 @@ export const authDetailReducer = (
     case AUTH_DETAIL_FETCH:
         return { ...state, loading: true };
     case AUTH_DETAIL_DATA:
-        console.log(action);
         return { ...state, loading: false, payload: action.payload };
     case AUTH_DETAIL_ERROR:
         return { ...state, loading: false, payload: {isLogin: false}, error: action.error };

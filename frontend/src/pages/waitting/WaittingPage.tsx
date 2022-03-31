@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import './waittingpage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 
 export function WaittingPage() {
     const [toggleMic, setToggleMic] = useState(true);
     const [toggleCamera, setToggleCamera] = useState(true);
-
+    const { id } = useParams();
+    console.log(id);
     const navigate = useNavigate();
     const redirectUrL = (url: any) => {
         navigate('/room/' + url);
