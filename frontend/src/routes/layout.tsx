@@ -6,7 +6,7 @@ import { authDetailData } from '../contexts/auth';
 import { userDetailData } from '../contexts';
 
 const StopRoom: any = lazy(() =>
-    import('../pages/stoproom/StopRoom').then(({ StopRoom }) => ({ default: StopRoom }))
+    import('../pages').then(({ StopRoom }) => ({ default: StopRoom }))
 );
 const PreJoinPage: any = lazy(() =>
     import('../pages').then(({ PreJoinPage }) => ({ default: PreJoinPage }))
@@ -21,9 +21,6 @@ const HomeContainer: any = lazy(() =>
 export const Layout = () => {
     const authProvider = useContext<any>(GlobalContext);
     const { authDetailState, authDetailDispatch, userDetailDispatch } = authProvider;
-    // const StopRoom: any = lazy(() =>
-    //     import('../pages/stoproom/StopRoom').then(({ StopRoom }) => ({ default: StopRoom }))
-    // );
 
     useLayoutEffect(() => {
         const checkVerify = async () => {
@@ -37,7 +34,7 @@ export const Layout = () => {
                         userDetailData({
                             uid_google: result.data.data.id,
                             full_name: result.data.data.name,
-                            avaURL: result.data.data.picture,
+                            ava_url: result.data.data.picture,
                         })
                     );
                 })
@@ -46,7 +43,7 @@ export const Layout = () => {
                 });
         };
         checkVerify();
-    }, [authDetailState.payload.isLogin]);
+    }, []);
 
     return (
         <Suspense fallback={true}>

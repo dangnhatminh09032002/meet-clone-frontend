@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import React, { useContext } from 'react';
@@ -32,8 +31,8 @@ export function Header() {
     };
 
     const signInWithGoogle = () => {
-        const provider = new GoogleAuthProvider();  
-        signInWithPopup(auth, provider)    
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
             .then(async (result) => {
                 const id_token = await auth.currentUser?.getIdToken(true);
                 console.log(id_token);
@@ -49,11 +48,10 @@ export function Header() {
                             userDetailData({
                                 uid_google: result.user.uid,
                                 full_name: `${result.user.displayName}`,
-                                avaURL: `${result.user.photoURL}`,
+                                ava_url: `${result.user.photoURL}`,
                             })
                         );
                     });
-                
             })
             .catch((err) => {
                 console.log(err);
@@ -66,7 +64,7 @@ export function Header() {
             userDetailData({
                 uid_google: '',
                 full_name: '',
-                avaURL: '',
+                ava_url: '',
             })
         );
         await axios.get('http://localhost:8080/api/auth/logout', { withCredentials: true });
@@ -90,7 +88,7 @@ export function Header() {
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, w: '40px' }}>
                                     <img
                                         alt='Ava'
-                                        src={userDetailState.payload.avaURL}
+                                        src={userDetailState.payload.ava_url}
                                         referrerPolicy='no-referrer'
                                     />
                                 </IconButton>
@@ -112,27 +110,23 @@ export function Header() {
                                 onClose={handleCloseUserMenu}
                             >
                                 <MenuItem onClick={handleCloseUserMenu}>
-                                    <Typography textAlign='center'>Change Account</Typography>
-                                </MenuItem>
-                                <MenuItem onClick={handleCloseUserMenu}>
+                                    Change Account
+                                </MenuItem >
+                                <MenuItem onClick={() => handleLogout()}>
                                     <div className='btn-logout'>
-                                        <Typography
-                                            textAlign='center'
-                                            onClick={() => handleLogout()}
-                                        >
-                                            Logout
-                                        </Typography>
+                                        Logout
                                     </div>
                                 </MenuItem>
-                            </Menu>
-                        </Box>
-                    </Container>
+                            </Menu >
+                        </Box >
+                    </Container >
                 ) : (
                     <Button variant='outlined' onClick={() => signInWithGoogle()}>
                         Login
                     </Button>
-                )}
-            </div>
-        </div>
+                )
+                }
+            </div >
+        </div >
     );
 }

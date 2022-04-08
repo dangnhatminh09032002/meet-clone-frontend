@@ -16,26 +16,30 @@
     align-items: center;
     margin-top: 5%;
     flex-direction: column;
+    margin: 5% 16px 0 16px;
 }
 
 .wapper-videoSection {
     display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
     min-height: 100%;
-    width: 800px;
+    max-width: 800px;
+    margin-left: 32px;
+    margin-right: 32px;
 }
 
 .videoSection {
     width: 100%;
-    height: 450px;
     position: relative;
 }
 
 .videoFrame {
+    width: 100%;
+    height: 100%;
     display: inline-flex;
     flex-direction: column;
-    max-width: calc(800px + 24px);
 }
 
 .videoFrame video {
@@ -45,7 +49,16 @@
     position: relative;
 }
 
+.videoSection span {
+    position: absolute;
+    top: 50%;
+    left:40%;
+    z-index: 10000;
+    color: white;
+}
+
 .videoInvisible {
+    aspect-ratio: 16/9;
     background-color: black;
     border-radius: 10px;
     width: 100%;
@@ -58,15 +71,18 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 90%;
-    left: 35%;
+    top: 85%;
+    left: 25%;
 }
 
-.videoSection .placeholder {
-    width: 100%;
-    height: 100%;
-    border-radius: 4px;
-    background: #2F2F2F;
+.controlMicCam button {
+    outline: none;
+    border: none;
+    background: none;
+}
+
+.controlMicCam button:hover {
+    background: unset;
 }
 
 .toggleMic {
@@ -84,6 +100,8 @@
     background: none;
     color: white;
 }
+
+/* ----------------------- controll join ------------------------- */
 
 .wapper-participant {
     height: 100%;
@@ -151,19 +169,31 @@
     display: none;
 }
 
-.videoFrame {
-    width: 100%;
-    height: 100%;
+/* --------------------- hover-btn ------------------------------ */
+
+
+@media only screen and (min-width: 375px) and (max-width:600px){
+    .wapper-participant h3{
+        font-size: 20px;
+    }
+    .controlMicCam {
+        top: 82%;
+        left: 18%;
+    }
+
+    .controlMicCam button {
+        padding: 6px 8px 6px 8px;
+    }
 }
 
-@media screen and (min-width: 375px) and (max-width:500px){
-    
-};
+@media only screen and (min-width: 601px) and (max-width:740px){
+    .wapper-participant h3{
+        font-size: 24px;
+    }
+}
 
-@media screen and (min-width: 501px) and (max-width:707px){
-    
-};
-
-@media screen and (min-width:708px) and (max-width: 1024px) {
-    
+@media only screen and (min-width:1134px){
+    .wapper-content {
+        flex-direction: row;
+    }
 }

@@ -3,7 +3,7 @@ import { CommonState } from '../types';
 export interface IUser {
   uid_google?: string;
   full_name?: string;
-  avaURL?: string;
+  ava_url?: string;
 }
 
 export interface UserDetailState extends CommonState {

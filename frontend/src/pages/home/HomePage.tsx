@@ -70,7 +70,7 @@ export function HomePage() {
               userDetailData({
                 uid_google: result.user.uid,
                 full_name: `${result.user.displayName}`,
-                avaURL: `${result.user.photoURL}`,
+                ava_url: `${result.user.photoURL}`,
               })
             );
           });
@@ -97,7 +97,7 @@ export function HomePage() {
               userDetailData({
                 uid_google: result.user.uid,
                 full_name: `${result.user.displayName}`,
-                avaURL: `${result.user.photoURL}`,
+                ava_url: `${result.user.photoURL}`,
               })
             );
           });

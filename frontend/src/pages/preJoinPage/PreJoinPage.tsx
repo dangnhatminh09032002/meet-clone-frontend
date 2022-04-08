@@ -12,35 +12,19 @@ export const PreJoinPage = () => {
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(true);
     const [token, setToken] = useState('');
+    const { roomName } = useParams();
     const [connectDisabled, setConnectDisabled] = useState(true)
-    const { room_name } = useParams();
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
 
-    const room = new Room({
-        adaptiveStream: true,
-        dynacast: true,
-        videoCaptureDefaults: {
-            resolution: VideoPresets.h720.resolution,
-        },
-    });
-
-    useEffect( () => {
-        const callConnect = async () => {
-            const res = await axios.post(
-                'http://localhost:8080/api/room/get-token',
-                { room_name },
-                { withCredentials: true }
-            );
-            await room.connect(url, res.data.data);
-        };
-        callConnect();
-    },[]);
-    const requestJoinRoom = async () => {
-        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${room_name}`);
-        console.log(res);
-    };
+    useEffect(() => {
+        if (token && url) {
+            setConnectDisabled(false)
+        } else {
+            setConnectDisabled(true)
+        }
+    }, [token, url])
 
     const toggleVideo = async () => {
         if (videoTrack) {
@@ -57,7 +41,6 @@ export const PreJoinPage = () => {
     }
 
     useEffect(() => {
-        // enable video by default
         createLocalVideoTrack({
             deviceId: videoDevice?.deviceId,
         }).then((track) => {
@@ -80,7 +63,6 @@ export const PreJoinPage = () => {
             if (videoTrack.mediaStreamTrack.getSettings().deviceId === device.deviceId) {
                 return
             }
-            // stop video
             videoTrack.stop()
         }
     }
@@ -108,7 +90,6 @@ export const PreJoinPage = () => {
         if (videoDevice) {
             params.videoDeviceId = videoDevice.deviceId;
         } else if (videoTrack) {
-            // pass along current device id to ensure camera device match
             const deviceId = await videoTrack.getDeviceId();
             if (deviceId) {
                 params.videoDeviceId = deviceId;
@@ -123,10 +104,16 @@ export const PreJoinPage = () => {
         videoElement = <div className="placeholder" />
     }
 
+    const requestJoinRoom = async () => {
+        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`);
+        console.log(res);
+    };
+
     window.addEventListener('resize', function () {
-        const wapperSection = this.document.querySelector('.wapper-videoSection');
-        if (window.innerWidth < 900) {
-            wapperSection?.setAttribute('style', `width: ${window.innerWidth - 25}px`)
+        if (window.outerWidth < 900) {
+            this.document.querySelector('.wapper-videoSection')?.setAttribute('style', `width: ${window.outerWidth - 64}px`)
+        } else {
+            this.document.querySelector('.wapper-videoSection')?.setAttribute('style', 'width: 100%')
         }
     });
 
@@ -137,6 +124,7 @@ export const PreJoinPage = () => {
                 <div className='wapper-content'>
                     <div className='wapper-videoSection'>
                         <div className="videoSection">
+                            <span>Máy ảnh đang tắt</span>
                             {videoEnabled ? (
                                 <div className='videoFrame'>
                                     <AspectRatio ratio={16 / 9}>
@@ -185,7 +173,7 @@ export const PreJoinPage = () => {
                                 <span>Ai đang ở đây</span>
                             </div>
                             <div className='join-room'>
-                                <button>Tham gia ngay</button>
+                                <button onClick={requestJoinRoom}>Tham gia ngay</button>
                             </div>
                             <div className='hold-join'>
                                 <h3>Đang chờ tham gia...</h3>

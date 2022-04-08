@@ -9,7 +9,7 @@ import { AuthDetailState } from './authTypes';
 
 export const initialAuthDetail: AuthDetailState = {
     payload: {
-        isLogin: true
+        isLogin: false
     },
     loading: true,
 };
