@@ -1,0 +1,18 @@
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    width: 500px;
+    padding: 12px 20px 25px 20px;
+}
+
+.css-lc2yqr-MuiButtonBase-root-MuiIconButton-root{
+    top: 23px !important;
+}
+.css-ke5b6m-MuiButtonBase-root-MuiButton-root{
+    width: 100%;
+    margin-top: 5px !important;
+}
+.css-1t4vnk2-MuiDialogContent-root{
+    border-bottom: none !important;
+}
+.css-153eyq5-MuiModal-root-MuiDialog-root .MuiDialogActions-root{
+    padding: 0px 15px !important;
+}

@@ -1,0 +1,62 @@
+.frameInfo {
+    height: 100%;
+    background: #fff;
+    width: 360px;
+    border-radius:8px;
+    border-left: 1px solid #f1f3f4;
+}
+
+.headerFrameUser {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 64px;
+    min-height: 64px;
+    padding-left: 24px;
+}
+
+.infoRoom {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    padding: 0 12px 12px 12px;
+    margin: 0 12px 12px 12px;
+}
+
+.infoRoom .infoTitle {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.infoRoom .linkRoom {
+    color: #5f6368;
+    font-size: 14px;
+}
+
+.infoRoom .copyInfo {
+    display: flex;
+    margin-top: 20px;
+    color: #5587c9;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.infoRoom .copyInfo:hover {
+    background-color: #ebf1fa;
+    color: #1c5db3;
+}
+
+.infoRoom .copyInfo .copyInfoText {
+    font-weight: 600;
+    margin-left: 6px;
+    align-self: center;
+    font-size: 14px;
+}
+
+.frameInfo .separator {
+    border-top: 1px solid #dadce0;
+}

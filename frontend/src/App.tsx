@@ -11,12 +11,8 @@ function App() {
     return (
         <BrowserRouter>
             <GlobalProvider>
-                <React.Suspense fallback={<h1>Loading...</h1>}>
-                    {/* <SideBar></SideBar> */}
+                <React.Suspense fallback={false}>
                     <LayoutContainer />
-                    {/* </Header> */}
-
-                    {/* <Banner></Banner> */}
                 </React.Suspense>
             </GlobalProvider>
         </BrowserRouter>
