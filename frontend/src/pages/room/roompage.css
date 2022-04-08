@@ -1,11 +1,132 @@
-.rcw-timestamp::before {
-    content: "Duy";
-    padding: 0 5px;
-    font-weight: bold;
-}
 .roomPageWrapper {
     height: 100vh;
     width: 100%;
-    background-color: #3c4043;
+    background-color: #181b1c;
     display: block;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    position: relative;
+}
+
+.frameControl {
+    align-items: center;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    margin-bottom: 0;
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+    z-index: 100;
+    color: #fff;
+    padding: 10px;
+}
+
+.frameControlLeft {
+    display: flex;
+    color: #fff;
+    height: 100px;
+    align-items: center;
+}
+
+.frameControl .frameControlLeft .hourAndMinute,
+.frameControl .frameControlLeft .roomName
+{
+    margin: 0 12px;
+}
+
+.frameControlCenter {
+    align-items: center;
+    display: flex;
+    flex: 1 1 25%;
+}
+
+.frameControlRight {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.frameControlRight .controlItem{
+    color: #fff;
+    margin: 0 8px;
+}
+
+.frameControlRight .controlItem .controlNumberCount {
+    position: absolute;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background-color: #5f6368;
+    bottom: 61px;
+    right: 172px;
+}
+
+.glo-checkChat{
+    height: 100%;
+    animation-duration: 0.2s;
+    animation-name: mymove;
+}
+
+@keyframes mymove {
+    0%   {right: -2%;}
+    50%  {right: -1%;}
+    100% {right: 0%;}
+}
+.glo-page{
+    display: flex;
+    flex-direction: row;
+    height: 98.9vh;
+    background:#000;
+    padding: 10px 10px 0px 10px;
+    width: 98.95%;
+}
+.glo-button{
+    height: 100px;
+}
+.glo-video-chat{
+    display: flex;
+    flex-direction: column;
+    width: 81%;
+}
+.glo-test{
+    height: 100%;
+}
+.glo-chat{
+    width: 360px;
+    height: 100%;
+}
+.glo-video{
+    height: calc( 98.8vh - 100px);
+    width: 100%;
+}
+
+._1smc2{
+    margin-bottom: -133px;
+}
+
+/* ._3rLR0 {
+    grid-template-rows: repeat(2, 1fr);
+} */
+
+.rightRoom {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rightRoom .containerFrame {
+    height: calc( 98.8vh - 100px);
+}
+
+.rightRoom .wrapChat,
+.rightRoom .wrapUser,
+.rightRoom .wrapInfo
+{
+    height: calc( 98.8vh - 100px);
 }

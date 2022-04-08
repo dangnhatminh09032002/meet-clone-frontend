@@ -9,9 +9,9 @@ import { AuthDetailState } from './authTypes';
 
 export const initialAuthDetail: AuthDetailState = {
     payload: {
-        isLogin: false
+        isLogin: true
     },
-    loading: false,
+    loading: true,
 };
 
 export const authDetailReducer = (

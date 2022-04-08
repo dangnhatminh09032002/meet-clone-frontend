@@ -1,4 +1,3 @@
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -9,8 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import React, { useContext, useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../configs/firebase-config';
 import { authDetailData, authLogout } from '../../contexts/auth';
@@ -20,16 +18,10 @@ import './homeHeader.css';
 
 export function Header() {
     const authProvider = useContext<any>(GlobalContext);
-    const {
-        authDetailState,
-        authDetailDispatch,
-        userDetailState,
-        userDetailDispatch,
-    } = authProvider;
+    const { authDetailState, authDetailDispatch, userDetailState, userDetailDispatch } =
+        authProvider;
     const navigate = useNavigate();
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-        null
-    );
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -39,18 +31,16 @@ export function Header() {
         setAnchorElUser(null);
     };
 
-    const [avatarURL, setAvatarURL] = useState<any>();
-
     const signInWithGoogle = () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
+        const provider = new GoogleAuthProvider();  
+        signInWithPopup(auth, provider)    
             .then(async (result) => {
-                const idToken = await auth.currentUser?.getIdToken(true);
-                console.log(idToken);
+                const id_token = await auth.currentUser?.getIdToken(true);
+                console.log(id_token);
                 const res = await axios
                     .post(
                         'http://localhost:8080/api/auth/google',
-                        { idToken },
+                        { id_token },
                         { withCredentials: true }
                     )
                     .then(async () => {
@@ -63,21 +53,23 @@ export function Header() {
                             })
                         );
                     });
+                
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    useEffect(() => {
-        setAvatarURL(userDetailState.payload.avaURL);
-    }, [userDetailState.payload.avaURL]);
-
-    const [cookies, setCookie, removeCookie] = useCookies(['sid']);
-
-    const handleLogout = () => {
+    const handleLogout = async () => {
         authDetailDispatch(authLogout());
-        removeCookie('sid');
+        userDetailDispatch(
+            userDetailData({
+                uid_google: '',
+                full_name: '',
+                avaURL: '',
+            })
+        );
+        await axios.get('http://localhost:8080/api/auth/logout', { withCredentials: true });
         navigate('/home');
     };
 
@@ -85,18 +77,22 @@ export function Header() {
         <div className='header'>
             <div className='logo'>
                 <img
-                    src='https://res.cloudinary.com/boo-it/image/upload/v1648520027/test/oefxnl6sa1peftkdkhag.svg'
+                    src='https://res.cloudinary.com/boo-it/image/upload/v1649148875/test/toi78rot2nfxprqp7ey4.png'
                     alt=''
                 />
                 <span className='help-text'>Unicorn</span>
             </div>
-            <div className=''>
-                {authDetailState.payload.isLogin === true ? (
+            <div className='header-content'>
+                {authDetailState.payload.isLogin ? (
                     <Container maxWidth='xl'>
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title='Open settings'>
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt='Ava' src={avatarURL} />
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, w: '40px' }}>
+                                    <img
+                                        alt='Ava'
+                                        src={userDetailState.payload.avaURL}
+                                        referrerPolicy='no-referrer'
+                                    />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -119,16 +115,21 @@ export function Header() {
                                     <Typography textAlign='center'>Change Account</Typography>
                                 </MenuItem>
                                 <MenuItem onClick={handleCloseUserMenu}>
-                                    <Typography textAlign='center' onClick={handleLogout}>
-                    Logout
-                                    </Typography>
+                                    <div className='btn-logout'>
+                                        <Typography
+                                            textAlign='center'
+                                            onClick={() => handleLogout()}
+                                        >
+                                            Logout
+                                        </Typography>
+                                    </div>
                                 </MenuItem>
                             </Menu>
                         </Box>
                     </Container>
                 ) : (
-                    <Button variant='outlined' onClick={signInWithGoogle}>
-            Login
+                    <Button variant='outlined' onClick={() => signInWithGoogle()}>
+                        Login
                     </Button>
                 )}
             </div>

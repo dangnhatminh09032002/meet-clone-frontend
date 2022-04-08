@@ -1,14 +1,8 @@
 .frameChat {
-    height: calc(100% - 96px);
+    height: 100%;
     background: #fff;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    right: 16px;
-    top: 16px;
     width: 360px;
     border-radius:8px;
-    overflow-x: hidden;
     border-left: 1px solid #f1f3f4;
 }
 
@@ -29,8 +23,6 @@
     line-height: 1.5rem;
     box-flex: 1;
     flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 18px;
 }
@@ -91,7 +83,8 @@ opacity: 1;
     overflow-y: auto;
     padding-bottom: 8px;
     -webkit-user-select: text;
-    width: 100%
+    width: 100%;
+    height: 570px;
 }
 
 .footerFrameChat{
@@ -133,13 +126,11 @@ opacity: 1;
 
 .footerFrameChat .formSendMessage .footerChatIconSend {
     display: inline-flex;
-    position: absolute;
-    right: 20px;
     color: #ACAFB0;
 }
 
-.footerFrameChat .formSendMessage .footerChatIconSend .iconActive {
-    color: #ACAFB0;
+.footerFrameChat .formSendMessage .iconActive {
+    color: #1a73e8;
 }
 
 .footerInputChat {
@@ -149,4 +140,60 @@ opacity: 1;
     height: auto;
     padding: 0;
     transition: none;
+}
+
+.acceptMessage {
+    display: flex;
+    flex-direction: row;
+    background: #f1f3f4;
+    border-radius: 4px;
+    margin: 12px;
+    padding: 12px;
+    font-size: 12px;
+}
+
+.acceptMessage .isAllow{
+    width: 276px;
+}
+.acceptMessage .acceptButton {
+    justify-content: end;
+}
+
+.notificationChat {
+    background: #f1f3f4;
+    border-radius: 8px;
+    margin: 12px;
+    padding: 12px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.bodyFrameChat{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.bodyFrameChat .rowChat{
+    padding: 14px 24px;
+}
+
+.bodyFrameChat .rowChat .headerRowChat {
+    display: flex;
+}
+
+.bodyFrameChat .rowChat .inputMessage {
+    margin-top: 6px;
+}
+
+.bodyFrameChat .rowChat .headerRowChat .timeRowChat {
+    margin-left: 10px;
+    color: #5f6368;
+    font-size: 12px;
+    align-self: center;
+}
+
+.bodyFrameChat .rowChat .headerRowChat .nameRowChat {
+    color: #202124;
+    font-weight: 600;
 }

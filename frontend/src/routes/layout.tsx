@@ -1,36 +1,67 @@
-import React, { useContext, useEffect } from 'react';
+import React, { lazy, Suspense, useContext, useLayoutEffect, Fragment } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { HomeContainer } from '../containers';
-import { StopRoom } from '../pages/stoproom/StopRoom';
-import { RoomPage, WaittingPage } from '../pages';
 import axios from 'axios';
 import { GlobalContext } from '../contexts/provider';
 import { authDetailData } from '../contexts/auth';
 import { userDetailData } from '../contexts';
 
+const StopRoom: any = lazy(() =>
+    import('../pages/stoproom/StopRoom').then(({ StopRoom }) => ({ default: StopRoom }))
+);
+const PreJoinPage: any = lazy(() =>
+    import('../pages').then(({ PreJoinPage }) => ({ default: PreJoinPage }))
+);
+const RoomPage: any = lazy(() =>
+    import('../pages').then(({ RoomPage }) => ({ default: RoomPage }))
+);
+const HomeContainer: any = lazy(() =>
+    import('../containers').then(({ HomeContainer }) => ({ default: HomeContainer }))
+);
+
 export const Layout = () => {
     const authProvider = useContext<any>(GlobalContext);
-    const {authDetailState, authDetailDispatch, userDetailDispatch} = authProvider;
-    useEffect( () => {
+    const { authDetailState, authDetailDispatch, userDetailDispatch } = authProvider;
+    // const StopRoom: any = lazy(() =>
+    //     import('../pages/stoproom/StopRoom').then(({ StopRoom }) => ({ default: StopRoom }))
+    // );
+
+    useLayoutEffect(() => {
         const checkVerify = async () => {
-            const res = await axios.get('http://localhost:8080/api/auth/verify', { withCredentials: true });
-            await authDetailDispatch(authDetailData({isLogin: true}));
-            await userDetailDispatch(userDetailData({
-                uid_google: res.data.data.id,
-                full_name: res.data.data.name,
-                avaURL: res.data.data.picture,
-            }));
+            await axios
+                .get('http://localhost:8080/api/auth/verify', {
+                    withCredentials: true,
+                })
+                .then((result) => {
+                    authDetailDispatch(authDetailData({ isLogin: true }));
+                    userDetailDispatch(
+                        userDetailData({
+                            uid_google: result.data.data.id,
+                            full_name: result.data.data.name,
+                            avaURL: result.data.data.picture,
+                        })
+                    );
+                })
+                .catch((err) => {
+                    authDetailDispatch(authDetailData({ isLogin: false }));
+                });
         };
         checkVerify();
-    }, []);
+    }, [authDetailState.payload.isLogin]);
+
     return (
-        <Routes>
-            <Route path="/home" element={<HomeContainer />} />
-            {authDetailState.payload.isLogin ? '' : <Route path="*" element={<Navigate to="/home" />} />}
-            <Route path="/stoproom" element={<StopRoom />} />
-            <Route path='/waitting/:roomName' element={<WaittingPage />  } />
-            <Route path="/room/:roomName" element={<RoomPage />} />
-            <Route path="/*" element={<Navigate to="/home" />} />
-        </Routes>
+        <Suspense fallback={true}>
+            {authDetailState.loading ||
+                <Routes>
+                    {authDetailState.payload.isLogin &&
+                        <Fragment>
+                            <Route path='/prejoinroom/:roomName' element={<PreJoinPage />} />
+                            <Route path='/room/:roomName' element={<RoomPage />} />
+                            <Route path='/stoproom' element={<StopRoom />} />
+                        </Fragment>
+                    }
+                    <Route path='/home' element={<HomeContainer />} />
+                    <Route path='/*' element={<Navigate to='/home' />} />
+                </Routes>}
+        </Suspense>
     );
 };

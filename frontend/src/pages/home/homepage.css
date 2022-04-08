@@ -1,9 +1,8 @@
 body {
   font-family: "Google Sans Display", Roboto, Arial, sans-serif;
+  padding: 10px;
 }
 .home-page {
-  /* display: flex;
-  flex-direction: column; */
   height: calc(100vh - 20px);
 }
 .home-page .body {
@@ -102,6 +101,7 @@ body {
   margin-top: 30px;
   padding-top: 25px;
   border-top: 1px solid #ddd;
+  margin-bottom: 20px;
 }
 .home-page .body .left-side .help-text a {
   text-decoration: none;
@@ -125,7 +125,7 @@ body {
 
 .btn-meeting {
   padding: 10px;
-  text-transform: uppercase !important;
+  text-align: left;
   color: #000;
 }
 
@@ -136,7 +136,6 @@ body {
   padding: 10px;
   background: none;
   font-size: 16px;
-  width: 100%;
 }
 
 .btn-conversations:hover {
@@ -160,6 +159,7 @@ body {
   }
   .home-page .body .left-side .content .action-btn .btn {
     width: 100%;
+    height: 55px;
   }
   .home-page .body .left-side .content .action-btn .input-block {
     margin-top: 10px;
@@ -193,6 +193,11 @@ body {
   .home-page .body .left-side .content .action-btn .input-block .input-section input{
     height: 56px;
   }
+
+  .home-page .body .left-side .content .action-btn .btn{
+    height: 55px;
+  }
+
   
 }
 
@@ -202,6 +207,7 @@ body {
   }
   .home-page .body .left-side .content .action-btn .btn{
     width: 160px;
+    height: 55px;
   }
 
   .home-page .body .left-side .content .action-btn .input-block{
@@ -212,6 +218,7 @@ body {
   .home-page .body .right-side .content{
     max-width: unset;
     margin-top: 10px;
+    margin: unset;
   }
   .home-page .body .left-side .content .action-btn .input-block .input-section input{
     height: 55px;
@@ -230,7 +237,9 @@ body {
   }
   .home-page .body .left-side .content .action-btn .btn{
     width: 400px;
+    height: 55px;
   }
+  
   .home-page .body .left-side .content .action-btn .input-block{
     width: auto;
     margin-left: 10px;
@@ -245,7 +254,7 @@ body {
   }
   .home-page .body .right-side .content{
     max-width: unset;
-    margin: 20px 125px;
+    margin: 20px 50px;
   }
 }
 
@@ -254,6 +263,10 @@ body {
     padding: 0px 15px;
   }
   .home-page .body .left-side .content .action-btn .input-block .input-section input{
+    height: 55px;
+  }
+
+  .home-page .body .left-side .content .action-btn .btn{
     height: 55px;
   }
   
