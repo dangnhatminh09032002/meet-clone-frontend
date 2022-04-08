@@ -12,6 +12,7 @@ function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
     const room = props.room;
+    console.log(room);
     const { hourAndMinute, clickButtonMessage } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
@@ -75,7 +76,7 @@ function FrameChat(props: any) {
 
                         <div className="rowChat" key={index}>
                             <div className="headerRowChat">
-                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity == infoMessage.userIdentity) ? 'You' : infoMessage.userIdentity}</div>
+                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.userIdentity) ? 'You' : infoMessage.userIdentity}</div>
                                 <div className="timeRowChat">{infoMessage.timeSpan}</div>
                             </div>
                             <div className="inputMessage">

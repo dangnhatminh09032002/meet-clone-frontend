@@ -52,7 +52,7 @@ export const Layout = () => {
                     {authDetailState.payload.isLogin &&
                         <Fragment>
                             <Route path='/prejoinroom/:roomName' element={<PreJoinPage />} />
-                            <Route path='/room/:roomName' element={<RoomPage />} />
+                            <Route path='/room/:room_id' element={<RoomPage />} />
                             <Route path='/stoproom' element={<StopRoom />} />
                         </Fragment>
                     }

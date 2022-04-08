@@ -134,7 +134,6 @@ export const PreJoinPage = () => {
                             ) : (
                                 <div className='videoInvisible'></div>
                             )}
-
                             <div className='controlMicCam'>
                                 <AudioSelectButton
                                     className='toggleMic'

@@ -33,12 +33,6 @@
     align-items: center;
 }
 
-.frameControl .frameControlLeft .hourAndMinute,
-.frameControl .frameControlLeft .roomName
-{
-    margin: 0 12px;
-}
-
 .frameControlCenter {
     align-items: center;
     display: flex;
@@ -109,6 +103,10 @@
 ._1smc2{
     margin-bottom: -133px;
 }
+
+/* ._3rLR0 {
+    grid-template-rows: repeat(2, 1fr);
+} */
 
 .rightRoom {
     width: 360px;

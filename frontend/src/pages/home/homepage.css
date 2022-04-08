@@ -1,6 +1,5 @@
 body {
   font-family: "Google Sans Display", Roboto, Arial, sans-serif;
-  padding: 10px;
 }
 .home-page {
   height: calc(100vh - 20px);

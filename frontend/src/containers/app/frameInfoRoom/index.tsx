@@ -1,7 +1,7 @@
 import './frameInfo.css';
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { ReactNotifications, Store } from 'react-notifications-component';
+import { Store } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import 'animate.css';
 
