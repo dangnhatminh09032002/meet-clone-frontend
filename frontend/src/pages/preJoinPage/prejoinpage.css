@@ -1,7 +1,7 @@
 .prejoin {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     margin: 0;
 }
@@ -57,6 +57,14 @@
     color: white;
 }
 
+.videoSection h3 {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    z-index: 10000;
+    color: white;
+}
+
 .videoInvisible {
     aspect-ratio: 16/9;
     background-color: black;
@@ -72,7 +80,8 @@
     align-items: center;
     position: absolute;
     top: 85%;
-    left: 25%;
+    left: 0%;
+    width: 100%;
 }
 
 .controlMicCam button {
@@ -178,7 +187,7 @@
     }
     .controlMicCam {
         top: 82%;
-        left: 18%;
+        left: 0%;
     }
 
     .controlMicCam button {

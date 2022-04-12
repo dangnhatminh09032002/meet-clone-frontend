@@ -6,18 +6,16 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
+import { TableRoom } from "../../components/TableRoom/TableRoom";
 import { auth } from "../../configs/firebase-config";
 import { authDetailData } from "../../contexts/auth";
 import { userDetailData } from "../../contexts/user";
-import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "./../../contexts/provider";
-import "./homepage.css";
 import DialogMeet from "./DialogMeet";
-import { TableRoom } from "../../components/TableRoom/TableRoom";
+import "./homepage.css";
 
 export function HomePage() {
   const [room_name, setRoomName] = useState("");
-  const [idTokenRoom, setIdTokenRoom] = useState("");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -30,7 +28,6 @@ export function HomePage() {
     authDetailState,
     authDetailDispatch,
     userDetailDispatch,
-    meetListDispatch,
   } = homeProvider;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,15 +38,15 @@ export function HomePage() {
   };
 
   const joinRoomURL = async () => {
-    const id_token = await auth.currentUser?.getIdToken(true);
     const res = await axios.get(
       `http://localhost:8080/api/room/exits-room/${room_name}`,
       { withCredentials: true }
     );
-    if (res.data.data === true) {
+    const isMaster = await axios.get(`http://localhost:8080/api/room/is-room-master/${room_name}`, { withCredentials: true })
+    if (isMaster.data.data === true && res.data.data === true) {
       navigate("/room/" + room_name);
     } else {
-      console.log("Does not exist!");
+      navigate("/prejoinroom/" + room_name);
     }
   };
 
@@ -80,32 +77,8 @@ export function HomePage() {
       });
   };
 
-  const hanleJoin = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-        navigate("/waitting");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const hanleJoin = async () => {
+    signInWithGoogle();
   };
 
   return (
@@ -169,7 +142,6 @@ export function HomePage() {
                 {authDetailState.payload.isLogin === true ? (
                   <button
                     className="btn no-bg btn-join"
-                    // onClick={() => joinRoomURL(room_name)}
                     onClick={() => joinRoomURL()}
                   >
                     Join

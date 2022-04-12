@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createLocalVideoTrack, LocalVideoTrack, Room, VideoPresets } from 'livekit-client';
+import { createLocalVideoTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
@@ -13,18 +13,28 @@ export const PreJoinPage = () => {
     const [audioEnabled, setAudioEnabled] = useState(true);
     const [token, setToken] = useState('');
     const { roomName } = useParams();
-    const [connectDisabled, setConnectDisabled] = useState(true)
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
 
+    const room = new Room({
+        adaptiveStream: true,
+        dynacast: true,
+    });
+
     useEffect(() => {
-        if (token && url) {
-            setConnectDisabled(false)
-        } else {
-            setConnectDisabled(true)
+
+        async function fetchToken() {
+            const res = await axios.get(`http://localhost:8080/api/room/get-token/${roomName}`, { withCredentials: true })
+            setToken(res.data.data);
+            await room.connect(`${url}`, token, {
+                autoSubscribe: true,
+            });
+            console.log(room);
         }
-    }, [token, url])
+        fetchToken();
+    }, [token, url, roomName]);
+
 
     const toggleVideo = async () => {
         if (videoTrack) {
@@ -101,12 +111,19 @@ export const PreJoinPage = () => {
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
+        room.localParticipant.setCameraEnabled(false);
         videoElement = <div className="placeholder" />
     }
 
     const requestJoinRoom = async () => {
-        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`);
-        console.log(res);
+        await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true })
+            .then(() => {
+                document.querySelector('.hold-join')?.setAttribute('style', 'display:flex');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
     };
 
     window.addEventListener('resize', function () {
@@ -124,7 +141,16 @@ export const PreJoinPage = () => {
                 <div className='wapper-content'>
                     <div className='wapper-videoSection'>
                         <div className="videoSection">
-                            <span>Máy ảnh đang tắt</span>
+                            {videoEnabled ? (
+                                <span>Máy ảnh đang bật</span>
+                            ) : (
+                                <span>Máy ảnh đang tắt</span>
+                            )}
+                            {audioEnabled ? (
+                                <h3 className='text-audio'>Mic đang bật</h3>
+                            ) : (
+                                <h3 className='text-audio'>Mic đang tắt</h3>
+                            )}
                             {videoEnabled ? (
                                 <div className='videoFrame'>
                                     <AspectRatio ratio={16 / 9}>
@@ -135,18 +161,23 @@ export const PreJoinPage = () => {
                                 <div className='videoInvisible'></div>
                             )}
                             <div className='controlMicCam'>
-                                <AudioSelectButton
-                                    className='toggleMic'
-                                    isMuted={!audioEnabled}
-                                    onClick={toggleAudio}
-                                    onSourceSelected={setAudioDevice}
-                                />
-                                <VideoSelectButton
-                                    className='toggleCamera'
-                                    isEnabled={videoTrack !== undefined}
-                                    onClick={toggleVideo}
-                                    onSourceSelected={selectVideoDevice}
-                                />
+                                <div>
+                                    <AudioSelectButton
+                                        className='toggleMic'
+                                        isMuted={!audioEnabled}
+                                        onClick={toggleAudio}
+                                        onSourceSelected={setAudioDevice}
+                                    />
+                                </div>
+                                <div>
+                                    <VideoSelectButton
+                                        className='toggleCamera'
+                                        isEnabled={videoTrack !== undefined}
+                                        onClick={toggleVideo}
+                                        onSourceSelected={selectVideoDevice}
+                                    />
+                                </div>
+
                             </div>
                         </div>
                     </div>
