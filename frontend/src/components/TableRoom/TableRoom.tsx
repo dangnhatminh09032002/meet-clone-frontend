@@ -89,7 +89,7 @@ export function TableRoom() {
                       {meet.room_name.length > 25 ? (
                         <Typography noWrap>{`${meet.room_name.slice(
                           0,
-                          25
+                          10
                         )}...`}</Typography>
                       ) : (
                         <Typography noWrap>{meet.room_name}</Typography>

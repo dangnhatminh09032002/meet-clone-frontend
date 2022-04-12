@@ -36,7 +36,7 @@ export function Header() {
             .then(async (result) => {
                 const id_token = await auth.currentUser?.getIdToken(true);
                 console.log(id_token);
-                const res = await axios
+                await axios
                     .post(
                         'http://localhost:8080/api/auth/google',
                         { id_token },
@@ -71,9 +71,13 @@ export function Header() {
         navigate('/home');
     };
 
+    const toHome = () => {
+        navigate('/home');
+    }
+
     return (
         <div className='header'>
-            <div className='logo'>
+            <div className='logo' onClick={() => toHome()}>
                 <img
                     src='https://res.cloudinary.com/boo-it/image/upload/v1649148875/test/toi78rot2nfxprqp7ey4.png'
                     alt=''
@@ -109,7 +113,7 @@ export function Header() {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                <MenuItem onClick={handleCloseUserMenu}>
+                                <MenuItem onClick={handleCloseUserMenu} disabled>
                                     Change Account
                                 </MenuItem >
                                 <MenuItem onClick={() => handleLogout()}>

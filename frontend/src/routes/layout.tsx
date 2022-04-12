@@ -38,9 +38,11 @@ export const Layout = () => {
                         })
                     );
                 })
+
                 .catch((err) => {
                     authDetailDispatch(authDetailData({ isLogin: false }));
                 });
+
         };
         checkVerify();
     }, []);
