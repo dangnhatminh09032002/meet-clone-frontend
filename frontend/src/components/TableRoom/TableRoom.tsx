@@ -68,7 +68,7 @@ export function TableRoom() {
 
   return (
     <div className="tableroom-content">
-      {authDetailState.payload.isLogin === true ? (
+      {authDetailState?.payload?.isLogin === true ? (
         <TableContainer component={Paper} sx={{ maxHeight: 330 }}>
           <Table stickyHeader>
             <TableHead className="bg-table-header">
@@ -86,10 +86,10 @@ export function TableRoom() {
                 return (
                   <TableRow key={index}>
                     <TableCell>
-                      {meet.room_name.length > 25 ? (
+                      {meet.room_name.length > 10 ? (
                         <Typography noWrap>{`${meet.room_name.slice(
                           0,
-                          25
+                          10
                         )}...`}</Typography>
                       ) : (
                         <Typography noWrap>{meet.room_name}</Typography>
@@ -98,11 +98,6 @@ export function TableRoom() {
 
                     <TableCell className="glo-text-center">
                       <Tooltip title="Copy">
-                        {/* <IconButton
-                          onClick={() => handleCopyLink(meet?.friendly_id)}
-                        >
-                          <ContentCopyIcon />
-                        </IconButton> */}
                         <Button variant="outlined" startIcon={<ContentCopyIcon />} className="link-room" onClick={() => handleCopyLink(meet?.friendly_id)}>
                           Copy
                         </Button>

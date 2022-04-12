@@ -114,13 +114,12 @@ export function HomePage() {
       <div className="body">
         <div className="left-side">
           <div className="content">
-            <h1>Premium video meetings. Now free for everyone.</h1>
-            <p>
-              Unicorn for you, We&apos;re here to help you connect, communicate,
-              and express your ideas so you can get more done together.
+            <h1 data-testid="test">Premium video meetings. Now free for everyone.</h1>
+            <p data-testid="testp">
+              Unicorn for you, We re here to help you connect, communicate, and express your ideas so you can get more done together.
             </p>
             <div className="action-btn">
-              {authDetailState.payload.isLogin === true ? (
+              {authDetailState?.payload?.isLogin === true ? (
                 <button className="btn green" onClick={handleClick}>
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
                   New Meeting
@@ -166,7 +165,7 @@ export function HomePage() {
                     onChange={(e) => setRoomName(e.target.value)}
                   />
                 </div>
-                {authDetailState.payload.isLogin === true ? (
+                {authDetailState?.payload?.isLogin === true ? (
                   <button
                     className="btn no-bg btn-join"
                     // onClick={() => joinRoomURL(room_name)}

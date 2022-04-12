@@ -81,7 +81,7 @@ export function Header() {
                 <span className='help-text'>Unicorn</span>
             </div>
             <div className='header-content'>
-                {authDetailState.payload.isLogin ? (
+                {authDetailState?.payload?.isLogin ? (
                     <Container maxWidth='xl'>
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title='Open settings'>
