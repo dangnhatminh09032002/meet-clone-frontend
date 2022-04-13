@@ -82,17 +82,17 @@ export function Header() {
                     src='https://res.cloudinary.com/boo-it/image/upload/v1649148875/test/toi78rot2nfxprqp7ey4.png'
                     alt=''
                 />
-                <span className='help-text'>Unicorn</span>
+                <span className='help-text' data-testid='logo-label'>Unicorn</span>
             </div>
             <div className='header-content'>
-                {authDetailState.payload.isLogin ? (
+                {authDetailState?.payload.isLogin ? (
                     <Container maxWidth='xl'>
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title='Open settings'>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, w: '40px' }}>
                                     <img
                                         alt='Ava'
-                                        src={userDetailState.payload.ava_url}
+                                        src={userDetailState?.payload.ava_url}
                                         referrerPolicy='no-referrer'
                                     />
                                 </IconButton>

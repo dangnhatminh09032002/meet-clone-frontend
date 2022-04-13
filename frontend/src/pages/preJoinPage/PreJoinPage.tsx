@@ -23,7 +23,6 @@ export const PreJoinPage = () => {
     });
 
     useEffect(() => {
-
         async function fetchToken() {
             const res = await axios.get(`http://localhost:8080/api/room/get-token/${roomName}`, { withCredentials: true })
             setToken(res.data.data);
