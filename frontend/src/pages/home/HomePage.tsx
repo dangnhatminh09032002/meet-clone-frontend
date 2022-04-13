@@ -81,31 +81,10 @@ export function HomePage() {
   };
 
   const hanleJoin = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-        navigate("/waitting");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    signInWithGoogle();
+    navigate({
+      pathname: `/room + ${room_name}`,
+  });
   };
 
   return (

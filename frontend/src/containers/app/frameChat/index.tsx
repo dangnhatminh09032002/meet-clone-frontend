@@ -12,7 +12,6 @@ function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
     const room = props.room;
-    console.log(room);
     const { hourAndMinute, clickButtonMessage } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
@@ -34,16 +33,14 @@ function FrameChat(props: any) {
     };
 
     useEffect(() => {
-        const test = () => {
+        const receivedData = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
                 setListMessage(JSON.parse(strData));
             });
         };
-        if (room) {
-            test();
-        }
+        room && receivedData()
     }, [room]);
 
     return (
@@ -61,10 +58,10 @@ function FrameChat(props: any) {
             </div>
 
 
-            <div className="acceptMessage">
+            {/* <div className="acceptMessage">
                 <div className="isAllow">Allow people to message</div>
                 <div className="acceptButton"> accept</div>
-            </div>
+            </div> */}
 
             <div className="notificationChat">
                 The message will only be visible to the call participants and will be deleted when the call ends.

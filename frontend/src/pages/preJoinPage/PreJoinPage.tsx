@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { createLocalVideoTrack, LocalVideoTrack, Room, VideoPresets } from 'livekit-client';
+import { createLocalVideoTrack, LocalVideoTrack, Room, VideoPresets, DataPacket_Kind } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState, useContext } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
+import { GlobalContext } from '../../contexts/provider';
 import './prejoinpage.css';
 
 export const PreJoinPage = () => {
@@ -17,7 +18,9 @@ export const PreJoinPage = () => {
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-
+    const authProvider = useContext<any>(GlobalContext);
+    const {userDetailState } = authProvider;
+    
     useEffect(() => {
         if (token && url) {
             setConnectDisabled(false)
@@ -101,11 +104,11 @@ export const PreJoinPage = () => {
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
-        videoElement = <div className="placeholder" />
+        videoElement = <div className="placeholder" style={{backgroundColor:'green'}}/>
     }
 
     const requestJoinRoom = async () => {
-        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`);
+        const res = await axios.get(`http://localhost:7880/api/room/req-join-room/${roomName}`);
         console.log(res);
     };
 
@@ -127,12 +130,12 @@ export const PreJoinPage = () => {
                             <span>Máy ảnh đang tắt</span>
                             {videoEnabled ? (
                                 <div className='videoFrame'>
-                                    <AspectRatio ratio={16 / 9}>
-                                        {videoElement}
+                                    <AspectRatio  ratio={16 / 9}>
+                                        {videoElement }
                                     </AspectRatio>
                                 </div>
                             ) : (
-                                <div className='videoInvisible'></div>
+                                <div className='videoInvisible' ></div>
                             )}
                             <div className='controlMicCam'>
                                 <AudioSelectButton

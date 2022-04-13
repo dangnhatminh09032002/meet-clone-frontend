@@ -1,0 +1,59 @@
+.frameJoinRoom {
+    height: 100%;
+    background: #fff;
+    width: 360px;
+    border-radius:8px;
+    border-left: 1px solid #f1f3f4;
+}
+
+.frameJoinRoom .listJoin {
+    display: flex;
+    flex-direction: column;
+    padding: 18px 12px 12px 12px;
+    overflow-y: auto;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .avatarUser img {
+    width: 40px;
+    border-radius: 20px;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .bodyInfo {
+    margin-left: 16px;
+    width: calc(100% - 106px);
+    align-self: center;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .bodyInfo .description {
+    font-size: 12px;
+    color: #6f7478;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .infoIcon {
+    width: 20px;
+    align-self: center;
+    display: flex;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .infoIcon .infoIconDelete {
+    color: #8f2626;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .infoIcon .infoIconAllow {
+    color: #146e14;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .infoIcon .infoIconDelete:hover {
+    color: #f30b0b;
+}
+
+.frameJoinRoom .listJoin .infoUsersJoin .infoIcon .infoIconAllow:hover
+{
+    color: #0ac50a;
+}
