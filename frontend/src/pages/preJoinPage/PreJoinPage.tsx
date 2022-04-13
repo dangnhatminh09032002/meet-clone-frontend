@@ -1,22 +1,23 @@
 import axios from 'axios';
-import { createLocalVideoTrack, LocalVideoTrack, Room } from 'livekit-client';
+import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
+import { GlobalContext } from '../../contexts/provider';
 import './prejoinpage.css';
 
 export const PreJoinPage = () => {
     const [url, setUrl] = useState('ws://localhost:7880');
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(true);
-    const [token, setToken] = useState('');
     const { roomName } = useParams();
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-
+    const authProvider = useContext<any>(GlobalContext);
+    const { userDetailState } = authProvider;
     const room = new Room({
         adaptiveStream: true,
         dynacast: true,
@@ -25,29 +26,24 @@ export const PreJoinPage = () => {
     useEffect(() => {
         async function fetchToken() {
             const res = await axios.get(`http://localhost:8080/api/room/get-token/${roomName}`, { withCredentials: true })
-            setToken(res.data.data);
-            await room.connect(`${url}`, token, {
+            await room.connect(`${url}`, res.data.data, {
                 autoSubscribe: true,
             });
             console.log(room);
         }
         fetchToken();
-    }, [token, url, roomName]);
+    }, [url, roomName]);
 
-
-    const toggleVideo = async () => {
-        if (videoTrack) {
-            videoTrack.stop()
-            setVideoEnabled(false)
-            setVideoTrack(undefined)
-        } else {
-            const track = await createLocalVideoTrack({
-                deviceId: videoDevice?.deviceId,
+    useEffect(() => {
+        const listenResponse = () => {
+            const decoder = new TextDecoder();
+            room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
+                const strData = decoder.decode(payload)
+                console.log(strData);
             })
-            setVideoEnabled(true)
-            setVideoTrack(track)
         }
-    }
+        listenResponse();
+    })
 
     useEffect(() => {
         createLocalVideoTrack({
@@ -58,11 +54,42 @@ export const PreJoinPage = () => {
         })
     }, [videoDevice])
 
+    const toggleVideo = async () => {
+        if (videoTrack) {
+            videoTrack.stop()
+            setVideoEnabled(false)
+            setVideoTrack(undefined)
+            setAudioEnabled(false)
+            document.querySelector('.text-video')?.setAttribute('style', 'display:block');
+            setTimeout(() => {
+                document.querySelector('.text-video')?.setAttribute('style', 'display:none');
+            }, 5000);
+        } else {
+            const track = await createLocalVideoTrack({
+                deviceId: videoDevice?.deviceId,
+            })
+            setVideoEnabled(true)
+            setVideoTrack(track)
+            document.querySelector('.text-video')?.setAttribute('style', 'display:block');
+            setTimeout(() => {
+                document.querySelector('.text-video')?.setAttribute('style', 'display:none');
+            }, 5000);
+        }
+    }
+
     const toggleAudio = () => {
         if (audioEnabled) {
             setAudioEnabled(false)
+            document.querySelector('.text-audio')?.setAttribute('style', 'display:block');
+            setTimeout(() => {
+                document.querySelector('.text-audio')?.setAttribute('style', 'display:none');
+            }, 5000);
         } else {
             setAudioEnabled(true)
+            document.querySelector('.text-audio')?.setAttribute('style', 'display:block');
+            setTimeout(() => {
+                document.querySelector('.text-audio')?.setAttribute('style', 'display:none');
+            }, 5000);
         }
     }
 
@@ -76,36 +103,6 @@ export const PreJoinPage = () => {
         }
     }
 
-    const connectToRoom = async () => {
-        if (videoTrack) {
-            videoTrack.stop()
-        }
-
-        if (window.location.protocol === 'https:' &&
-            url.startsWith('ws://') && !url.startsWith('ws://localhost')) {
-            alert('Unable to connect to insecure websocket from https');
-            return
-        }
-
-        const params: { [key: string]: string } = {
-            url,
-            token,
-            videoEnabled: videoEnabled ? '1' : '0',
-            audioEnabled: audioEnabled ? '1' : '0',
-        }
-        if (audioDevice) {
-            params.audioDeviceId = audioDevice.deviceId;
-        }
-        if (videoDevice) {
-            params.videoDeviceId = videoDevice.deviceId;
-        } else if (videoTrack) {
-            const deviceId = await videoTrack.getDeviceId();
-            if (deviceId) {
-                params.videoDeviceId = deviceId;
-            }
-        }
-    }
-
     let videoElement: ReactElement;
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
@@ -115,14 +112,28 @@ export const PreJoinPage = () => {
     }
 
     const requestJoinRoom = async () => {
-        await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true })
-            .then(() => {
-                document.querySelector('.hold-join')?.setAttribute('style', 'display:flex');
+        await axios.get(`http://localhost:7880/api/room/req-join-room/${roomName}`)
+            .then((result) => {
+                document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
+                console.log(result);
+                // const strData = JSON.stringify({
+                //     type: 'room',
+                //     data: {
+                //         message: 'req_join_room',
+                //         data: {
+                //             participant_name: userDetailState.payload.full_name,
+                //             participant_id: userDetailState.payload.uid_google,
+                //         },
+                //     },
+                // });
+                // const encoder = new TextEncoder();
+                // const data = encoder.encode(strData);
+                // room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE)
+                // console.log('aaaaaaaaaaaa', room);
             })
             .catch((err) => {
                 console.log(err);
             })
-
     };
 
     window.addEventListener('resize', function () {
@@ -141,9 +152,9 @@ export const PreJoinPage = () => {
                     <div className='wapper-videoSection'>
                         <div className="videoSection">
                             {videoEnabled ? (
-                                <span>Máy ảnh đang bật</span>
+                                <span className="text-video">Máy ảnh đang bật</span>
                             ) : (
-                                <span>Máy ảnh đang tắt</span>
+                                <span className="text-video">Máy ảnh đang tắt</span>
                             )}
                             {audioEnabled ? (
                                 <h3 className='text-audio'>Mic đang bật</h3>
@@ -205,7 +216,7 @@ export const PreJoinPage = () => {
                                 <button onClick={requestJoinRoom}>Tham gia ngay</button>
                             </div>
                             <div className='hold-join'>
-                                <h3>Đang chờ tham gia...</h3>
+                                <span>Đang chờ tham gia...</span>
                             </div>
                         </div>
                     </div>

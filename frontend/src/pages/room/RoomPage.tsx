@@ -20,7 +20,6 @@ import RoomTime from "../../components/RoomTime";
 
 export function RoomPage() {
     const navigate = useNavigate();
-    console.log(useParams());
     const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>();
     const [showChat, setShowChat] = useState(true);
@@ -32,8 +31,6 @@ export function RoomPage() {
     const [token, setToken] = useState<any>(null);
     const location = useLocation();
 
-    console.log(room_id);
-    console.log(room);
     const displayStyle = {
         display: "block",
     };
@@ -82,14 +79,14 @@ export function RoomPage() {
         getToken();
     }, []);
 
-    
+
     useEffect(() => {
         const realTime = setInterval(() => {
             setHourAndMinute(moment(new Date()).format("LTS"));
         }, 1000);
         return () => clearInterval(realTime);
     }, []);
-    
+
     async function onConnected(room: Room) {
         setRoom(room);
         console.log(room);
@@ -132,36 +129,36 @@ export function RoomPage() {
                 <div className="glo-video">
                     <DisplayContext.Provider value={displayOptions}>
                         {token &&
-                        <LiveKitRoom
-                            url={'ws://localhost:7880'}
-                            token={token}
-                            // key={uuidv1()}
-                            onConnected={(room) => {
-                                onConnected(room)
-                                room.on(RoomEvent.ParticipantConnected, () => updateParticipantSize(room))
-                                room.on(RoomEvent.ParticipantDisconnected, () => onParticipantDisconnected(room))
-                                updateParticipantSize(room);
-                            }}
-                            connectOptions={{
-                                adaptiveStream: true,
-                                dynacast: true,
-                                videoCaptureDefaults: {
-                                    resolution: VideoPresets.hd.resolution,
-                                },
-                                publishDefaults: {
-                                    videoEncoding: VideoPresets.hd.encoding,
-                                    simulcast: true,
-                                },
-                                logLevel: "debug",
-                            }}
-                            onLeave={onLeave}
-                        />
+                            <LiveKitRoom
+                                url={'ws://localhost:7880'}
+                                token={token}
+                                // key={uuidv1()}
+                                onConnected={(room) => {
+                                    onConnected(room)
+                                    room.on(RoomEvent.ParticipantConnected, () => updateParticipantSize(room))
+                                    room.on(RoomEvent.ParticipantDisconnected, () => onParticipantDisconnected(room))
+                                    updateParticipantSize(room);
+                                }}
+                                connectOptions={{
+                                    adaptiveStream: true,
+                                    dynacast: true,
+                                    videoCaptureDefaults: {
+                                        resolution: VideoPresets.hd.resolution,
+                                    },
+                                    publishDefaults: {
+                                        videoEncoding: VideoPresets.hd.encoding,
+                                        simulcast: true,
+                                    },
+                                    logLevel: "debug",
+                                }}
+                                onLeave={onLeave}
+                            />
                         }
                     </DisplayContext.Provider>
                     <div className="frameControlLeft">
                         <p>{hourAndMinute} | roomName</p>
                     </div>
-                    
+
                 </div>
             </div>
 

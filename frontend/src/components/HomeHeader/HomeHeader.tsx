@@ -98,7 +98,7 @@ export function Header() {
                                 </IconButton>
                             </Tooltip>
                             <Menu
-                                sx={{ mt: '45px', py: '0' }}
+                                sx={{ mt: '45px' }}
                                 id='menu-appbar'
                                 anchorEl={anchorElUser}
                                 anchorOrigin={{

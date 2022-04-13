@@ -172,14 +172,21 @@
     transform: scale(1.01);
     cursor: pointer;
 }
-.hold-join h3{
+.hold-join{
     text-align: center;
     margin-top: 8px;
     display: none;
 }
 
-/* --------------------- hover-btn ------------------------------ */
+.text-audio {
+    display: none;
+}
 
+.text-video {
+    display: none;
+}
+
+/* --------------------- hover-btn ------------------------------ */
 
 @media only screen and (min-width: 375px) and (max-width:600px){
     .wapper-participant h3{

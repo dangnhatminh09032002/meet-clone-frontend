@@ -5,14 +5,12 @@ import SendIcon from '@mui/icons-material/Send';
 import {
     RoomEvent,
     DataPacket_Kind,
-    Participant
 } from 'livekit-client';
 
 function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
     const room = props.room;
-    console.log(room);
     const { hourAndMinute, clickButtonMessage } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
