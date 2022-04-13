@@ -86,7 +86,7 @@ export default function DialogMeet({
   };
 
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+  const onKeyDownName = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
       handleSubmitCreateMeeting();
     }
@@ -119,7 +119,7 @@ export default function DialogMeet({
             onChange={(event) => {
               setName(event.target.value);
             }}
-            onKeyDown={onKeyDown}
+            onKeyDown={onKeyDownName}
           />
         </DialogContent>
         <DialogActions>

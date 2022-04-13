@@ -3,6 +3,8 @@ import axios from "axios";
 import {
   Alert,
   Button,
+  Card,
+  CardContent,
   IconButton,
   Paper,
   Snackbar,
@@ -16,8 +18,8 @@ import {
   Typography,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import OutputIcon from '@mui/icons-material/Output';
-import DeleteIcon from '@mui/icons-material/Delete';
+import OutputIcon from "@mui/icons-material/Output";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";
@@ -71,18 +73,32 @@ export function TableRoom() {
       {authDetailState?.payload?.isLogin === true ? (
         <TableContainer component={Paper} sx={{ maxHeight: 330 }}>
           <Table stickyHeader>
-            <TableHead className="bg-table-header">
-              <TableRow>
-                <TableCell className="text-while-table-header" width="150px">
-                  Name
-                </TableCell>
-                <TableCell className="text-while-table-header glo-text-center" width="500px">
-                  Action
-                </TableCell>
-              </TableRow>
-            </TableHead>
+            {meetListState.payload.length == 0 ? (
+              <TableHead>
+                <TableRow>
+                  <TableCell>There are no meeting rooms</TableCell>
+                </TableRow>
+              </TableHead>
+            ) : (
+              <TableHead className="bg-table-header">
+                <TableRow>
+                  <TableCell className="text-while-table-header" width="150px">
+                    Name
+                  </TableCell>
+                  <TableCell
+                    className="text-while-table-header glo-text-center"
+                    width="500px"
+                  >
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            )}
+
             <TableBody>
               {meetListState.payload.map((meet: any, index: any) => {
+                console.log("meetListState");
+                console.log(meetListState.payload.length);
                 return (
                   <TableRow key={index}>
                     <TableCell>
@@ -98,7 +114,12 @@ export function TableRoom() {
 
                     <TableCell className="glo-text-center">
                       <Tooltip title="Copy">
-                        <Button variant="outlined" startIcon={<ContentCopyIcon />} className="link-room" onClick={() => handleCopyLink(meet?.friendly_id)}>
+                        <Button
+                          variant="outlined"
+                          startIcon={<ContentCopyIcon />}
+                          className="link-room"
+                          onClick={() => handleCopyLink(meet?.friendly_id)}
+                        >
                           Copy
                         </Button>
                       </Tooltip>
@@ -142,7 +163,13 @@ export function TableRoom() {
           </Table>
         </TableContainer>
       ) : (
-        <p>Chưa có phòng họp</p>
+        <Card sx={{ minWidth: 275 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Create your own meeting room
+            </Typography>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

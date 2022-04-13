@@ -15,6 +15,34 @@ import "./homepage.css";
 import DialogMeet from "./DialogMeet";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
 
+export const textModel = {
+  titleH1: "Premium video meetings. Now free for everyone.",
+  titlep:
+    "Unicorn for you, We re here to help you connect, communicate, and express your ideas so you can get more done together.",
+  btnNewMeeting: "New Meeting",
+  btnCreateMeetingLater: " Create a meeting to use later",
+  btnJoin: "Join",
+  aHelpText: "Learn more",
+  aHelpTextAbout: "about Unicorn",
+  imgContent: "https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png"
+};
+
+export const textPlaceholder = {
+  inputEnterCodeOrLink: "Enter a code or link",
+};
+
+export const testId = {
+  titleH1: "title-h1",
+  titlep: "title-p",
+  btnNewMeeting: "btn-new-meeting",
+  btnCreateMeetingLater: "btn-create-meeting-later",
+  inputEnterCode: "input-enter-code",
+  btnJoin: "btn-join",
+  aHelpText: "help-text",
+  aHelpTextAbout: "help-text-about",
+  imgContent: "img-content"
+};
+
 export function HomePage() {
   const [room_name, setRoomName] = useState("");
   const [idTokenRoom, setIdTokenRoom] = useState("");
@@ -33,15 +61,17 @@ export function HomePage() {
     meetListDispatch,
   } = homeProvider;
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  const [textErrorEmpty, setTextErrorEmpty] = useState(false);
+  const [textErrorWorng, setTextErrorWorng] = useState(false);
+
   const joinRoomURL = async () => {
-    const id_token = await auth.currentUser?.getIdToken(true);
     const res = await axios.get(
       `http://localhost:8080/api/room/exits-room/${room_name}`,
       { withCredentials: true }
@@ -49,7 +79,15 @@ export function HomePage() {
     if (res.data.data === true) {
       navigate("/room/" + room_name);
     } else {
-      console.log("Does not exist!");
+      setTextErrorEmpty(true);
+    }
+  };
+
+  const onKeyDownCodeOrLink = (
+    event: React.KeyboardEvent<HTMLDivElement>
+  ): void => {
+    if (event.key === "Enter") {
+      joinRoomURL();
     }
   };
 
@@ -114,20 +152,18 @@ export function HomePage() {
       <div className="body">
         <div className="left-side">
           <div className="content">
-            <h1 data-testid="test">Premium video meetings. Now free for everyone.</h1>
-            <p data-testid="testp">
-              Unicorn for you, We re here to help you connect, communicate, and express your ideas so you can get more done together.
-            </p>
+            <h1 data-testid={testId.titleH1}>{textModel.titleH1}</h1>
+            <p data-testid={testId.titlep}>{textModel.titlep}</p>
             <div className="action-btn">
               {authDetailState?.payload?.isLogin === true ? (
-                <button className="btn green" onClick={handleClick}>
+                <button className="btn green" onClick={handleClickPopover} data-testid={testId.btnNewMeeting}>
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
-                  New Meeting
+                  {textModel.btnNewMeeting}
                 </button>
               ) : (
-                <button className="btn green" onClick={signInWithGoogle}>
+                <button className="btn green" onClick={signInWithGoogle} data-testid={testId.btnNewMeeting}>
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
-                  New Meeting
+                  {textModel.btnNewMeeting}
                 </button>
               )}
 
@@ -146,8 +182,9 @@ export function HomePage() {
                     onClick={() => {
                       setOpenDialogMeet(true);
                     }}
+                    data-testid={testId.btnCreateMeetingLater}
                   >
-                    Create a meeting to use later
+                    {textModel.btnCreateMeetingLater}
                   </button>
 
                   <DialogMeet
@@ -163,38 +200,38 @@ export function HomePage() {
                   <input
                     placeholder="Enter a code or link"
                     onChange={(e) => setRoomName(e.target.value)}
+                    onKeyDown={onKeyDownCodeOrLink}
+                    data-testid={testId.inputEnterCode}
                   />
                 </div>
                 {authDetailState?.payload?.isLogin === true ? (
                   <button
                     className="btn no-bg btn-join"
-                    // onClick={() => joinRoomURL(room_name)}
                     onClick={() => joinRoomURL()}
+                    data-testid={testId.btnJoin}
                   >
-                    Join
+                   {textModel.btnJoin}
                   </button>
                 ) : (
                   <button
                     className="btn no-bg btn-join"
                     onClick={() => hanleJoin()}
+                    data-testid={testId.btnJoin}
                   >
-                    Join
+                    {textModel.btnJoin}
                   </button>
                 )}
               </div>
             </div>
           </div>
           <div className="help-text">
-            <a href="##">Learn more</a> about Unicorn
+            <a href="##" data-testid={testId.aHelpText}>{textModel.aHelpText}</a> about Unicorn
           </div>
           <TableRoom />
         </div>
         <div className="right-side">
           <div className="content">
-            <img
-              src="https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png"
-              alt=""
-            />
+            <img src={textModel.imgContent} alt=""/>
           </div>
         </div>
       </div>
