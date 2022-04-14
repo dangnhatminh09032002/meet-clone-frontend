@@ -1,26 +1,56 @@
-import CloseIcon from '@mui/icons-material/Close';
-import './frameJoinRoom.css'
-import DoneIcon from '@mui/icons-material/Done';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect, useState } from 'react';
-import { DataPacket_Kind, Participant, RoomEvent } from 'livekit-client';
+import CloseIcon from "@mui/icons-material/Close";
+import "./frameJoinRoom.css";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect, useState } from "react";
+import { RoomEvent } from "livekit-client";
+import axios from "axios";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
     const room = props.room;
-    console.log(infoJoinRoom);
+    const room_id = props.room_id;
+    const setNumberPerjoin = props.setNumberPerjoin
+    
+    useEffect(() => {
+        setNumberPerjoin(infoJoinRoom.length);
+    },[infoJoinRoom.length])
 
     useEffect(() => {
         const receivedDataJoin = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
-                console.log('matching.......');
-                const strData = decoder.decode(payload);
-                setInfoJoinRoom(JSON.parse(strData));
-            })
+                const strData2 = decoder.decode(payload);
+                const data = JSON.parse(strData2);
+                if (data.type === 'room'){
+                    setInfoJoinRoom((prev: any) => [...prev, data]);
+                } 
+            });
+        };
+        room && receivedDataJoin();
+    }, [room]);
+    
+
+    const handleAllow = async (participant_id: any) => {
+        console.log(room_id)
+        const data = {
+            roomName: room_id,
+            participantId: participant_id,
+            isAllow: true
         }
-        room && receivedDataJoin()
-    }, [room])
+        const res = await axios.post('http://localhost:8080/api/room/res-join-room', data,  { withCredentials: true });
+        console.log(res)
+    }
+
+    const handleDeny = async (participant_id: any) => {
+        const data = {
+            roomName: room_id,
+            participantId: participant_id,
+            isAllow: false
+        }
+        const res = await axios.post('http://localhost:8080/api/room/res-join-room', data, { withCredentials: true })
+        console.log(res)
+    }
 
     return (
         <div className="frameJoinRoom">
@@ -30,34 +60,36 @@ function FrameJoinRoom(props: any) {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon/>
+                        <CloseIcon />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
             </div>
 
             <div className="listJoin">
-                <div className="infoUsersJoin">
-                    <div className="avatarUser">
-                        <img src="https://lh3.googleusercontent.com/a/AATXAJy-qB8gB7EjKkXwPV7WWfUHmg3ZHBb2SWw9rN_IMA=s192-c-mo" />
-                    </div>
+                {infoJoinRoom.map((user: any, index: any) => (
+                    <div className="infoUsersJoin" key={index}>
+                        <div className="avatarUser">
+                            <img src={user.data.data.picture} referrerPolicy='no-referrer' alt="Avatar"/>
+                        </div>
 
-                    <div className="bodyInfo">
-                        <div className="nameUser">Lê Văn Duy</div>
-                    </div>
+                        <div className="bodyInfo">
+                            <div className="nameUser">{user.data.data.participant_name}</div>
+                        </div>
 
                     <div className="infoIcon">
-                        <div className="infoIconDelete">
-                            <DeleteIcon />  
-                        </div>
-                        <div className="infoIconAllow">
-                            <DoneIcon />
+                            <div className="infoIconDelete">
+                                <DeleteIcon  onClick={() => handleDeny(user.data.data.participant_id)}/>
+                            </div>
+                            <div className="infoIconAllow">
+                                <DoneIcon  onClick={() => handleAllow(user.data.data.participant_id)}/>
+                            </div>      
                         </div>
                     </div>
-                </div>
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default FrameJoinRoom;

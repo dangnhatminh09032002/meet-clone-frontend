@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .frameJoinRoom .listJoin .infoUsersJoin .avatarUser img {

@@ -99,6 +99,7 @@
     display: flex;
     flex-direction: column;
     width: 81%;
+    position: relative;
 }
 .glo-test{
     height: 100%;
@@ -136,4 +137,13 @@
 .rightRoom .containerFrame .wrapJoin
 {
     height: calc( 98.8vh - 100px);
+}
+
+.backgroundVideo {
+    height: calc( 98.8vh - 100px);
+    width: 100%;
+    position: absolute;
+    background: blue;
+    top: 0;
+    z-index: 1000;
 }

@@ -108,7 +108,7 @@ export const PreJoinPage = () => {
     }
 
     const requestJoinRoom = async () => {
-        const res = await axios.get(`http://localhost:7880/api/room/req-join-room/${roomName}`);
+        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true });
         console.log(res);
     };
 
