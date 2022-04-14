@@ -144,6 +144,21 @@ body {
 }
 
 
+
+.glo-notify{
+  width: 100%;
+  text-align: center;
+}
+
+.text-notice{
+  font-size: 12px !important;
+  color: #FF6B6B !important;
+  margin-left: 15px;
+}
+
+
+
+
 @media screen and (min-width: 375px) and (max-width: 1200px) {
   .home-page .body {
     flex-direction: column;

@@ -97,8 +97,6 @@ export function TableRoom() {
 
             <TableBody>
               {meetListState.payload.map((meet: any, index: any) => {
-                console.log("meetListState");
-                console.log(meetListState.payload.length);
                 return (
                   <TableRow key={index}>
                     <TableCell>

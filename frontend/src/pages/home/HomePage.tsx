@@ -14,6 +14,7 @@ import { GlobalContext } from "./../../contexts/provider";
 import "./homepage.css";
 import DialogMeet from "./DialogMeet";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
+import { TextField } from "@mui/material";
 
 export const textModel = {
   titleH1: "Premium video meetings. Now free for everyone.",
@@ -24,7 +25,8 @@ export const textModel = {
   btnJoin: "Join",
   aHelpText: "Learn more",
   aHelpTextAbout: "about Unicorn",
-  imgContent: "https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png"
+  imgContent:
+    "https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png",
 };
 
 export const textPlaceholder = {
@@ -40,7 +42,14 @@ export const testId = {
   btnJoin: "btn-join",
   aHelpText: "help-text",
   aHelpTextAbout: "help-text-about",
-  imgContent: "img-content"
+  imgContent: "img-content",
+  popoverCreate: "popover-create",
+};
+
+export const myError = {
+  error: {
+    worng: "Code or link is not correct, please re-enter",
+  },
 };
 
 export function HomePage() {
@@ -68,9 +77,7 @@ export function HomePage() {
     setAnchorEl(null);
   };
 
-  const [textErrorEmpty, setTextErrorEmpty] = useState(false);
   const [textErrorWorng, setTextErrorWorng] = useState(false);
-
   const joinRoomURL = async () => {
     const res = await axios.get(
       `http://localhost:8080/api/room/exits-room/${room_name}`,
@@ -79,7 +86,7 @@ export function HomePage() {
     if (res.data.data === true) {
       navigate("/room/" + room_name);
     } else {
-      setTextErrorEmpty(true);
+      setTextErrorWorng(true);
     }
   };
 
@@ -156,12 +163,20 @@ export function HomePage() {
             <p data-testid={testId.titlep}>{textModel.titlep}</p>
             <div className="action-btn">
               {authDetailState?.payload?.isLogin === true ? (
-                <button className="btn green" onClick={handleClickPopover} data-testid={testId.btnNewMeeting}>
+                <button
+                  className="btn green"
+                  onClick={handleClickPopover}
+                  data-testid={testId.btnNewMeeting}
+                >
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
                   {textModel.btnNewMeeting}
                 </button>
               ) : (
-                <button className="btn green" onClick={signInWithGoogle} data-testid={testId.btnNewMeeting}>
+                <button
+                  className="btn green"
+                  onClick={signInWithGoogle}
+                  data-testid={testId.btnNewMeeting}
+                >
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
                   {textModel.btnNewMeeting}
                 </button>
@@ -175,6 +190,7 @@ export function HomePage() {
                   vertical: "bottom",
                   horizontal: "left",
                 }}
+                data-testid={testId.popoverCreate}
               >
                 <div className="btn-meeting">
                   <button
@@ -210,7 +226,7 @@ export function HomePage() {
                     onClick={() => joinRoomURL()}
                     data-testid={testId.btnJoin}
                   >
-                   {textModel.btnJoin}
+                    {textModel.btnJoin}
                   </button>
                 ) : (
                   <button
@@ -223,15 +239,23 @@ export function HomePage() {
                 )}
               </div>
             </div>
+            <div className="glo-notify">
+              {textErrorWorng && (
+                <p className="text-notice">{myError.error.worng}</p>
+              )}
+            </div>
           </div>
           <div className="help-text">
-            <a href="##" data-testid={testId.aHelpText}>{textModel.aHelpText}</a> about Unicorn
+            <a href="##" data-testid={testId.aHelpText}>
+              {textModel.aHelpText}
+            </a>{" "}
+            about Unicorn
           </div>
           <TableRoom />
         </div>
         <div className="right-side">
           <div className="content">
-            <img src={textModel.imgContent} alt=""/>
+            <img src={textModel.imgContent} alt="" />
           </div>
         </div>
       </div>

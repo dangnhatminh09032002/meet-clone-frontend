@@ -102,6 +102,7 @@ export default function DialogMeet({
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={handleClose}
+          data-testid="inside-testid"
         >
           Create a meeting room
         </BootstrapDialogTitle>
