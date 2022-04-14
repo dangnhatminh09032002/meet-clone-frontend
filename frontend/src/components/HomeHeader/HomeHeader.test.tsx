@@ -1,11 +1,10 @@
-import React from "react";
-import { render, waitFor } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
+import { render, waitFor } from "@testing-library/react";
+import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { shallow, configure } from 'enzyme';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import { Header } from './HomeHeader';
-import { Button } from '@mui/material';
 
 const logoLabel = 'Unicorn';
 configure({ adapter: new Adapter() });

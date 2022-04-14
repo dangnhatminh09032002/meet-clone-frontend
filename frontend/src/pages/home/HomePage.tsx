@@ -2,14 +2,11 @@ import { faKeyboard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popover from "@mui/material/Popover";
 import axios from "axios";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
-import { auth } from "../../configs/firebase-config";
-import { authDetailData } from "../../contexts/auth";
-import { userDetailData } from "../../contexts/user";
+import { AuthContext } from '../../contexts/auth/authProvider';
 import { GlobalContext } from "./../../contexts/provider";
 import DialogMeet from "./DialogMeet";
 import "./homepage.css";
@@ -26,9 +23,9 @@ export function HomePage() {
   const homeProvider = useContext<any>(GlobalContext);
   const {
     authDetailState,
-    authDetailDispatch,
-    userDetailDispatch,
   } = homeProvider;
+  const authProvider = useContext<any>(AuthContext);
+  const { signInWithGoogle } = authProvider;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,33 +45,6 @@ export function HomePage() {
     } else {
       navigate("/prejoinroom/" + room_name);
     }
-  };
-
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const hanleJoin = async () => {
@@ -99,7 +69,7 @@ export function HomePage() {
                   New Meeting
                 </button>
               ) : (
-                <button className="btn green" onClick={signInWithGoogle}>
+                <button className="btn green" onClick={() => hanleJoin()} >
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
                   New Meeting
                 </button>

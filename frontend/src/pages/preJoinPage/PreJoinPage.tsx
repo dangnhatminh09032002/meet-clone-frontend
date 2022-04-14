@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-import { GlobalContext } from '../../contexts/provider';
 import './prejoinpage.css';
 
 export const PreJoinPage = () => {
@@ -16,8 +15,6 @@ export const PreJoinPage = () => {
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-    const authProvider = useContext<any>(GlobalContext);
-    const { userDetailState } = authProvider;
     const room = new Room({
         adaptiveStream: true,
         dynacast: true,
@@ -112,7 +109,7 @@ export const PreJoinPage = () => {
     }
 
     const requestJoinRoom = async () => {
-        await axios.get(`http://localhost:7880/api/room/req-join-room/${roomName}`)
+        await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true })
             .then((result) => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
                 console.log(result);

@@ -14,8 +14,8 @@ const PreJoinPage: any = lazy(() =>
 const RoomPage: any = lazy(() =>
     import('../pages').then(({ RoomPage }) => ({ default: RoomPage }))
 );
-const HomeContainer: any = lazy(() =>
-    import('../containers').then(({ HomeContainer }) => ({ default: HomeContainer }))
+const HomePage: any = lazy(() =>
+    import('../pages').then(({ HomePage }) => ({ default: HomePage }))
 );
 
 export const Layout = () => {
@@ -58,7 +58,7 @@ export const Layout = () => {
                             <Route path='/stoproom' element={<StopRoom />} />
                         </Fragment>
                     }
-                    <Route path='/home' element={<HomeContainer />} />
+                    <Route path='/home' element={<HomePage />} />
                     <Route path='/*' element={<Navigate to='/home' />} />
                 </Routes>}
         </Suspense>

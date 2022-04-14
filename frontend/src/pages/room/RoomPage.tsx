@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import "react-chat-widget/lib/styles.css";
-import FrameChat from "../../containers/app/frameChat";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import GroupIcon from "@mui/icons-material/Group";
 import InfoIcon from "@mui/icons-material/Info";
-import moment from "moment";
-import { VideoPresets, Room, RoomEvent } from "livekit-client";
-import { DisplayContext, LiveKitRoom, useRoom } from "livekit-react";
-import "livekit-react/dist/index.css";
-import "react-aspect-ratio/aspect-ratio.css";
-import "./roompage.css";
-import FrameShowUsers from "../../containers/app/frameShowUsers";
-import FrameInfoRoom from "../../containers/app/frameInfoRoom";
-import { v1 as uuidv1 } from "uuid";
 import axios from "axios";
+import { Room, RoomEvent, VideoPresets } from "livekit-client";
+import { DisplayContext, LiveKitRoom } from "livekit-react";
+import "livekit-react/dist/index.css";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import "react-aspect-ratio/aspect-ratio.css";
+import "react-chat-widget/lib/styles.css";
 import { ReactNotifications } from "react-notifications-component";
-import RoomTime from "../../components/RoomTime";
+import { useNavigate, useParams } from "react-router-dom";
+import FrameChat from "../../containers/app/frameChat";
+import FrameInfoRoom from "../../containers/app/frameInfoRoom";
+import FrameShowUsers from "../../containers/app/frameShowUsers";
+import "./roompage.css";
 
 export function RoomPage() {
     const navigate = useNavigate();
@@ -29,7 +27,6 @@ export function RoomPage() {
     const [numParticipants, setNumParticipants] = useState<any>(0);
     const [type, setType] = useState<any>("chat");
     const [token, setToken] = useState<any>(null);
-    const location = useLocation();
 
     const displayStyle = {
         display: "block",
@@ -73,7 +70,6 @@ export function RoomPage() {
                 `http://localhost:8080/api/room/get-token/${room_id}`,
                 { withCredentials: true }
             );
-            console.log(res);
             setToken(res.data.data);
         };
         getToken();
@@ -92,13 +88,7 @@ export function RoomPage() {
         console.log(room);
         await room.localParticipant.setCameraEnabled(true)
         await room.localParticipant.setMicrophoneEnabled(true)
-        // await room.on(RoomEvent.ParticipantConnected, () =>
-        //     updateParticipantSize(room)
-        // );
-        // await room.on(RoomEvent.ParticipantDisconnected, () =>
-        //     onParticipantDisconnected(room)
-        // );
-        // await updateParticipantSize(room);
+
     }
 
     const clickButtonMessage = () => {

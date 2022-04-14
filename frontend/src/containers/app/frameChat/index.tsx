@@ -36,13 +36,19 @@ function FrameChat(props: any) {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
-                setListMessage(JSON.parse(strData));
+                const data = JSON.parse(strData);
+                console.log(data)
+                if (data.type === 'room') {
+
+                }
+                // setListMessage(JSON.parse(strData));
             });
         };
         if (room) {
             test();
         }
     }, [room]);
+    console.log(listMessage);
 
     return (
         <div className="frameChat">
