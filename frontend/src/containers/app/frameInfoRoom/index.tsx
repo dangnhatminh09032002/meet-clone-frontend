@@ -18,14 +18,14 @@ function FrameInfoRoom() {
             animationIn: ["animated", "fadeIn"],     // animate.css classes that's applied
             animationOut: ["animated", "fadeOut"],   // animate.css classes that's applied
             dismiss: {
-              duration: 3000,
-              showIcon: true
+                duration: 3000,
+                showIcon: true
             },
         })
     }
 
 
-    return(
+    return (
         <div className="frameInfo">
             <div className="headerFrameUser">
                 <div className="headerTitleWrap">
@@ -33,7 +33,7 @@ function FrameInfoRoom() {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon/>
+                        <CloseIcon />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
@@ -47,10 +47,10 @@ function FrameInfoRoom() {
                     {window.location.href}
                 </div>
 
-                <div className="copyInfo" 
+                <div className="copyInfo"
                     onClick={handleCopy}
                 >
-                    <div className="copyInfoIcon"><ContentCopyIcon/></div>
+                    <div className="copyInfoIcon"><ContentCopyIcon /></div>
                     <div className="copyInfoText">Copy information on how to join</div>
                 </div>
             </div>

@@ -1,9 +1,9 @@
 import React, { lazy, Suspense, useContext, useLayoutEffect, Fragment } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import axios from 'axios';
 import { GlobalContext } from '../contexts/provider';
 import { authDetailData } from '../contexts/auth';
 import { userDetailData } from '../contexts';
+import server from '../configs/axios-config';
 
 const StopRoom: any = lazy(() =>
     import('../pages').then(({ StopRoom }) => ({ default: StopRoom }))
@@ -14,8 +14,8 @@ const PreJoinPage: any = lazy(() =>
 const RoomPage: any = lazy(() =>
     import('../pages').then(({ RoomPage }) => ({ default: RoomPage }))
 );
-const HomeContainer: any = lazy(() =>
-    import('../containers').then(({ HomeContainer }) => ({ default: HomeContainer }))
+const HomePage: any = lazy(() =>
+    import('../pages').then(({ HomePage }) => ({ default: HomePage }))
 );
 
 export const Layout = () => {
@@ -24,10 +24,8 @@ export const Layout = () => {
 
     useLayoutEffect(() => {
         const checkVerify = async () => {
-            await axios
-                .get('http://localhost:8080/api/auth/verify', {
-                    withCredentials: true,
-                })
+            await server
+                .get('auth/verify')
                 .then((result) => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(
@@ -38,9 +36,11 @@ export const Layout = () => {
                         })
                     );
                 })
+
                 .catch((err) => {
                     authDetailDispatch(authDetailData({ isLogin: false }));
                 });
+
         };
         checkVerify();
     }, []);
@@ -56,7 +56,7 @@ export const Layout = () => {
                             <Route path='/stoproom' element={<StopRoom />} />
                         </Fragment>
                     }
-                    <Route path='/home' element={<HomeContainer />} />
+                    <Route path='/home' element={<HomePage />} />
                     <Route path='/*' element={<Navigate to='/home' />} />
                 </Routes>}
         </Suspense>
