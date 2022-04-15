@@ -10,7 +10,7 @@ import './prejoinpage.css';
 export const PreJoinPage = () => {
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(true);
-    const { roomName } = useParams();
+    const { room_id } = useParams();
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
@@ -21,21 +21,24 @@ export const PreJoinPage = () => {
 
     useEffect(() => {
         async function fetchToken() {
-            const res = await server.post(`rooms/${roomName}/token`)
+            const res = await server.post(`rooms/${room_id}/token`);
+            console.log(res);
             await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                 autoSubscribe: true,
             });
             console.log(room);
         }
         fetchToken();
-    }, [process.env.LIVEKIT_URL, roomName]);
+    }, [room_id]);
 
     useEffect(() => {
         const listenResponse = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload)
-                console.log(strData);
+                const data = JSON.parse(strData)
+                if (data.type === 'room')
+                    console.log(strData);
             })
         }
         listenResponse();
@@ -108,10 +111,14 @@ export const PreJoinPage = () => {
     }
 
     const requestJoinRoom = async () => {
-        await server.get(`rooms/${roomName}/req-join-room`)
+        await server.get(`rooms/${room_id}/req-join-room`)
             .then((result) => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
                 console.log(result);
+                room.on(RoomEvent.ParticipantConnected, (participant) => {
+                    console.log(room);
+                    console.log('participant: ' + participant);
+                })
                 // const strData = JSON.stringify({
                 //     type: 'room',
                 //     data: {

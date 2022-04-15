@@ -36,14 +36,13 @@ export const Layout = () => {
                         })
                     );
                 })
-
                 .catch((err) => {
                     authDetailDispatch(authDetailData({ isLogin: false }));
                 });
 
         };
         checkVerify();
-    }, []);
+    }, [authDetailState.payload.isLogin]);
 
     return (
         <Suspense fallback={true}>
@@ -51,7 +50,7 @@ export const Layout = () => {
                 <Routes>
                     {authDetailState.payload.isLogin &&
                         <Fragment>
-                            <Route path='/prejoinroom/:roomName' element={<PreJoinPage />} />
+                            <Route path='/prejoinroom/:room_id' element={<PreJoinPage />} />
                             <Route path='/room/:room_id' element={<RoomPage />} />
                             <Route path='/stoproom' element={<StopRoom />} />
                         </Fragment>

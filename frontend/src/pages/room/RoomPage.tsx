@@ -77,7 +77,7 @@ export function RoomPage() {
             setToken(res.data);
         };
         getToken();
-    }, []);
+    }, [room_id]);
 
 
     useEffect(() => {
