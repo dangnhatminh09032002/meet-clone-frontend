@@ -2,7 +2,7 @@ import { createLocalVideoTrack, LocalVideoTrack, ParticipantEvent, Room, RoomEve
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState, useContext } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 import server from '../../configs/axios-config';
 import './prejoinpage.css';
@@ -14,6 +14,7 @@ export const PreJoinPage = () => {
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
+    const navigate = useNavigate();
     const room = new Room({
         adaptiveStream: true,
         dynacast: true,
@@ -42,10 +43,19 @@ export const PreJoinPage = () => {
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload)
                 const result = JSON.parse(strData)
-                console.log(result);
+                if (result.type === 'room' && result.action === 'res-join-room') {
+                    if (result?.payload.data.is_allow) {
+                        navigate('/room/' + room_id)
+                    }
+                } else {
+                    document.querySelector('.hold-join')?.setAttribute('style', 'display:none');
+                }
             })
         }
         listenResponse();
+        return function () {
+
+        }
     })
 
     useEffect(() => {
@@ -151,8 +161,8 @@ export const PreJoinPage = () => {
                             )}
                             {videoEnabled ? (
                                 <div className='videoFrame'>
-                                    <AspectRatio  ratio={16 / 9}>
-                                        {videoElement }
+                                    <AspectRatio ratio={16 / 9}>
+                                        {videoElement}
                                     </AspectRatio>
                                 </div>
                             ) : (
