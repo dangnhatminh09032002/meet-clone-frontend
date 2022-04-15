@@ -30,20 +30,19 @@ export const Layout = () => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(
                         userDetailData({
-                            uid_google: result.data.data.id,
-                            full_name: result.data.data.name,
-                            ava_url: result.data.data.picture,
+                            uid_google: result.data.id,
+                            full_name: result.data.name,
+                            ava_url: result.data.picture,
                         })
                     );
                 })
-
                 .catch((err) => {
                     authDetailDispatch(authDetailData({ isLogin: false }));
                 });
 
         };
         checkVerify();
-    }, []);
+    }, [authDetailState.payload.isLogin]);
 
     return (
         <Suspense fallback={true}>
@@ -51,7 +50,7 @@ export const Layout = () => {
                 <Routes>
                     {authDetailState.payload.isLogin &&
                         <Fragment>
-                            <Route path='/prejoinroom/:roomName' element={<PreJoinPage />} />
+                            <Route path='/prejoinroom/:room_id' element={<PreJoinPage />} />
                             <Route path='/room/:room_id' element={<RoomPage />} />
                             <Route path='/stoproom' element={<StopRoom />} />
                         </Fragment>

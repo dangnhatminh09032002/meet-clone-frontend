@@ -43,7 +43,7 @@ export function Header() {
                 ava_url: '',
             })
         );
-        await server.get('api/auth/logout');
+        await server.get('auth/logout');
         navigate('/home');
     };
 
@@ -52,7 +52,7 @@ export function Header() {
     }
 
     return (
-        <Container maxWidth="xl">
+        <Container maxWidth={false} >
             <Toolbar disableGutters>
                 <div className='header' onClick={() => toHome()}>
                     <div className='logo'>

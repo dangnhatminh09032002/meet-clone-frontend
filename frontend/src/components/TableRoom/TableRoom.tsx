@@ -32,7 +32,7 @@ export function TableRoom() {
   useEffect(() => {
     const getListRoom = async () => {
       await server
-        .get('/rooms')
+        .get('rooms')
         .then(async (result) => {
           await meetListDispatch(meetListData(result.data));
         });
@@ -41,8 +41,8 @@ export function TableRoom() {
   }, [authDetailState]);
 
   const handleDeleteRoom = async () => {
-    const res = await server.delete(
-      "/rooms"
+    await server.delete(
+      "rooms"
     );
   };
 

@@ -66,13 +66,13 @@ export function RoomPage() {
 
     useEffect(() => {
         const getToken = async () => {
-            const res = await server.get(
-                `api/room/get-token/${room_id}`
+            const res = await server.post(
+                `rooms/${room_id}/token`
             );
-            setToken(res.data.data);
+            setToken(res.data);
         };
         getToken();
-    }, []);
+    }, [room_id]);
 
 
     useEffect(() => {

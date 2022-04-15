@@ -74,7 +74,7 @@ export default function DialogMeet({
   const handleSubmitCreateMeeting = async () => {
     await server
       .post(
-        "/rooms",
+        "rooms",
         { room_name: name },
       )
       .then(async (result) => {
