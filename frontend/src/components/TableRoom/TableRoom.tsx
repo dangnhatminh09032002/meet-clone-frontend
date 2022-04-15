@@ -14,9 +14,9 @@ import {
   Tooltip,
   Typography
 } from "@mui/material";
-import axios from "axios";
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import server from '../../configs/axios-config';
 import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";
@@ -31,20 +31,18 @@ export function TableRoom() {
 
   useEffect(() => {
     const getListRoom = async () => {
-      await axios
-        .get("http://localhost:8080/api/room/list-room", {
-          withCredentials: true,
-        })
+      await server
+        .get('/rooms')
         .then(async (result) => {
-          await meetListDispatch(meetListData(result.data.data));
+          await meetListDispatch(meetListData(result.data));
         });
     };
     getListRoom();
   }, [authDetailState]);
 
   const handleDeleteRoom = async () => {
-    const res = await axios.delete(
-      "http://localhost:8080/api/room/delete-room/"
+    const res = await server.delete(
+      "/rooms"
     );
   };
 

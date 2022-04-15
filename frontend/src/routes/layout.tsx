@@ -1,9 +1,9 @@
 import React, { lazy, Suspense, useContext, useLayoutEffect, Fragment } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import axios from 'axios';
 import { GlobalContext } from '../contexts/provider';
 import { authDetailData } from '../contexts/auth';
 import { userDetailData } from '../contexts';
+import server from '../configs/axios-config';
 
 const StopRoom: any = lazy(() =>
     import('../pages').then(({ StopRoom }) => ({ default: StopRoom }))
@@ -24,10 +24,8 @@ export const Layout = () => {
 
     useLayoutEffect(() => {
         const checkVerify = async () => {
-            await axios
-                .get('http://localhost:8080/api/auth/verify', {
-                    withCredentials: true,
-                })
+            await server
+                .get('auth/verify')
                 .then((result) => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(

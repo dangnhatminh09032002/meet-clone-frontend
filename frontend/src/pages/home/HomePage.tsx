@@ -1,11 +1,11 @@
 import { faKeyboard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popover from "@mui/material/Popover";
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
+import server from '../../configs/axios-config';
 import { AuthContext } from '../../contexts/auth/authProvider';
 import { GlobalContext } from "./../../contexts/provider";
 import DialogMeet from "./DialogMeet";
@@ -35,16 +35,17 @@ export function HomePage() {
   };
 
   const joinRoomURL = async () => {
-    const res = await axios.get(
-      `http://localhost:8080/api/room/exits-room/${room_name}`,
-      { withCredentials: true }
-    );
-    const isMaster = await axios.get(`http://localhost:8080/api/room/is-room-master/${room_name}`, { withCredentials: true })
-    if (isMaster.data.data === true && res.data.data === true) {
-      navigate("/room/" + room_name);
-    } else {
-      navigate("/prejoinroom/" + room_name);
-    }
+    await server.get(
+      `rooms/${room_name}`,
+    ).then((res) => {
+      if (res.data.is_master) {
+        navigate("/room/" + room_name);
+      } else {
+        navigate("/prejoinroom/" + room_name);
+      }
+    }).catch((error) => {
+      return
+    })
   };
 
   const hanleJoin = async () => {

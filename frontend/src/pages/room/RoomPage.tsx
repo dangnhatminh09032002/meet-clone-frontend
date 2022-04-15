@@ -1,7 +1,6 @@
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import GroupIcon from "@mui/icons-material/Group";
 import InfoIcon from "@mui/icons-material/Info";
-import axios from "axios";
 import { Room, RoomEvent, VideoPresets } from "livekit-client";
 import { DisplayContext, LiveKitRoom } from "livekit-react";
 import "livekit-react/dist/index.css";
@@ -11,6 +10,7 @@ import "react-aspect-ratio/aspect-ratio.css";
 import "react-chat-widget/lib/styles.css";
 import { ReactNotifications } from "react-notifications-component";
 import { useNavigate, useParams } from "react-router-dom";
+import server from '../../configs/axios-config';
 import FrameChat from "../../containers/app/frameChat";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameShowUsers from "../../containers/app/frameShowUsers";
@@ -66,9 +66,8 @@ export function RoomPage() {
 
     useEffect(() => {
         const getToken = async () => {
-            const res = await axios.get(
-                `http://localhost:8080/api/room/get-token/${room_id}`,
-                { withCredentials: true }
+            const res = await server.get(
+                `api/room/get-token/${room_id}`
             );
             setToken(res.data.data);
         };

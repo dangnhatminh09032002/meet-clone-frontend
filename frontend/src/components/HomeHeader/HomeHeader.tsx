@@ -7,9 +7,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import axios from 'axios';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import server from '../../configs/axios-config';
 import { authLogout } from '../../contexts/auth';
 import { AuthContext } from '../../contexts/auth/authProvider';
 import { userDetailData } from '../../contexts/user';
@@ -43,7 +43,7 @@ export function Header() {
                 ava_url: '',
             })
         );
-        await axios.get('http://localhost:8080/api/auth/logout', { withCredentials: true });
+        await server.get('api/auth/logout');
         navigate('/home');
     };
 
@@ -111,6 +111,5 @@ export function Header() {
                 </div>
             </Toolbar>
         </Container>
-
     );
 }

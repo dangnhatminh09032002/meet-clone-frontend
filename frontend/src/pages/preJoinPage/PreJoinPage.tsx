@@ -1,14 +1,13 @@
-import axios from 'axios';
 import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
+import server from '../../configs/axios-config';
 import './prejoinpage.css';
 
 export const PreJoinPage = () => {
-    const [url, setUrl] = useState('ws://localhost:7880');
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(true);
     const { roomName } = useParams();
@@ -22,14 +21,14 @@ export const PreJoinPage = () => {
 
     useEffect(() => {
         async function fetchToken() {
-            const res = await axios.get(`http://localhost:8080/api/room/get-token/${roomName}`, { withCredentials: true })
-            await room.connect(`${url}`, res.data.data, {
+            const res = await server.post(`rooms/${roomName}/token`)
+            await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                 autoSubscribe: true,
             });
             console.log(room);
         }
         fetchToken();
-    }, [url, roomName]);
+    }, [process.env.LIVEKIT_URL, roomName]);
 
     useEffect(() => {
         const listenResponse = () => {
@@ -109,7 +108,7 @@ export const PreJoinPage = () => {
     }
 
     const requestJoinRoom = async () => {
-        await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true })
+        await server.get(`rooms/${roomName}/req-join-room`)
             .then((result) => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
                 console.log(result);
