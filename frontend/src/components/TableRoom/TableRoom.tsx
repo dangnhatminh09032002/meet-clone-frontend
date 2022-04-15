@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from "react";
-import axios from "axios";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from '@mui/icons-material/Delete';
+import OutputIcon from '@mui/icons-material/Output';
 import {
   Alert,
   Button,
@@ -15,20 +16,18 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import OutputIcon from "@mui/icons-material/Output";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import server from '../../configs/axios-config';
+import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";
-import { meetListData } from "../../contexts/meet";
-import { auth } from "../../configs/firebase-config";
 
 export function TableRoom() {
   const homeProvider = useContext<any>(GlobalContext);
-  const { authDetailState, userDetailState, meetListState, meetListDispatch } =
+  const { authDetailState, meetListState, meetListDispatch } =
     homeProvider;
   const navigate = useNavigate();
 
@@ -36,20 +35,18 @@ export function TableRoom() {
 
   useEffect(() => {
     const getListRoom = async () => {
-      await axios
-        .get("http://localhost:8080/api/room/list-room", {
-          withCredentials: true,
-        })
+      await server
+        .get('/rooms')
         .then(async (result) => {
-          await meetListDispatch(meetListData(result.data.data));
+          await meetListDispatch(meetListData(result.data));
         });
     };
     getListRoom();
   }, [authDetailState]);
 
   const handleDeleteRoom = async () => {
-    const res = await axios.delete(
-      "http://localhost:8080/api/room/delete-room/"
+    const res = await server.delete(
+      "/rooms"
     );
   };
 
