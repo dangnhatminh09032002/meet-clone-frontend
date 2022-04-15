@@ -1,6 +1,6 @@
 import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState, useContext } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
@@ -166,12 +166,12 @@ export const PreJoinPage = () => {
                             )}
                             {videoEnabled ? (
                                 <div className='videoFrame'>
-                                    <AspectRatio ratio={16 / 9}>
-                                        {videoElement}
+                                    <AspectRatio  ratio={16 / 9}>
+                                        {videoElement }
                                     </AspectRatio>
                                 </div>
                             ) : (
-                                <div className='videoInvisible'></div>
+                                <div className='videoInvisible' ></div>
                             )}
                             <div className='controlMicCam'>
                                 <div>
