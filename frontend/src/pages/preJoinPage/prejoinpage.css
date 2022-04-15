@@ -114,7 +114,7 @@
 
 .wapper-participant {
     height: 100%;
-    width: 40%;
+    width: 100%;
     margin-top: 4%;
     padding-left: 48px;
 }
@@ -186,6 +186,10 @@
     display: none;
 }
 
+.join-section span {
+    width: 100%;
+}
+
 /* --------------------- hover-btn ------------------------------ */
 
 @media only screen and (min-width: 375px) and (max-width:600px){
@@ -200,16 +204,25 @@
     .controlMicCam button {
         padding: 6px 8px 6px 8px;
     }
+    .wapper-participant {
+        padding-left: 0;
+    }
 }
 
 @media only screen and (min-width: 601px) and (max-width:740px){
     .wapper-participant h3{
         font-size: 24px;
     }
+    .wapper-participant {
+        padding-left: 0;
+    }
 }
 
 @media only screen and (min-width:1134px){
     .wapper-content {
         flex-direction: row;
+    }
+    .wapper-participant {
+        padding-left: 0;
     }
 }

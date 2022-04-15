@@ -1,4 +1,4 @@
-import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
+import { createLocalVideoTrack, LocalVideoTrack, ParticipantEvent, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
@@ -26,19 +26,23 @@ export const PreJoinPage = () => {
             await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                 autoSubscribe: true,
             });
+            room.on(RoomEvent.ParticipantConnected, (participant) => {
+                participant.on(ParticipantEvent.TrackMuted, (publication) => {
+                    console.log('participant: ' + participant);
+                })
+            })
             console.log(room);
         }
         fetchToken();
-    }, [room_id]);
+    });
 
     useEffect(() => {
         const listenResponse = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload)
-                const data = JSON.parse(strData)
-                if (data.type === 'room')
-                    console.log(strData);
+                const result = JSON.parse(strData)
+                console.log(result);
             })
         }
         listenResponse();
@@ -114,25 +118,6 @@ export const PreJoinPage = () => {
         await server.get(`rooms/${room_id}/req-join-room`)
             .then((result) => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
-                console.log(result);
-                room.on(RoomEvent.ParticipantConnected, (participant) => {
-                    console.log(room);
-                    console.log('participant: ' + participant);
-                })
-                // const strData = JSON.stringify({
-                //     type: 'room',
-                //     data: {
-                //         message: 'req_join_room',
-                //         data: {
-                //             participant_name: userDetailState.payload.full_name,
-                //             participant_id: userDetailState.payload.uid_google,
-                //         },
-                //     },
-                // });
-                // const encoder = new TextEncoder();
-                // const data = encoder.encode(strData);
-                // room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE)
-                // console.log('aaaaaaaaaaaa', room);
             })
             .catch((err) => {
                 console.log(err);
@@ -155,14 +140,14 @@ export const PreJoinPage = () => {
                     <div className='wapper-videoSection'>
                         <div className="videoSection">
                             {videoEnabled ? (
-                                <span className="text-video">Máy ảnh đang bật</span>
+                                <span className="text-video">Camera is enabled</span>
                             ) : (
-                                <span className="text-video">Máy ảnh đang tắt</span>
+                                <span className="text-video">Camera is disabled</span>
                             )}
                             {audioEnabled ? (
-                                <h3 className='text-audio'>Mic đang bật</h3>
+                                <h3 className='text-audio'>Mic is enabled</h3>
                             ) : (
-                                <h3 className='text-audio'>Mic đang tắt</h3>
+                                <h3 className='text-audio'>Mic is disabled</h3>
                             )}
                             {videoEnabled ? (
                                 <div className='videoFrame'>
@@ -196,8 +181,8 @@ export const PreJoinPage = () => {
                     </div>
                     <div className='wapper-participant'>
                         <div className='join-section'>
-                            <h3>Sẵn sàng tham gia</h3>
-                            <span>Những người khác ở đây</span>
+                            <h3>Ready to join</h3>
+                            <span>The others are here</span>
                             <div className='view-participant'>
                                 <div className='join-participant'>
                                     <img
@@ -213,13 +198,12 @@ export const PreJoinPage = () => {
                                         alt=''
                                     />
                                 </div>
-                                <span>Ai đang ở đây</span>
                             </div>
                             <div className='join-room'>
-                                <button onClick={requestJoinRoom}>Tham gia ngay</button>
+                                <button onClick={requestJoinRoom}>Join Now</button>
                             </div>
                             <div className='hold-join'>
-                                <span>Đang chờ tham gia...</span>
+                                <span>Waiting to join...</span>
                             </div>
                         </div>
                     </div>
