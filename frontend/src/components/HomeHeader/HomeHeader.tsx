@@ -52,7 +52,7 @@ export function Header() {
     }
 
     return (
-        <Container maxWidth="xl">
+        <Container maxWidth={false}>
             <Toolbar disableGutters>
                 <div className='header' onClick={() => toHome()}>
                     <div className='logo'>

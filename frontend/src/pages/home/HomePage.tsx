@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import server from "../../configs/axios-config";
 import { AuthContext } from "../../contexts/auth/authProvider";
 import { GlobalContext } from "./../../contexts/provider";
@@ -17,7 +17,8 @@ export const textModel = {
   titlep:
     "Unicorn for you, We re here to help you connect, communicate, and express your ideas so you can get more done together.",
   btnNewMeeting: "New Meeting",
-  btnCreateMeetingLater: " Create a meeting to use later",
+  btnCreateMeetingLater: "Create a meeting to use later",
+  btnCreateMeetingSchedule: "Create a meeting schedule",
   btnJoin: "Join",
   aHelpText: "Learn more",
   aHelpTextAbout: "about Unicorn",
@@ -34,6 +35,7 @@ export const testId = {
   titlep: "title-p",
   btnNewMeeting: "btn-new-meeting",
   btnCreateMeetingLater: "btn-create-meeting-later",
+  btnCreateMeetingSchedule: "btn-create-meeting-schedule",
   inputEnterCode: "input-enter-code",
   btnJoin: "btn-join",
   aHelpText: "help-text",
@@ -98,6 +100,10 @@ export function HomePage() {
     signInWithGoogle();
   };
 
+  const createMeetingSchedule = async() =>{
+    navigate("/schedule");
+  };
+
   return (
     <div className="home-page">
       <Header />
@@ -147,7 +153,14 @@ export function HomePage() {
                   >
                     {textModel.btnCreateMeetingLater}
                   </button>
-
+                  <br></br>
+                  <button
+                    className="btn-conversations"
+                    onClick={createMeetingSchedule}
+                    data-testid={testId.btnCreateMeetingSchedule}
+                  >
+                    {textModel.btnCreateMeetingSchedule}
+                  </button>
                   <DialogMeet
                     openDialogMeet={openDialogMeet}
                     setOpenDialogMeet={setOpenDialogMeet}
