@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-import axios from 'axios';
-import { createLocalVideoTrack, LocalVideoTrack, Room, VideoPresets, DataPacket_Kind } from 'livekit-client';
-=======
 import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState, useContext } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-<<<<<<< HEAD
-import { GlobalContext } from '../../contexts/provider';
-=======
 import server from '../../configs/axios-config';
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
 import './prejoinpage.css';
 
 export const PreJoinPage = () => {
@@ -23,17 +14,11 @@ export const PreJoinPage = () => {
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-<<<<<<< HEAD
-    const authProvider = useContext<any>(GlobalContext);
-    const {userDetailState } = authProvider;
-    
-=======
     const room = new Room({
         adaptiveStream: true,
         dynacast: true,
     });
 
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
     useEffect(() => {
         async function fetchToken() {
             const res = await server.post(`rooms/${roomName}/token`)
@@ -118,14 +103,6 @@ export const PreJoinPage = () => {
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
-<<<<<<< HEAD
-        videoElement = <div className="placeholder" style={{backgroundColor:'green'}}/>
-    }
-
-    const requestJoinRoom = async () => {
-        const res = await axios.get(`http://localhost:8080/api/room/req-join-room/${roomName}`, { withCredentials: true });
-        console.log(res);
-=======
         room.localParticipant.setCameraEnabled(false);
         videoElement = <div className="placeholder" />
     }
@@ -153,7 +130,6 @@ export const PreJoinPage = () => {
             .catch((err) => {
                 console.log(err);
             })
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
     };
 
     window.addEventListener('resize', function () {

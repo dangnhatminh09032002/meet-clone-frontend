@@ -39,25 +39,15 @@ function FrameChat(props: any) {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
-<<<<<<< HEAD
                 const data = JSON.parse(strData)
                 if(data.type === 'chat'){
                     console.log(data)
                     setListMessage([...message, data]);
                 }
-=======
-                const data = JSON.parse(strData);
-                console.log(data)
-                if (data.type === 'room') {
-
-                }
-                // setListMessage(JSON.parse(strData));
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
             });
         };
         room && receivedData()
     }, [room]);
-    console.log(listMessage);
 
     return (
         <div className="frameChat">
@@ -72,12 +62,6 @@ function FrameChat(props: any) {
                     </div>
                 </div>
             </div>
-
-
-            {/* <div className="acceptMessage">
-                <div className="isAllow">Allow people to message</div>
-                <div className="acceptButton"> accept</div>
-            </div> */}
 
             <div className="notificationChat">
                 The message will only be visible to the call participants and will be deleted when the call ends.

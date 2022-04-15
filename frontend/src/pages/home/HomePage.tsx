@@ -48,43 +48,8 @@ export function HomePage() {
     })
   };
 
-<<<<<<< HEAD
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const hanleJoin = () => {
-    signInWithGoogle();
-    navigate({
-      pathname: `/room + ${room_name}`,
-  });
-=======
   const hanleJoin = async () => {
     signInWithGoogle();
->>>>>>> 4b68fcd868204a9d7630ee320f73d58b9245c5ac
   };
 
   return (

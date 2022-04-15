@@ -4,14 +4,16 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { RoomEvent } from "livekit-client";
-import axios from "axios";
+import server from "../../../configs/axios-config";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
     const room = props.room;
     const room_id = props.room_id;
     const setNumberPerjoin = props.setNumberPerjoin
-    
+    // console.log(infoJoinRoom.map((e: any) => console.log(e.payload.data.participant_id)));
+    console.log(infoJoinRoom)
+
     useEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
     },[infoJoinRoom.length])
@@ -22,8 +24,12 @@ function FrameJoinRoom(props: any) {
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData2 = decoder.decode(payload);
                 const data = JSON.parse(strData2);
-                if (data.type === 'room'){
-                    setInfoJoinRoom((prev: any) => [...prev, data]);
+                console.log(data);
+                // console.log(infoJoinRoom.some((e: any) => e.payload.data.participant_id === data.payload.data.participant_id));
+                // console.log('infoJoinRoom: ', infoJoinRoom?.map((e: any) => e.payload.data.participant_id));
+                // console.log('data: ', data.payload.data.participant_id)
+                if (data.type === 'room' ){
+                    setInfoJoinRoom((prev: any) => [...prev, data]);  
                 } 
             });
         };
@@ -32,23 +38,12 @@ function FrameJoinRoom(props: any) {
     
 
     const handleAllow = async (participant_id: any) => {
-        console.log(room_id)
-        const data = {
-            roomName: room_id,
-            participantId: participant_id,
-            isAllow: true
-        }
-        const res = await axios.post('http://localhost:8080/api/room/res-join-room', data,  { withCredentials: true });
+        const res = await server.get(`rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=${true}`);
         console.log(res)
     }
 
     const handleDeny = async (participant_id: any) => {
-        const data = {
-            roomName: room_id,
-            participantId: participant_id,
-            isAllow: false
-        }
-        const res = await axios.post('http://localhost:8080/api/room/res-join-room', data, { withCredentials: true })
+        const res = await server.get(`rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=${false}`);
         console.log(res)
     }
 
@@ -70,19 +65,19 @@ function FrameJoinRoom(props: any) {
                 {infoJoinRoom.map((user: any, index: any) => (
                     <div className="infoUsersJoin" key={index}>
                         <div className="avatarUser">
-                            <img src={user.data.data.picture} referrerPolicy='no-referrer' alt="Avatar"/>
+                            <img src={user?.payload?.data?.participant_picture} referrerPolicy='no-referrer' alt="Avatar"/>
                         </div>
 
                         <div className="bodyInfo">
-                            <div className="nameUser">{user.data.data.participant_name}</div>
+                            <div className="nameUser">{user?.payload?.data?.participant_name}</div>
                         </div>
 
                     <div className="infoIcon">
                             <div className="infoIconDelete">
-                                <DeleteIcon  onClick={() => handleDeny(user.data.data.participant_id)}/>
+                                <DeleteIcon  onClick={() => handleDeny(user.payload.data.participant_id)}/>
                             </div>
                             <div className="infoIconAllow">
-                                <DoneIcon  onClick={() => handleAllow(user.data.data.participant_id)}/>
+                                <DoneIcon  onClick={() => handleAllow(user.payload.data.participant_id)}/>
                             </div>      
                         </div>
                     </div>
