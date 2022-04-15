@@ -50,6 +50,7 @@
 .frameControlRight .controlItem{
     color: #fff;
     margin: 0 8px;
+    font-size: 20px;
 }
 
 .frameControlRight .controlItem .controlNumberCount {
@@ -57,8 +58,19 @@
     padding: 1px 6px;
     border-radius: 10px;
     background-color: #5f6368;
-    bottom: 61px;
-    right: 172px;
+    bottom: 58px;
+    right: 146px;
+    font-size: 14px;
+}
+
+.frameControlRight .controlItem .controlNumberJoin {
+    position: absolute;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background-color: #5f6368;
+    bottom: 58px;
+    right: 234px;
+    font-size: 14px;
 }
 
 .glo-checkChat{
@@ -87,6 +99,7 @@
     display: flex;
     flex-direction: column;
     width: 81%;
+    position: relative;
 }
 .glo-test{
     height: 100%;
@@ -118,9 +131,19 @@
     height: calc( 98.8vh - 100px);
 }
 
-.rightRoom .wrapChat,
-.rightRoom .wrapUser,
-.rightRoom .wrapInfo
+.rightRoom .containerFrame .wrapChat,
+.rightRoom .containerFrame .wrapUser,
+.rightRoom .containerFrame .wrapInfo,
+.rightRoom .containerFrame .wrapJoin
 {
     height: calc( 98.8vh - 100px);
+}
+
+.backgroundVideo {
+    height: calc( 98.8vh - 100px);
+    width: 100%;
+    position: absolute;
+    background: blue;
+    top: 0;
+    z-index: 1000;
 }
