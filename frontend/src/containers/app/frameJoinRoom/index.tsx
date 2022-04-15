@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./frameJoinRoom.css";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { RoomEvent } from "livekit-client";
 import server from "../../../configs/axios-config";
 
@@ -10,42 +10,59 @@ function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
     const room = props.room;
     const room_id = props.room_id;
-    const setNumberPerjoin = props.setNumberPerjoin
-    // console.log(infoJoinRoom.map((e: any) => console.log(e.payload.data.participant_id)));
-    console.log(infoJoinRoom)
+    const setNumberPerjoin = props.setNumberPerjoin;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
-    },[infoJoinRoom.length])
+    }, [infoJoinRoom.length]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const receivedDataJoin = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData2 = decoder.decode(payload);
-                const data = JSON.parse(strData2);
-                console.log(data);
-                // console.log(infoJoinRoom.some((e: any) => e.payload.data.participant_id === data.payload.data.participant_id));
-                // console.log('infoJoinRoom: ', infoJoinRoom?.map((e: any) => e.payload.data.participant_id));
-                // console.log('data: ', data.payload.data.participant_id)
-                if (data.type === 'room' ){
-                    setInfoJoinRoom((prev: any) => [...prev, data]);  
-                } 
+                const result = JSON.parse(strData2);
+                if (
+                    result.type === "room" &&
+                    result.action === "req-join-room"
+                ) {
+                    setInfoJoinRoom((prev: any) => {
+                        const check = prev.some(
+                            (user: any) =>
+                                user.participant_id ===
+                                result.payload.data.participant_id
+                        );
+                        if (!check) prev.push(result.payload.data);
+                        return prev;
+                    });
+                }
             });
         };
         room && receivedDataJoin();
     }, [room]);
-    
 
-    const handleAllow = async (participant_id: any) => {
-        const res = await server.get(`rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=${true}`);
-        console.log(res)
-    }
+    const handleResponseJoinRoom = (participant_id: string) => {
+        setInfoJoinRoom((prev: any) => {
+            return prev.filter(
+                (room: any) => room.participant_id !== participant_id
+            );
+        });
+    };
 
-    const handleDeny = async (participant_id: any) => {
-        const res = await server.get(`rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=${false}`);
-        console.log(res)
-    }
+    const handleAllow = async (participant_id: string) => {
+        console.log("handleAllow", participant_id);
+        await server.get(
+            `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=true`
+        );
+        handleResponseJoinRoom(participant_id);
+    };
+
+    const handleDeny = async (participant_id: string) => {
+        const res = await server.get(
+            `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=false`
+        );
+        handleResponseJoinRoom(participant_id);
+    };
 
     return (
         <div className="frameJoinRoom">
@@ -65,20 +82,34 @@ function FrameJoinRoom(props: any) {
                 {infoJoinRoom.map((user: any, index: any) => (
                     <div className="infoUsersJoin" key={index}>
                         <div className="avatarUser">
-                            <img src={user?.payload?.data?.participant_picture} referrerPolicy='no-referrer' alt="Avatar"/>
+                            <img
+                                src={user.participant_picture}
+                                referrerPolicy="no-referrer"
+                                alt="Avatar"
+                            />
                         </div>
 
                         <div className="bodyInfo">
-                            <div className="nameUser">{user?.payload?.data?.participant_name}</div>
+                            <div className="nameUser">
+                                {user.participant_name}
+                            </div>
                         </div>
 
-                    <div className="infoIcon">
+                        <div className="infoIcon">
                             <div className="infoIconDelete">
-                                <DeleteIcon  onClick={() => handleDeny(user.payload.data.participant_id)}/>
+                                <DeleteIcon
+                                    onClick={() =>
+                                        handleDeny(user.participant_id)
+                                    }
+                                />
                             </div>
                             <div className="infoIconAllow">
-                                <DoneIcon  onClick={() => handleAllow(user.payload.data.participant_id)}/>
-                            </div>      
+                                <DoneIcon
+                                    onClick={() =>
+                                        handleAllow(user.participant_id)
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
                 ))}

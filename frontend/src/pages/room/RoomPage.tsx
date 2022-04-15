@@ -15,7 +15,6 @@ import FrameChat from "../../containers/app/frameChat";
 import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
-import axios from "axios";
 import { ReactNotifications } from "react-notifications-component";
 import server from '../../configs/axios-config';
 
@@ -32,7 +31,6 @@ export function RoomPage() {
     const [type, setType] = useState<any>("chat");
     const [token, setToken] = useState<any>(null);
     const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
-    
     const displayStyle = {
         display: "block",
     };
