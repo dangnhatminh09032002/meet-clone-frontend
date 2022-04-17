@@ -7,19 +7,19 @@ import GroupIcon from "@mui/icons-material/Group";
 import InfoIcon from "@mui/icons-material/Info";
 import moment from "moment";
 import { VideoPresets, Room, RoomEvent } from "livekit-client";
-import { DisplayContext, LiveKitRoom } from "livekit-react";
+import { DisplayContext, LiveKitRoom, useRoom } from "livekit-react";
 import "livekit-react/dist/index.css";
 import "react-aspect-ratio/aspect-ratio.css";
 import "./roompage.css";
 import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
-import { v1 as uuidv1 } from "uuid";
 import axios from "axios";
 import { ReactNotifications } from "react-notifications-component";
 
 export function RoomPage() {
     const navigate = useNavigate();
-    const { roomName = "" } = useParams();
+    console.log(useParams());
+    const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>();
     const [showChat, setShowChat] = useState(true);
     const [showUsers, setShowUsers] = useState(false);
@@ -30,7 +30,8 @@ export function RoomPage() {
     const [token, setToken] = useState<any>(null);
     const location = useLocation();
 
-    console.log(roomName);
+    console.log(room_id);
+    console.log(room);
     const displayStyle = {
         display: "block",
     };
@@ -66,35 +67,32 @@ export function RoomPage() {
         color: "#fff",
     };
 
-    // useEffect(() => {
-    //     const realTime = setInterval(() => {
-    //         setHourAndMinute(moment(new Date()).format("LTS"));
-    //     }, 1000);
-    //     return () => clearInterval(realTime);
-    // }, []);
+    // set Token from friendly_id
+    useEffect(() => {
+        const getToken = async () => {
+            const res = await axios.get(
+                `http://localhost:8080/api/room/get-token/${room_id}`,
+                { withCredentials: true }
+            );
+            console.log(res);
+            setToken(res.data.data);
+        };
+        getToken();
+    }, []);
 
-    // useEffect(() => {
-    //     const getToken = async () => {
-    //         const room_id = roomName;
-    //         const res = await axios.get(
-    //             `http://localhost:8080/api/room/get-token/${room_id}`,
-    //             { withCredentials: true }
-    //         );
-    //         setToken(res.data.data);
-    //     };
-    //     getToken();
-    // }, []);
+    // update time room
+    useEffect(() => {
+        const realTime = setInterval(() => {
+            setHourAndMinute(moment(new Date()).format("LTS"));
+        }, 1000);
+        return () => clearInterval(realTime);
+    }, []);
 
-    async function onConnected(room: any) {
+    async function onConnected(room: Room) {
         setRoom(room);
-        await room.localParticipant.enableCameraAndMicrophone(true);
-        await room.on(RoomEvent.ParticipantConnected, () =>
-            updateParticipantSize(room)
-        );
-        await room.on(RoomEvent.ParticipantDisconnected, () =>
-            onParticipantDisconnected(room)
-        );
-        updateParticipantSize(room);
+        console.log(room);
+        await room.localParticipant.setCameraEnabled(true)
+        await room.localParticipant.setMicrophoneEnabled(true)
     }
 
     const clickButtonMessage = () => {
@@ -124,32 +122,36 @@ export function RoomPage() {
             <div className="row glo-row glo-video-chat">
                 <div className="glo-video">
                     <DisplayContext.Provider value={displayOptions}>
-                        <LiveKitRoom
-                            url={'ws://localhost:7880'}
-                            token={roomName}
-                            key={uuidv1()}
-                            onConnected={(room) => {
-                                console.log(room)
-                                // return onConnected(room);
-                            }}
-                            connectOptions={{
-                                adaptiveStream: true,
-                                dynacast: true,
-                                videoCaptureDefaults: {
-                                    resolution: VideoPresets.hd.resolution,
-                                },
-                                publishDefaults: {
-                                    videoEncoding: VideoPresets.hd.encoding,
-                                    simulcast: true,
-                                },
-                                logLevel: "debug",
-                            }}
-                            onLeave={onLeave}
-                        />
+                        {token &&
+                            <LiveKitRoom
+                                url={'ws://localhost:7880'}
+                                token={token}
+                                onConnected={(room) => {
+                                    onConnected(room)
+                                    room.on(RoomEvent.ParticipantConnected, () => updateParticipantSize(room))
+                                    room.on(RoomEvent.ParticipantDisconnected, () => onParticipantDisconnected(room))
+                                    updateParticipantSize(room);
+                                }}
+                                connectOptions={{
+                                    adaptiveStream: true,
+                                    dynacast: true,
+                                    videoCaptureDefaults: {
+                                        resolution: VideoPresets.hd.resolution,
+                                    },
+                                    publishDefaults: {
+                                        videoEncoding: VideoPresets.hd.encoding,
+                                        simulcast: true,
+                                    },
+                                    logLevel: "debug",
+                                }}
+                                onLeave={onLeave}
+                            />
+                        }
                     </DisplayContext.Provider>
                     <div className="frameControlLeft">
                         <p>{hourAndMinute} | roomName</p>
                     </div>
+
                 </div>
             </div>
 
