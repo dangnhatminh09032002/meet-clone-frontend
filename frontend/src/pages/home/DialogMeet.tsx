@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { useContext, useState } from "react";
-import server from '../../configs/axios-config';
+import server from "../../configs/axios-config";
 import { addMeet } from "../../contexts";
 import { GlobalContext } from "../../contexts/provider";
 import "./dialogmeet.css";
@@ -72,24 +72,18 @@ export default function DialogMeet({
   const { meetListDispatch } = meetProvider;
 
   const handleSubmitCreateMeeting = async () => {
-    await server
-      .post(
-        "/rooms",
-        { room_name: name },
-      )
-      .then(async (result) => {
-        await meetListDispatch(addMeet(result.data));
-      });
+    await server.post("rooms", { room_name: name }).then(async (result) => {
+      await meetListDispatch(addMeet(result.data));
+    });
     setOpenDialogMeet(false);
     setAnchor(null);
   };
 
-
   const onKeyDownName = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSubmitCreateMeeting();
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmitCreateMeeting}>
@@ -125,9 +119,9 @@ export default function DialogMeet({
         <DialogActions>
           <Button
             variant="contained"
-            color="success"
             type="submit"
             onClick={handleSubmitCreateMeeting}
+            className="btn-color-green"
           >
             Submit
           </Button>

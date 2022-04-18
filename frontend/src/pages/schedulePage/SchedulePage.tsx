@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -15,29 +15,29 @@ import {
 } from "@mui/material";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import "./schedulepage.css";
-import { log } from "console";
 import moment from "moment";
 
 export function SchedulePage() {
-  const [repeatime, setRepeatTime] = React.useState("");
-  const [startDay, setStartDay] = React.useState(
-    moment(new Date()).format("L").replaceAll("/", "-").toString()
-  );
+  const [repeatime, setRepeatTime] = useState("");
+  const [startDay, setStartDay] = useState("");
+  // const [startDay, setStartDay] = useState(
+  //   moment(new Date()).format("L").toString()
+  // );
+  const [hour, setHour] = useState<any>("");
   const handleChange = (event: SelectChangeEvent) => {
     setRepeatTime(event.target.value);
   };
 
-  // useEffect(() => {
-  //   let result = moment(new Date()).format("L");
-  //   console.log(result);
-  //   let formatResult = result.replaceAll("/", "-");
-  //   console.log(formatResult);
-  //   setStartDay(formatResult);
-  // }, []);
+  useEffect(() => {
+    // let result = moment(new Date()).format("L");
+    let result = moment(new Date()).format("L");
+    console.log(result);
+    setStartDay(result);
 
-  React.useEffect(() => {
-    console.log(startDay);
-  }, [startDay]);
+    // let formatResult = result.replaceAll("/", "-");
+    // console.log(formatResult);
+    // setStartDay(formatResult);
+  }, []);
 
   return (
     <div className="schedule-page">
@@ -47,30 +47,8 @@ export function SchedulePage() {
           <Typography variant="h4" gutterBottom>
             Your schedule
           </Typography>
-          {/* <div className="schedule-title">
-            <Input
-              className="glo-add-title"
-              placeholder="Add title"
-              sx={{ mb: 2 }}
-              autoFocus
-            />
-          </div>
-          <div className="schedule-time">
-            <p>From</p>
-            <div className="time-from-day">
-              <div className="input-from-day">
-                <input type="date" />
-                <input type="time" />
-              </div>
-            </div>
-            <p>To</p>
-            <div className="time-to-day">
-
-            </div>
-          </div> */}
-
           <Grid container className="schedule-title">
-            <Grid item xs={12} lg={5}>
+            <Grid item xs={12} lg={12} xl={12}>
               <Input
                 className="glo-add-title"
                 placeholder="Add title"
@@ -79,139 +57,97 @@ export function SchedulePage() {
               />
             </Grid>
           </Grid>
-
+          <p>{startDay}</p>
           <div className="schedule-time">
-            <Grid container>
-              <Grid className="schedule-start-time">
-                <Grid
-                  item
-                  // xl={3}
-                  // lg={3.5}
-                  container
-                  // justifyContent={{ lg: "flex-start", xl: "flex-start" }}
-                  mr={0.5}
-                >
+            <Grid container className="time" xl={12}>
+              <Grid className="schedule-start-time" xl={5.5}>
+                <Grid item md={6} lg={6} xl={6} container mr={0.5}>
                   <TextField
                     id="outlined-size-small"
                     size="small"
                     type="date"
-                    defaultValue={startDay}
+                    asp-format="{mm/dd/yyyy}"
+                    // defaultValue={startDay}
+                    // defaultValue={`${startDay}`}
+                    // value={`${startDay}`}
+                    value={startDay}
                     className="ip-dayUpper"
+                    fullWidth
                   />
                 </Grid>
-                <Grid
-                  item
-                  // xl={2.5}
-                  // lg={3.5}
-                  // xs={5}
-                  container
-                  // justifyContent={{
-                  //   lg: "center",
-                  //   xl: "flex-start",
-                  // }}
-                >
+                <Grid item md={6} lg={6} xl={6} container>
                   <TextField
                     id="outlined-size-small"
                     size="small"
                     type="time"
                     className="ip-timeUpper"
+                    fullWidth
                   />
                 </Grid>
               </Grid>
 
               <Grid
                 item
-                // xl={1}
-                // lg={12}
-                // xs={8}
                 container
-                // justifyContent={{ lg: "flex-start", xl: "center" }}
-                // alignItems="center"
-                // my={{ lg: 2, xs: 1 }}
                 my={1}
+                xl={1}
+                justifyContent={{ xl: "center" }}
               >
                 <Typography color="black">To</Typography>
               </Grid>
 
-              <Grid className="schedule-end-time">
-                <Grid
-                  item
-                  // xl={3}
-                  // lg={3.5}
-                  container
-                  // justifyContent={{ lg: "flex-start", xl: "flex-end" }}
-                  mr={0.5}
-                >
+              <Grid className="schedule-end-time" xl={5.5}>
+                <Grid item md={6} container mr={0.5} xl={6}>
                   <TextField
                     id="outlined-size-small"
                     size="small"
                     type="date"
                     className="ip-dayDown"
+                    fullWidth
                   />
                 </Grid>
-                <Grid
-                  item
-                  // xl={2.5}
-                  // lg={3.5}
-                  container
-                  // justifyContent={{ lg: "center", xl: "flex-end" }}
-                >
+                <Grid item md={6} container xl={6}>
                   <TextField
                     id="outlined-size-small"
                     size="small"
                     type="time"
                     className="ip-timeDown"
+                    fullWidth
                   />
                 </Grid>
               </Grid>
             </Grid>
           </div>
-          {/* <div className="time-loop" style={{ marginTop: "10px" }}>
-            <FormControl
-              sx={{ mb: 2, minWidth: 200 }}
-              size="small"
-              className="glo-select-repeat"
-            >
-              <InputLabel id="demo-select-small">Choose option</InputLabel>
-              <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={repeatime}
-                label="Repeat time"
-                onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>Do not repeat</em>
-                </MenuItem>
-                <MenuItem value={"daily"}>Daily</MenuItem>
-                <MenuItem value={"Monday to Friday"}>Monday to Friday</MenuItem>
-                <MenuItem value={"Custom"}>Custom</MenuItem>
-              </Select>
-            </FormControl>
-          </div> */}
-          {/* <div className="time-loop" style={{ marginTop: "10px" }}>
-            <FormControl
-              sx={{ mb: 2, minWidth: 320 }}
-              size="small"
-              className="glo-select-repeat"
-            >
-              <InputLabel id="demo-select-small">Choose option</InputLabel>
-              <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={repeatime}
-                label="Repeat time"
-                onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>Do not repeat</em>
-                </MenuItem>
-                <MenuItem value={"daily"}>Daily</MenuItem>
-                <MenuItem value={"Monday to Friday"}>Monday to Friday</MenuItem>
-                <MenuItem value={"Custom"}>Custom</MenuItem>
-              </Select>
-            </FormControl>
+          <div className="time-loop" style={{ marginTop: "10px" }}>
+            <Grid container>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <FormControl
+                  sx={{ mb: 2 }}
+                  size="small"
+                  className="glo-select-repeat"
+                >
+                  <InputLabel id="demo-select-small">Choose option</InputLabel>
+                  <Select
+                    labelId="demo-select-small"
+                    id="demo-select-small"
+                    value={repeatime}
+                    label="Repeat time"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>Do not repeat</em>
+                    </MenuItem>
+                    <MenuItem value={"daily"}>Daily</MenuItem>
+                    <MenuItem value={"Monday to Friday"}>
+                      Monday to Friday
+                    </MenuItem>
+                    <MenuItem value={"Custom"}>Custom</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </div>
+
           <div className="info-room">
             <Typography variant="h6" gutterBottom>
               Event details
@@ -220,62 +156,70 @@ export function SchedulePage() {
               <Button
                 className="glo-btn-join-meet"
                 variant="contained"
-                color="success"
                 sx={{ mb: 1 }}
               >
                 Join Meet
               </Button>
               <Typography variant="caption" display="block" gutterBottom>
-                Information meet
+                Information meet: <i>localhost:3000/abc-xyz</i>
               </Typography>
             </div>
           </div>
           <div className="glo-notify">
-            <Stack spacing={2} direction="row">
-              <div className="glo-stack-text">
-                <Typography
-                  variant="subtitle1"
-                  display="block"
-                  className="text-send-email text-margin"
-                >
+            <Grid container className="schedule-title">
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" display="block">
                   Send notifications by mail
                 </Typography>
-              </div>
-
-              <div className="glo-row-stack">
-                <TextField
-                  sx={{ m: 1, maxWidth: 70 }}
-                  size="small"
-                  type="number"
-                  inputProps={{ min: 1, max: 60 }}
-                />
-                <FormControl sx={{ minWidth: 200 }} size="small">
-                  <InputLabel id="demo-select-small">Time</InputLabel>
-                  <Select
-                    labelId="demo-select-small"
-                    id="demo-select-small"
-                    value={repeatime}
-                    label="Time"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="">
-                      <em>minute</em>
-                    </MenuItem>
-                    <MenuItem value={"hour"}>hour</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            </Stack>
+              </Grid>
+              <Grid container xl={12}>
+                <Grid
+                  item
+                  xs={2.8}
+                  sm={2.87}
+                  md={2.8}
+                  lg={2.5}
+                  xl={2.4}
+                  className="spac-right"
+                >
+                  <TextField
+                    size="small"
+                    type="number"
+                    fullWidth
+                    inputProps={{ min: 1, max: 60 }}
+                  />
+                </Grid>
+                <Grid item xs={9} sm={9} md={9.125} lg={9.44} xl={9.51}>
+                  <FormControl size="small" fullWidth>
+                    <InputLabel id="demo-select-small">Time</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={repeatime}
+                      label="Time asasasasa"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="">
+                        <em>minute</em>
+                      </MenuItem>
+                      <MenuItem value={"hour"}>hour</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
           </div>
           <div className="glo-description">
             <Typography variant="h6" gutterBottom>
               Add description
             </Typography>
-            <div className="textarea-description">
+            <div className="texta-description">
               <TextareaAutosize
                 aria-label="minimum height"
-                minRows={8}
+                minRows={4}
+                maxRows={8}
                 placeholder="Add description"
+                className="textarea-description"
               />
             </div>
           </div>
@@ -283,14 +227,23 @@ export function SchedulePage() {
             <Typography variant="h6" gutterBottom>
               Guest
             </Typography>
-            <TextField
-              className="glo-add-guest"
-              id="filled-basic"
-              label="Add guest"
-              variant="filled"
-              size="small"
-            />
-          </div> */}
+            <Grid container className="add-guest">
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  className="glo-add-guest"
+                  id="filled-basic"
+                  label="Add guest"
+                  variant="filled"
+                  size="small"
+                />
+              </Grid>
+            </Grid>
+          </div>
+          <div className="btn-save-infor">
+            <Button sx={{ my: 2 }} variant="contained" className="btn-save">
+              Save
+            </Button>
+          </div>
         </div>
         <div className="schedule-right"></div>
       </div>

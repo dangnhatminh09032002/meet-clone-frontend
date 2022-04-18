@@ -1,7 +1,7 @@
 import { faKeyboard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popover from "@mui/material/Popover";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
@@ -57,6 +57,8 @@ export function HomePage() {
     null
   );
 
+  const [isHost, setIsHost] = useState(false);
+
   const [openDialogMeet, setOpenDialogMeet] = React.useState(false);
   const open = Boolean(anchorEl);
   const homeProvider = useContext<any>(GlobalContext);
@@ -81,11 +83,27 @@ export function HomePage() {
 
   const [textErrorWorng, setTextErrorWorng] = useState(false);
 
+  // useEffect(() => {
+  //   const isHost = async () => {
+  //     const res = await server.get(`rooms/${room_name}`);
+  //     setIsHost(res.data.is_master);
+  //   };
+  //   isHost();
+  // }, [room_name]);
+
   const joinRoomURL = async () => {
     await server
       .get(`rooms/${room_name}`)
       .then((res) => {
+        console.log(res);
+
         if (res.data.is_master) {
+          navigate("/room/" + room_name);
+        } else {
+          navigate("/prejoinroom/" + room_name);
+        }
+
+        if (res.data.is_participant) {
           navigate("/room/" + room_name);
         } else {
           navigate("/prejoinroom/" + room_name);
@@ -100,7 +118,7 @@ export function HomePage() {
     signInWithGoogle();
   };
 
-  const createMeetingSchedule = async() =>{
+  const createMeetingSchedule = async () => {
     navigate("/schedule");
   };
 

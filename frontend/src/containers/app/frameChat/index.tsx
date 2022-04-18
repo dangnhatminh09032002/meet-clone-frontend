@@ -14,12 +14,15 @@ function FrameChat(props: any) {
     const { hourAndMinute, clickButtonMessage } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
-
+    
     const handleSendMessage = () => {
         const dataSend = {
-            userIdentity: room.localParticipant.participantInfo.identity,
-            timeSpan: hourAndMinute,
-            inputMessage: message
+            type: "chat",
+            data: {
+                userIdentity: room.localParticipant.participantInfo.identity,
+                timeSpan: hourAndMinute,
+                inputMessage: message
+            }
         };
         setListMessage([...listMessage, dataSend]);
         const strData = JSON.stringify([...listMessage, dataSend]);
@@ -32,23 +35,19 @@ function FrameChat(props: any) {
     };
 
     useEffect(() => {
-        const test = () => {
+        const receivedData = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
-                const data = JSON.parse(strData);
-                console.log(data)
-                if (data.type === 'room') {
-
+                const data = JSON.parse(strData)
+                if(data.type === 'chat'){
+                    console.log(data)
+                    setListMessage([...message, data]);
                 }
-                // setListMessage(JSON.parse(strData));
             });
         };
-        if (room) {
-            test();
-        }
+        room && receivedData()
     }, [room]);
-    console.log(listMessage);
 
     return (
         <div className="frameChat">
@@ -64,12 +63,6 @@ function FrameChat(props: any) {
                 </div>
             </div>
 
-
-            <div className="acceptMessage">
-                <div className="isAllow">Allow people to message</div>
-                <div className="acceptButton"> accept</div>
-            </div>
-
             <div className="notificationChat">
                 The message will only be visible to the call participants and will be deleted when the call ends.
             </div>
@@ -80,11 +73,11 @@ function FrameChat(props: any) {
 
                         <div className="rowChat" key={index}>
                             <div className="headerRowChat">
-                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.userIdentity) ? 'You' : infoMessage.userIdentity}</div>
-                                <div className="timeRowChat">{infoMessage.timeSpan}</div>
+                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.userIdentity}</div>
+                                <div className="timeRowChat">{infoMessage.data.timeSpan}</div>
                             </div>
                             <div className="inputMessage">
-                                {infoMessage.inputMessage}
+                                {infoMessage.data.inputMessage}
                             </div>
                         </div>
                     ))

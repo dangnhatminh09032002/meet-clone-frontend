@@ -1,6 +1,6 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from '@mui/icons-material/Delete';
-import OutputIcon from '@mui/icons-material/Output';
+import DeleteIcon from "@mui/icons-material/Delete";
+import OutputIcon from "@mui/icons-material/Output";
 import {
   Alert,
   Button,
@@ -16,38 +16,33 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import server from '../../configs/axios-config';
+import server from "../../configs/axios-config";
 import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";
 
 export function TableRoom() {
   const homeProvider = useContext<any>(GlobalContext);
-  const { authDetailState, meetListState, meetListDispatch } =
-    homeProvider;
+  const { authDetailState, meetListState, meetListDispatch } = homeProvider;
   const navigate = useNavigate();
 
   const [openSnackbarCode, setOpenSnackbarCode] = React.useState(false);
 
   useEffect(() => {
     const getListRoom = async () => {
-      await server
-        .get('/rooms')
-        .then(async (result) => {
-          await meetListDispatch(meetListData(result.data));
-        });
+      await server.get("rooms").then(async (result) => {
+        await meetListDispatch(meetListData(result.data));
+      });
     };
     getListRoom();
   }, [authDetailState]);
 
   const handleDeleteRoom = async () => {
-    const res = await server.delete(
-      "/rooms"
-    );
+    await server.delete("rooms");
   };
 
   const handleCopyLink = (nameRoom: any) => {
