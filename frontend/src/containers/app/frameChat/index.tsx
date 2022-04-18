@@ -11,10 +11,11 @@ function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
     const room = props.room;
+    console.log(room);
     const { hourAndMinute, clickButtonMessage } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
-    
+
     const handleSendMessage = () => {
         const dataSend = {
             type: "chat",
@@ -40,7 +41,7 @@ function FrameChat(props: any) {
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
                 const data = JSON.parse(strData)
-                if(data.type === 'chat'){
+                if (data.type === 'chat') {
                     console.log(data)
                     setListMessage([...message, data]);
                 }

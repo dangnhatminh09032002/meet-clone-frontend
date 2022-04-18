@@ -64,13 +64,9 @@
     color: white;
 }
 
-.videoInvisible {
-    aspect-ratio: 16/9;
+.placeholder {
     background-color: black;
     border-radius: 10px;
-    width: 100%;
-    height: 100%;
-    position: relative;
 }
 
 .controlMicCam {
@@ -110,30 +106,33 @@
 }
 
 /* ----------------------- controll join ------------------------- */
-
 .wapper-participant {
     height: 100%;
     width: 100%;
     margin-top: 4%;
     padding-left: 48px;
 }
+
 .wapper-participant h3 {
     font-size: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .wapper-participant span {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 16px;
 }
+
 .view-participant {
     display: flex;
     align-items: center;
     flex-direction: column;
 }
+
 .join-participant {
     display: flex;
     align-items: center;
@@ -141,23 +140,27 @@
     margin-top: 16px;
     width: 120px;
 }
+
 .view-participant span{
     margin: 8px 8px 0 8px;
     text-align: center;
     font-weight: 500;
 }
+
 .view-participant img {
     margin-right: 8px;
     width: 24px;
     height: 24px;
     border-radius: 50%;
 }
+
 .join-room {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 24px;
 }
+
 .join-room button {
     width: 150px;
     height: 40px;
@@ -167,11 +170,19 @@
     border: none;
     outline: none;
 }
+
 .join-room button:hover {
     transform: scale(1.01);
     cursor: pointer;
 }
+
 .hold-join{
+    text-align: center;
+    margin-top: 8px;
+    display: none;
+}
+
+.reject{
     text-align: center;
     margin-top: 8px;
     display: none;

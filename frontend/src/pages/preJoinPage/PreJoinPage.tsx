@@ -1,81 +1,94 @@
 import {
-    createLocalVideoTrack,
-    LocalVideoTrack,
-    ParticipantEvent,
+    createLocalVideoTrack, LocalVideoTrack,
     Room,
-    RoomEvent,
+    RoomEvent
 } from "livekit-client";
 import {
     AudioSelectButton,
     VideoRenderer,
-    VideoSelectButton,
+    VideoSelectButton
 } from "livekit-react";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { AspectRatio } from "react-aspect-ratio";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { server } from "../../configs/axios-config";
+import { LoadingContext } from '../../contexts/loading/loadingProvider';
 import "./prejoinpage.css";
 
+const room = new Room({
+    adaptiveStream: true,
+    dynacast: true,
+});
+
 export const PreJoinPage = () => {
+    const loadingContext = useContext<any>(LoadingContext);
+    const { show, hide } = loadingContext;
     const [listAvatar, setListAvatar] = useState([]);
-    const [videoEnabled, setVideoEnabled] = useState<boolean>(false);
+    const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
     const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
     const { room_id } = useParams();
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
     const navigate = useNavigate();
-    const room = new Room({
-        adaptiveStream: true,
-        dynacast: true,
-    });
 
     useEffect(() => {
-        async function fetchToken() {
+        const fetchToken = async () => {
             const res = await server.post(`rooms/${room_id}/token`);
             await room.connect(
                 process.env.LIVEKIT_URL || "ws://localhost:7880",
                 res.data,
                 {
-                    autoSubscribe: true,
+                    autoSubscribe: false,
                 }
             );
-            console.log(room);
-        }
-        fetchToken();
-    }, [room_id]);
-
-    useEffect(() => {
-        const listenResponse = () => {
-            const decoder = new TextDecoder();
-            room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
+            const decoder = await new TextDecoder();
+            await room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
                 const result = JSON.parse(strData);
-                console.log(result);
-                // if (result.type === "room" && result.action === "res-join-room") {
-                //     if (result?.payload.data.is_allow) {
-                //         navigate("/room/" + room_id);
-                //     }
-                // } else {
-                //     document
-                //         .querySelector(".hold-join")
-                //         ?.setAttribute("style", "display:none");
-                // }
-            });
-        };
-        listenResponse();
-        async function getTokenRes() {
-            const res = await server.post(`rooms/${room_id}/token`);
-            await room.connect(
-                process.env.LIVEKIT_URL || "ws://localhost:7880",
-                res.data,
-                {
-                    autoSubscribe: true,
+                if (result.type === "room" && result.action === "res-join-room") {
+                    if (result?.payload.data.is_allow) {
+                        navigate("/room/" + room_id);
+                    }
+                } else {
+                    document.querySelector(".hold-join")?.setAttribute("style", "display:none");
+                    document.querySelector(".reject")?.setAttribute("style", "display:block");
                 }
-            );
+            });
+        }
+        fetchToken()
+    }, []);
+
+    useEffect(() => {
+        const isRoomExist = async () => {
+            await server
+                .get(`rooms/${room_id}`)
+                .catch((err) => {
+                    err.response.status = '500' &&
+                        navigate({ pathname: "/home" });
+                });
         };
-    });
+        isRoomExist();
+        return () => {
+            console.log('stop video');
+            videoTrack?.stop();
+        }
+    }, [room_id, videoTrack, navigate]);
+
+
+    const requestJoinRoom = async () => {
+        await server
+            .get(`rooms/${room_id}/req-join-room`)
+            .then(() => {
+                document
+                    .querySelector(".hold-join")
+                    ?.setAttribute("style", "display:block");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     useEffect(() => {
         createLocalVideoTrack({
@@ -160,18 +173,6 @@ export const PreJoinPage = () => {
         videoElement = <div className="placeholder" />;
     }
 
-    const requestJoinRoom = async () => {
-        await server
-            .get(`rooms/${room_id}/req-join-room`)
-            .then(() => {
-                document
-                    .querySelector(".hold-join")
-                    ?.setAttribute("style", "display:block");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
     return (
         <div className="prejoin">
@@ -190,13 +191,9 @@ export const PreJoinPage = () => {
                             ) : (
                                 <h3 className="text-audio">Mic is disabled</h3>
                             )}
-                            {videoEnabled ? (
-                                <div className="videoFrame">
-                                    <AspectRatio ratio={16 / 9}>{videoElement}</AspectRatio>
-                                </div>
-                            ) : (
-                                <div className="videoInvisible"></div>
-                            )}
+                            <div className="videoFrame">
+                                <AspectRatio ratio={16 / 9}>{videoElement}</AspectRatio>
+                            </div>
                             <div className="controlMicCam">
                                 <div>
                                     <AudioSelectButton
@@ -235,6 +232,9 @@ export const PreJoinPage = () => {
                             </div>
                             <div className="hold-join">
                                 <span>Waiting to join...</span>
+                            </div>
+                            <div className="reject">
+                                <span>Request has been rejected</span>
                             </div>
                         </div>
                     </div>
