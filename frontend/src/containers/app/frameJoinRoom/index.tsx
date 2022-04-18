@@ -4,7 +4,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLayoutEffect, useState } from "react";
 import { RoomEvent } from "livekit-client";
-import server from "../../../configs/axios-config";
+import { server } from "../../../configs/axios-config";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);

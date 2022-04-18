@@ -16,7 +16,7 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import server from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 
 export function RoomPage() {
     const navigate = useNavigate();

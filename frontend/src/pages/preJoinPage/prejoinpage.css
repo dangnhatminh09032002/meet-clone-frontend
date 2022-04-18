@@ -14,7 +14,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 5%;
     flex-direction: column;
     margin: 5% 16px 0 16px;
 }
@@ -226,9 +225,10 @@
     }
 }
 
-@media only screen and (min-width:1134px){
+@media only screen and (min-width:1280px){
     .wapper-content {
         flex-direction: row;
+        margin: 10% 0 5% 5%;
     }
     .wapper-participant {
         padding-left: 0;
