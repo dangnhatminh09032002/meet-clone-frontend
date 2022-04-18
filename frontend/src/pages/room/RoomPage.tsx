@@ -4,7 +4,7 @@ import "react-chat-widget/lib/styles.css";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import GroupIcon from "@mui/icons-material/Group";
 import InfoIcon from "@mui/icons-material/Info";
-import HailIcon from '@mui/icons-material/Hail';
+import HailIcon from "@mui/icons-material/Hail";
 import moment from "moment";
 import { VideoPresets, Room, RoomEvent } from "livekit-client";
 import { DisplayContext, LiveKitRoom } from "livekit-react";
@@ -16,12 +16,12 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import server from '../../configs/axios-config';
+import server from "../../configs/axios-config";
 
 export function RoomPage() {
     const navigate = useNavigate();
     const { room_id = "" } = useParams();
-    const [room, setRoom] = useState<any>('');
+    const [room, setRoom] = useState<any>(null);
     const [showChat, setShowChat] = useState(true);
     const [showUsers, setShowUsers] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
@@ -30,6 +30,7 @@ export function RoomPage() {
     const [numParticipants, setNumParticipants] = useState<any>(0);
     const [type, setType] = useState<any>("chat");
     const [token, setToken] = useState<any>(null);
+    const [isHost, setIsHost] = useState(false);
     const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
 
     const displayStyle = {
@@ -67,22 +68,57 @@ export function RoomPage() {
         color: "#fff",
     };
 
+    // check room not exist => negative to home
+    useEffect(() => {
+        const isRoomExist = async () => {
+            await server
+                .get(`rooms/${room_id}`)
+                .catch((err) => {
+                    err.response.status = '500' &&
+                    navigate({ pathname: "/home" });
+                });
+        };
+        isRoomExist();
+    }, []);
+
     // get Token
     useEffect(() => {
         const getToken = async () => {
-            const res = await server.post(
-                `rooms/${room_id}/token`
-            );
+            const res = await server.post(`rooms/${room_id}/token`);
             setToken(res.data);
         };
         getToken();
     }, [room_id]);
 
+    // check host
+    useEffect(() => {
+        const isHost = async () => {
+            const res = await server.get(`rooms/${room_id}`);
+            setIsHost(res.data.is_master);
+        };
+        isHost();
+    }, [room_id]);
 
+    // check Participant
+    useEffect(() => {
+        const isParticipant = async () => {
+            await server.get(`rooms/${room_id}`).then((res) => {
+                res.data.is_participant === false &&
+                    navigate({
+                        pathname: `/prejoinroom/${room_id}`
+                    });
+                }
+            )
+        }
+        isParticipant();
+    }, [room_id])
+
+    // get Time
     useEffect(() => {
         const realTime = setInterval(() => {
             setHourAndMinute(moment(new Date()).format("LTS"));
         }, 1000);
+
         return () => clearInterval(realTime);
     }, []);
 
@@ -97,7 +133,7 @@ export function RoomPage() {
         setShowChat(!showChat);
         setShowUsers(false);
         setShowInfo(false);
-        setShowJoin(false)
+        setShowJoin(false);
     };
 
     const clickButtonUser = () => {
@@ -105,7 +141,7 @@ export function RoomPage() {
         setShowUsers(!showUsers);
         setShowChat(false);
         setShowInfo(false);
-        setShowJoin(false)
+        setShowJoin(false);
     };
 
     const clickButtonInfo = () => {
@@ -113,16 +149,16 @@ export function RoomPage() {
         setShowInfo(!showInfo);
         setShowUsers(false);
         setShowChat(false);
-        setShowJoin(false)
+        setShowJoin(false);
     };
 
     const clickButtonJoin = () => {
-        setType('join');
+        setType("join");
         setShowJoin(!showJoin);
         setShowChat(false);
         setShowInfo(false);
-        setShowUsers(false)
-    }
+        setShowUsers(false);
+    };
 
     return (
         <div className="glo-page">
@@ -130,56 +166,65 @@ export function RoomPage() {
             <div className="row glo-row glo-video-chat">
                 <div className="glo-video ">
                     <DisplayContext.Provider value={displayOptions}>
-                        {token &&
-                        <LiveKitRoom
-                            url={'ws://localhost:7880'}
-                            token={token}
-                            onConnected={(room) => {
-                                onConnected(room)
-                                room.on(RoomEvent.ParticipantConnected, () => updateParticipantSize(room))
-                                room.on(RoomEvent.ParticipantDisconnected, () => onParticipantDisconnected(room))
-                                updateParticipantSize(room);   
-                            }}
-                            connectOptions={{
-                                adaptiveStream: true,
-                                dynacast: true,
-                                videoCaptureDefaults: {
-                                    resolution: VideoPresets.hd.resolution,
-                                },
-                                publishDefaults: {
-                                    videoEncoding: VideoPresets.hd.encoding,
-                                    simulcast: true,
-                                },
-                                logLevel: "debug",
-                            }}
-                            onLeave={onLeave}
-                        />
-                        }
+                        {token && (
+                            <LiveKitRoom
+                                url={"ws://localhost:7880"}
+                                token={token}
+                                onConnected={(room) => {
+                                    onConnected(room);
+                                    room.on(
+                                        RoomEvent.ParticipantConnected,
+                                        () => updateParticipantSize(room)
+                                    );
+                                    room.on(
+                                        RoomEvent.ParticipantDisconnected,
+                                        () => onParticipantDisconnected(room)
+                                    );
+                                    updateParticipantSize(room);
+                                }}
+                                connectOptions={{
+                                    adaptiveStream: true,
+                                    dynacast: true,
+                                    videoCaptureDefaults: {
+                                        resolution: VideoPresets.hd.resolution,
+                                    },
+                                    publishDefaults: {
+                                        videoEncoding: VideoPresets.hd.encoding,
+                                        simulcast: true,
+                                    },
+                                    logLevel: "debug",
+                                }}
+                                onLeave={onLeave}
+                            />
+                        )}
                     </DisplayContext.Provider>
                     <div className="frameControlLeft">
-                        <p>{hourAndMinute} | {room_id}</p>
+                        <p>
+                            {hourAndMinute} | {room_id}
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div className="rightRoom">
                 <div className="containerFrame">
-                    <div
-                        className="wrapJoin" 
-                        style={
-                            type === "join" && showJoin
-                                ? displayStyle
-                                : displayNoneStyle
-                        }
-                    >
-                        <FrameJoinRoom
-                            setShowJoin={setShowJoin}
-                            setNumberPerjoin= {setNumberPerjoin} 
-                            room={room}
-                            room_id={room_id}
-                        />
-                    </div>
-
+                    {isHost && (
+                        <div
+                            className="wrapJoin"
+                            style={
+                                type === "join" && showJoin
+                                    ? displayStyle
+                                    : displayNoneStyle
+                            }
+                        >
+                            <FrameJoinRoom
+                                setShowJoin={setShowJoin}
+                                setNumberPerjoin={setNumberPerjoin}
+                                room={room}
+                                room_id={room_id}
+                            />
+                        </div>
+                    )}
                     <div
                         className="wrapChat"
                         style={
@@ -197,7 +242,6 @@ export function RoomPage() {
                         </div>
                     </div>
 
-                    
                     <div
                         className="wrapUser"
                         style={
@@ -206,9 +250,7 @@ export function RoomPage() {
                                 : displayNoneStyle
                         }
                     >
-                        <FrameShowUsers 
-                            setShowUsers={setShowUsers}
-                        />
+                        <FrameShowUsers setShowUsers={setShowUsers} />
                     </div>
 
                     <div
@@ -219,30 +261,29 @@ export function RoomPage() {
                                 : displayNoneStyle
                         }
                     >
-                        <FrameInfoRoom 
-                            setShowInfo={setShowInfo}
-                        />
+                        <FrameInfoRoom setShowInfo={setShowInfo} />
                     </div>
-
                 </div>
                 <div className="frameControlRight">
-                    <div className="controlItem" onClick={clickButtonJoin}>
-                        <HailIcon
-                            style={
-                                type === "join"
-                                    ? controlItemActive
-                                    : controlItemNoActive
-                            }
-                            className="controlItem"
-                        />
-                        <span className="controlNumberJoin">
-                            {numberPrejoin}
-                        </span>
-                    </div>
+                    {isHost && (
+                        <div className="controlItem" onClick={clickButtonJoin}>
+                            <HailIcon
+                                style={
+                                    type === "join" && showJoin
+                                        ? controlItemActive
+                                        : controlItemNoActive
+                                }
+                                className="controlItem"
+                            />
+                            <span className="controlNumberJoin">
+                                {numberPrejoin}
+                            </span>
+                        </div>
+                    )}
                     <div className="controlItem" onClick={clickButtonInfo}>
                         <InfoIcon
                             style={
-                                type === "info"
+                                type === "info" && showInfo
                                     ? controlItemActive
                                     : controlItemNoActive
                             }
@@ -251,7 +292,7 @@ export function RoomPage() {
                     <div className="controlItem" onClick={clickButtonUser}>
                         <GroupIcon
                             style={
-                                type === "user"
+                                type === "user" && showUsers
                                     ? controlItemActive
                                     : controlItemNoActive
                             }
@@ -263,7 +304,7 @@ export function RoomPage() {
                     <div className="controlItem" onClick={clickButtonMessage}>
                         <ChatBubbleIcon
                             style={
-                                type === "chat"
+                                type === "chat" && showChat
                                     ? controlItemActive
                                     : controlItemNoActive
                             }

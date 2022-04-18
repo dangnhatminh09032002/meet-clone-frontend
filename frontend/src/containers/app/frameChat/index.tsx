@@ -28,7 +28,7 @@ function FrameChat(props: any) {
         const encoder = new TextEncoder();
         const data = encoder.encode(strData);
         room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
-
+        
         setMessage('');
         inputRef.current.focus();
     };
@@ -40,7 +40,6 @@ function FrameChat(props: any) {
                 const strData = decoder.decode(payload);
                 const data = JSON.parse(strData)
                 if(data.type === 'chat'){
-                    console.log(data)
                     setListMessage([...message, data]);
                 }
             });

@@ -49,7 +49,6 @@ function FrameJoinRoom(props: any) {
     };
 
     const handleAllow = async (participant_id: string) => {
-        console.log("handleAllow", participant_id);
         await server.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=true`
         );
@@ -57,7 +56,7 @@ function FrameJoinRoom(props: any) {
     };
 
     const handleDeny = async (participant_id: string) => {
-        const res = await server.get(
+        await server.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=false`
         );
         handleResponseJoinRoom(participant_id);
