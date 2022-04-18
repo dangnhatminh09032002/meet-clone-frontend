@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
-import server from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import { AuthContext } from '../../contexts/auth/authProvider';
 import { GlobalContext } from "./../../contexts/provider";
 import DialogMeet from "./DialogMeet";

@@ -14,7 +14,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 5%;
     flex-direction: column;
     margin: 5% 16px 0 16px;
 }
