@@ -3,7 +3,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
-function FrameShowUsers() {
+function FrameShowUsers(props: any) {
+
+    const setShowUsers = props.setShowUsers
+
     return(
         <div className="frameUsers">
             <div className="headerFrameUser">
@@ -12,7 +15,7 @@ function FrameShowUsers() {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon/>
+                        <CloseIcon onClick={() => setShowUsers(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>

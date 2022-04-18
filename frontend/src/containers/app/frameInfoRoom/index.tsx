@@ -5,7 +5,8 @@ import { Store } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import 'animate.css';
 
-function FrameInfoRoom() {
+function FrameInfoRoom(props: any) {
+    const {setShowInfo} = props
 
     const handleCopy = () => {
         navigator.clipboard.writeText(`${window.location.href}`);
@@ -33,7 +34,7 @@ function FrameInfoRoom() {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon />
+                        <CloseIcon onClick={() => setShowInfo(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>

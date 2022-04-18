@@ -31,6 +31,7 @@ export function RoomPage() {
     const [type, setType] = useState<any>("chat");
     const [token, setToken] = useState<any>(null);
     const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
+
     const displayStyle = {
         display: "block",
     };
@@ -172,6 +173,7 @@ export function RoomPage() {
                         }
                     >
                         <FrameJoinRoom
+                            setShowJoin={setShowJoin}
                             setNumberPerjoin= {setNumberPerjoin} 
                             room={room}
                             room_id={room_id}
@@ -190,6 +192,7 @@ export function RoomPage() {
                             <FrameChat
                                 room={room}
                                 hourAndMinute={hourAndMinute}
+                                setShowChat={setShowChat}
                             />
                         </div>
                     </div>
@@ -203,7 +206,9 @@ export function RoomPage() {
                                 : displayNoneStyle
                         }
                     >
-                        <FrameShowUsers />
+                        <FrameShowUsers 
+                            setShowUsers={setShowUsers}
+                        />
                     </div>
 
                     <div
@@ -214,7 +219,9 @@ export function RoomPage() {
                                 : displayNoneStyle
                         }
                     >
-                        <FrameInfoRoom />
+                        <FrameInfoRoom 
+                            setShowInfo={setShowInfo}
+                        />
                     </div>
 
                 </div>

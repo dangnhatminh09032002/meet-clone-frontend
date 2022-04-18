@@ -22,7 +22,7 @@ export default function AuthProvider(props: any) {
         console.log(id_token)
         await server
           .get(
-            `auth/login/google?id_token=${id_token}`,
+            `auth/login/google?id_token=${id_token}`
           )
           .then(async () => {
             await authDetailDispatch(authDetailData({ isLogin: true }));

@@ -10,8 +10,7 @@ import {
 function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
-    const room = props.room;
-    const { hourAndMinute, clickButtonMessage } = props;
+    const { hourAndMinute, setShowChat, room } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
     
@@ -57,7 +56,7 @@ function FrameChat(props: any) {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => clickButtonMessage()} />
+                        <CloseIcon onClick={() => setShowChat(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
