@@ -207,6 +207,14 @@
     .wapper-participant {
         padding-left: 0;
     }
+
+    .videoSection h3 {
+        left: 35%;
+    }
+
+    .videoSection span {
+        left: 35%;
+    }
 }
 
 @media only screen and (min-width: 601px) and (max-width:740px){

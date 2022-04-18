@@ -1,6 +1,6 @@
 import { createLocalVideoTrack, LocalVideoTrack, ParticipantEvent, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useEffect, useState, useContext } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
@@ -43,9 +43,10 @@ export const PreJoinPage = () => {
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload)
                 const result = JSON.parse(strData)
+                console.log(result);
                 if (result.type === 'room' && result.action === 'res-join-room') {
                     if (result?.payload.data.is_allow) {
-                        navigate('/room/' + room_id)
+                        // navigate('/room/' + room_id)
                     }
                 } else {
                     document.querySelector('.hold-join')?.setAttribute('style', 'display:none');
