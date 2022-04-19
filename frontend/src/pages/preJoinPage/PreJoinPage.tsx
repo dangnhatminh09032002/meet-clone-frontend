@@ -1,12 +1,18 @@
 import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { ReactElement, useEffect, useState, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import { AspectRatio } from 'react-aspect-ratio';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 import server from '../../configs/axios-config';
 import './prejoinpage.css';
 
+
+const room = new Room({
+    adaptiveStream: true,
+    dynacast: true,
+});
 export const PreJoinPage = () => {
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(true);
@@ -14,22 +20,36 @@ export const PreJoinPage = () => {
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-    const room = new Room({
-        adaptiveStream: true,
-        dynacast: true,
-    });
+    const navigate = useNavigate();
+
 
     useEffect(() => {
-        async function fetchToken() {
+        const fetchToken = async () => {
             const res = await server.post(`rooms/${room_id}/token`);
-            console.log(res);
-            await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
-                autoSubscribe: true,
+            await room.connect(
+                process.env.LIVEKIT_URL || "ws://localhost:7880",
+                res.data,
+                {
+                    autoSubscribe: false,
+                }
+            );
+            const decoder = await new TextDecoder();
+            await room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
+                const strData = decoder.decode(payload);
+                const result = JSON.parse(strData);
+                console.log(result);
+                if (result.type === "room" && result.action === "res-join-room") {
+                    if (result?.payload.data.is_allow) {
+                        navigate("/room/" + room_id);
+                    }
+                } else {
+                    document.querySelector(".hold-join")?.setAttribute("style", "display:none");
+                    document.querySelector(".reject")?.setAttribute("style", "display:block");
+                }
             });
-            console.log(room);
         }
-        fetchToken();
-    }, [room_id]);
+        fetchToken()
+    }, []);
 
     useEffect(() => {
         const listenResponse = () => {

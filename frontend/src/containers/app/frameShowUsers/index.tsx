@@ -38,7 +38,7 @@ function FrameShowUsers(props: any) {
             <div className="listUser">
                 <div className="infoUsers">
                     <div className="avatarUser">
-                        <img src="https://lh3.googleusercontent.com/a/AATXAJy-qB8gB7EjKkXwPV7WWfUHmg3ZHBb2SWw9rN_IMA=s192-c-mo" />
+                        <img src="https://lh3.googleusercontent.com/a/AATXAJy-qB8gB7EjKkXwPV7WWfUHmg3ZHBb2SWw9rN_IMA=s192-c-mo" referrerPolicy="no-referrer" alt="avatar"/>
                     </div>
 
                     <div className="bodyInfo">
