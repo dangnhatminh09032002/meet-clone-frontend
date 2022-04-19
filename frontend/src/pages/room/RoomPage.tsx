@@ -22,10 +22,10 @@ export function RoomPage() {
     const navigate = useNavigate();
     const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>(null);
-    const [showChat, setShowChat] = useState(true);
-    const [showUsers, setShowUsers] = useState(false);
-    const [showInfo, setShowInfo] = useState(false);
-    const [showJoin, setShowJoin] = useState(false);
+    const [showChat, setShowChat] = useState<boolean>(true);
+    const [showUsers, setShowUsers] = useState<boolean>(false);
+    const [showInfo, setShowInfo] = useState<boolean>(false);
+    const [showJoin, setShowJoin] = useState<boolean>(false);
     const [hourAndMinute, setHourAndMinute] = useState<any>("");
     const [numParticipants, setNumParticipants] = useState<any>(0);
     const [type, setType] = useState<any>("chat");
