@@ -5,45 +5,46 @@ import SendIcon from '@mui/icons-material/Send';
 import {
     RoomEvent,
     DataPacket_Kind,
-    Participant
 } from 'livekit-client';
 
 function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
-    const room = props.room;
-    console.log(room);
-    const { hourAndMinute, clickButtonMessage } = props;
+    const { hourAndMinute, setShowChat, room } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
-
+    
     const handleSendMessage = () => {
         const dataSend = {
-            userIdentity: room.localParticipant.participantInfo.identity,
-            timeSpan: hourAndMinute,
-            inputMessage: message
+            type: "chat",
+            data: {
+                userIdentity: room.localParticipant.participantInfo.identity,
+                timeSpan: hourAndMinute,
+                inputMessage: message
+            }
         };
         setListMessage([...listMessage, dataSend]);
         const strData = JSON.stringify([...listMessage, dataSend]);
         const encoder = new TextEncoder();
         const data = encoder.encode(strData);
         room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
-
+        
         setMessage('');
         inputRef.current.focus();
     };
 
     useEffect(() => {
-        const test = () => {
+        const receivedData = () => {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
-                setListMessage(JSON.parse(strData));
+                const data = JSON.parse(strData)
+                if(data.type === 'chat'){
+                    setListMessage([...message, data]);
+                }
             });
         };
-        if (room) {
-            test();
-        }
+        room && receivedData()
     }, [room]);
 
     return (
@@ -54,16 +55,10 @@ function FrameChat(props: any) {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => clickButtonMessage()} />
+                        <CloseIcon onClick={() => setShowChat(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
-            </div>
-
-
-            <div className="acceptMessage">
-                <div className="isAllow">Allow people to message</div>
-                <div className="acceptButton"> accept</div>
             </div>
 
             <div className="notificationChat">
@@ -76,11 +71,11 @@ function FrameChat(props: any) {
 
                         <div className="rowChat" key={index}>
                             <div className="headerRowChat">
-                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.userIdentity) ? 'You' : infoMessage.userIdentity}</div>
-                                <div className="timeRowChat">{infoMessage.timeSpan}</div>
+                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.userIdentity}</div>
+                                <div className="timeRowChat">{infoMessage.data.timeSpan}</div>
                             </div>
                             <div className="inputMessage">
-                                {infoMessage.inputMessage}
+                                {infoMessage.data.inputMessage}
                             </div>
                         </div>
                     ))

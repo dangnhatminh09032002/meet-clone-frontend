@@ -9,16 +9,16 @@
 .frameUsers .inputFindUser {
     display: flex;
     margin: 0 12px;
-    border: 1px solid #6f7478;
+    border: 2px solid #6f7478;
     border-radius: 4px;
 }
 
 .frameUsers .inputFindUser:focus-within {
-    border: 1px solid rgb(30, 89, 167);
+    border: 2px solid rgb(24 105 213);
 }
 .frameUsers .inputFindUser .iconSearch {
     padding: 12px;
-    color: #4a4747;
+    color: #b5b7b9;
 }
 
 .frameUsers .inputFindUser input {
@@ -37,6 +37,7 @@
     display: flex;
     flex-direction: column;
     padding: 18px 12px 12px 12px;
+    overflow-y: auto;
 }
 
 .frameUsers .listUser .infoUsers {

@@ -1,23 +1,18 @@
 import { faKeyboard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popover from "@mui/material/Popover";
-import axios from "axios";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
-import { auth } from "../../configs/firebase-config";
-import { authDetailData } from "../../contexts/auth";
-import { userDetailData } from "../../contexts/user";
-import { meetListData } from "../../contexts/meet";
-import { GlobalContext } from "./../../contexts/provider";
-import "./homepage.css";
-import DialogMeet from "./DialogMeet";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
+import server from '../../configs/axios-config';
+import { AuthContext } from '../../contexts/auth/authProvider';
+import { GlobalContext } from "./../../contexts/provider";
+import DialogMeet from "./DialogMeet";
+import "./homepage.css";
 
 export function HomePage() {
   const [room_name, setRoomName] = useState("");
-  const [idTokenRoom, setIdTokenRoom] = useState("");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -28,10 +23,9 @@ export function HomePage() {
   const homeProvider = useContext<any>(GlobalContext);
   const {
     authDetailState,
-    authDetailDispatch,
-    userDetailDispatch,
-    meetListDispatch,
   } = homeProvider;
+  const authProvider = useContext<any>(AuthContext);
+  const { signInWithGoogle } = authProvider;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -41,71 +35,21 @@ export function HomePage() {
   };
 
   const joinRoomURL = async () => {
-    const id_token = await auth.currentUser?.getIdToken(true);
-    const res = await axios.get(
-      `http://localhost:8080/api/room/exits-room/${room_name}`,
-      { withCredentials: true }
-    );
-    if (res.data.data === true) {
-      navigate("/room/" + room_name);
-    } else {
-      console.log("Does not exist!");
-    }
+    await server.get(
+      `rooms/${room_name}`,
+    ).then((res) => {
+      if (res.data.is_master) {
+        navigate("/room/" + room_name);
+      } else {
+        navigate("/prejoinroom/" + room_name);
+      }
+    }).catch((error) => {
+      return
+    })
   };
 
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const hanleJoin = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const id_token = await auth.currentUser?.getIdToken(true);
-        const res = await axios
-          .post(
-            "http://localhost:8080/api/auth/google",
-            { id_token },
-            { withCredentials: true }
-          )
-          .then(async () => {
-            await authDetailDispatch(authDetailData({ isLogin: true }));
-            await userDetailDispatch(
-              userDetailData({
-                uid_google: result.user.uid,
-                full_name: `${result.user.displayName}`,
-                ava_url: `${result.user.photoURL}`,
-              })
-            );
-          });
-        navigate("/waitting");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const hanleJoin = async () => {
+    signInWithGoogle();
   };
 
   return (
@@ -126,7 +70,7 @@ export function HomePage() {
                   New Meeting
                 </button>
               ) : (
-                <button className="btn green" onClick={signInWithGoogle}>
+                <button className="btn green" onClick={() => hanleJoin()} >
                   <FontAwesomeIcon className="icon-block" icon={faVideo} />
                   New Meeting
                 </button>
@@ -169,7 +113,6 @@ export function HomePage() {
                 {authDetailState.payload.isLogin === true ? (
                   <button
                     className="btn no-bg btn-join"
-                    // onClick={() => joinRoomURL(room_name)}
                     onClick={() => joinRoomURL()}
                   >
                     Join
