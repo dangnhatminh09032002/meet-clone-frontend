@@ -41,6 +41,17 @@
     border-radius: 4px;
 }
 
+.btn-custom-time{
+    width: 100%;
+    justify-content: left !important;
+    padding-left: 16px !important;
+    text-transform: capitalize !important;
+    font-size: 1em !important;
+    line-height: 1.5em !important;
+    font-weight: 400 !important;
+    color: inherit !important;
+}
+
 @media screen and (max-width: 1200px){
     .schedule-right{
         display: none;
@@ -212,9 +223,9 @@
 
 }
 
-@media screen and (min-width: 1201px){
+@media screen and (min-width: 1201px) and (max-width:2000px){
     .schedule-content{
-        width: 60%;
+        width: 70%;
         margin: 10px auto;
     }
 
@@ -249,6 +260,11 @@
 
     /* .spac-right{
         border-right: unset;
+    } */
+
+    /* .schedule-number{
+        display:flex;
+        width: 100%;
     } */
 
 }

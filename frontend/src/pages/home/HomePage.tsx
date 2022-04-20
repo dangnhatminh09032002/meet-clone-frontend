@@ -56,9 +56,6 @@ export function HomePage() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-
-  const [isHost, setIsHost] = useState(false);
-
   const [openDialogMeet, setOpenDialogMeet] = React.useState(false);
   const open = Boolean(anchorEl);
   const homeProvider = useContext<any>(GlobalContext);
@@ -82,14 +79,6 @@ export function HomePage() {
   };
 
   const [textErrorWorng, setTextErrorWorng] = useState(false);
-
-  // useEffect(() => {
-  //   const isHost = async () => {
-  //     const res = await server.get(`rooms/${room_name}`);
-  //     setIsHost(res.data.is_master);
-  //   };
-  //   isHost();
-  // }, [room_name]);
 
   const joinRoomURL = async () => {
     await server
