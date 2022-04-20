@@ -2,10 +2,22 @@ import './frameUsers.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { memo, useEffect, useState } from 'react';
+import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
-
-    const setShowUsers = props.setShowUsers
+    
+    const {setShowUsers, room_id} = props;
+    const [listParticipant, setListParticipant] = useState<any>([]);
+    console.log(listParticipant);
+    // get Participant of room
+    useEffect(() => {
+        const getParticipant = async () => {
+            await server.get(`rooms/${room_id}/participants`)
+                .then(res => console.log(res));
+        }
+        getParticipant();
+    }, [room_id]);
 
     return(
         <div className="frameUsers">
@@ -34,27 +46,28 @@ function FrameShowUsers(props: any) {
             <div className="headerListUser">
                 In a meeting
             </div>
-            
             <div className="listUser">
-                <div className="infoUsers">
-                    <div className="avatarUser">
-                        <img src="https://lh3.googleusercontent.com/a/AATXAJy-qB8gB7EjKkXwPV7WWfUHmg3ZHBb2SWw9rN_IMA=s192-c-mo" referrerPolicy="no-referrer" alt="avatar"/>
-                    </div>
+                {listParticipant.map((user: any, index: any) => {
+                    <div className="infoUsers" key={index}>
+                        <div className="avatarUser">
+                            <img src={user.picture} referrerPolicy="no-referrer" alt="avatar"/>
+                        </div>
 
-                    <div className="bodyInfo">
-                        <div className="nameUser">Lê Văn Duy</div>
-                        {/* check if === host => add class */}
-                        <div className="description">Meeting organizer</div>
-                    </div>
+                        <div className="bodyInfo">
+                            <div className="nameUser">{user.name}</div>
+                            {/* check if === host => add class */}
+                            <div className="description">Meeting organizer</div>
+                        </div>
 
-                    <div className="infoIcon">
-                        <ManageAccountsIcon />
+                        <div className="infoIcon">
+                            <ManageAccountsIcon />
+                        </div>
                     </div>
-                </div>
+                })}
             </div>
 
         </div>
     );
 }
 
-export default FrameShowUsers;
+export default memo(FrameShowUsers);

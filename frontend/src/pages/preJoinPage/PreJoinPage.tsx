@@ -21,7 +21,6 @@ const room = new Room({
     dynacast: true,
 });
 
-
 export const PreJoinPage = () => {
     const loadingContext = useContext<any>(LoadingContext);
     const { show, hide } = loadingContext;

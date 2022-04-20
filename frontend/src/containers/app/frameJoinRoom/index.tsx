@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./frameJoinRoom.css";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, memo } from "react";
 import { RoomEvent } from "livekit-client";
 import { server } from "../../../configs/axios-config";
 
@@ -10,7 +10,7 @@ function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
     const { setShowJoin, room, room_id} = props;
     const setNumberPerjoin = props.setNumberPerjoin;
-
+    console.log('FrameJoinRoom render.....');
     useLayoutEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
     }, [infoJoinRoom.length]);

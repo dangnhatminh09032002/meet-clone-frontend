@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import './frameChat.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
@@ -14,6 +14,7 @@ function FrameChat(props: any) {
     const { hourAndMinute, clickButtonMessage, room } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
+    // console.log('FrameChat render.....');
 
     const handleSendMessage = () => {
         const dataSend = {
@@ -37,7 +38,7 @@ function FrameChat(props: any) {
     useEffect(() => {
         const receivedData = () => {
             const decoder = new TextDecoder();
-            room.on(RoomEvent.DataReceived, (payload: Uint8Array, participant: Participant, kind: DataPacket_Kind) => {
+            room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
                 const data = JSON.parse(strData);
                 data.type === 'chat' && setListMessage((prev: any) => [...prev, data]);
@@ -108,4 +109,4 @@ function FrameChat(props: any) {
     );
 }
 
-export default FrameChat;
+export default memo(FrameChat);
