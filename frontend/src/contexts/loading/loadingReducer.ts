@@ -3,12 +3,13 @@ import { LOADING_DATA, LOADING_ERROR } from './loadingConstants';
 import { LoadingState } from './loadingTypes';
 
 
-export const initialAuthDetail: LoadingState = {
-    loading: true,
+export const initialLoading: LoadingState = {
+    payload:{ vid_track: false},
+    loading: false,
 };
 
-export const authDetailReducer = (
-    state = initialAuthDetail,
+export const loadingReducer = (
+    state = initialLoading,
     action: LoadingActions
 ): LoadingState => {
     switch (action.type) {
