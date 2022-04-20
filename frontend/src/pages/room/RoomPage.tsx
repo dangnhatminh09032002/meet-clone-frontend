@@ -16,9 +16,10 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import server from "../../configs/axios-config";
+import { server } from "../../configs/axios-config";
 
 export function RoomPage() {
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>(null);
@@ -30,7 +31,7 @@ export function RoomPage() {
     const [numParticipants, setNumParticipants] = useState<any>(0);
     const [type, setType] = useState<any>("chat");
     const [token, setToken] = useState<any>(null);
-    const [isHost, setIsHost] = useState(false);
+    const [isHost, setIsHost] = useState<boolean>(false);
     const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
 
     const displayStyle = {
@@ -70,15 +71,14 @@ export function RoomPage() {
 
     // check room not exist => negative to home
     useEffect(() => {
-        const isRoomExist = async () => {
-            await server
-                .get(`rooms/${room_id}`)
-                .catch((err) => {
-                    err.response.status = '500' &&
-                        navigate({ pathname: "/home" });
-                });
-        };
-        isRoomExist();
+        server
+            .get(`rooms/${room_id}`)
+            .then((res) => {
+                setLoading(false);
+            })
+            .catch((err) => {
+                navigate({ pathname: "/home" });
+            });
     }, []);
 
     // get Token
@@ -100,18 +100,18 @@ export function RoomPage() {
     }, [room_id]);
 
     // check Participant
-    useEffect(() => {
-        const isParticipant = async () => {
-            await server.get(`rooms/${room_id}`).then((res) => {
-                res.data.is_participant === false &&
-                    navigate({
-                        pathname: `/prejoinroom/${room_id}`
-                    });
-            }
-            )
-        }
-        isParticipant();
-    }, [room_id])
+    // useEffect(() => {
+    //     const isParticipant = async () => {
+    //         await server.get(`rooms/${room_id}`).then((res) => {
+    //             res.data.is_participant === false &&
+    //                 navigate({
+    //                     pathname: `/prejoinroom/${room_id}`
+    //                 });
+    //             }
+    //         )
+    //     }
+    //     isParticipant();
+    // }, [room_id, navigate])
 
     // get Time
     useEffect(() => {
@@ -158,6 +158,8 @@ export function RoomPage() {
         setShowInfo(false);
         setShowUsers(false);
     };
+
+    if (loading) return <></>;
 
     return (
         <div className="glo-page">
@@ -250,7 +252,11 @@ export function RoomPage() {
                                 : displayNoneStyle
                         }
                     >
-                        <FrameShowUsers setShowUsers={setShowUsers} />
+                        <FrameShowUsers
+                            setShowUsers={setShowUsers}
+                            room_id={room_id}
+                            room={room}
+                        />
                     </div>
 
                     <div
@@ -266,7 +272,11 @@ export function RoomPage() {
                 </div>
                 <div className="frameControlRight">
                     {isHost && (
-                        <div className="controlItem" onClick={clickButtonJoin}>
+                        <div
+                            className="controlItem"
+                            style={{ right: "16px" }}
+                            onClick={clickButtonJoin}
+                        >
                             <HailIcon
                                 style={
                                     type === "join" && showJoin
@@ -297,7 +307,10 @@ export function RoomPage() {
                                     : controlItemNoActive
                             }
                         />
-                        <span className="controlNumberCount">
+                        <span
+                            className="controlNumberCount"
+                            style={{ right: !isHost ? "173px" : "" }}
+                        >
                             {numParticipants}
                         </span>
                     </div>

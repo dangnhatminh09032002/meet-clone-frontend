@@ -1,34 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import './frameChat.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import {
     RoomEvent,
     DataPacket_Kind,
+    Participant
 } from 'livekit-client';
 
 function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
-    const { hourAndMinute, setShowChat, room } = props;
+    const { hourAndMinute, clickButtonMessage, room } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
-    
+    // console.log('FrameChat render.....');
+
     const handleSendMessage = () => {
         const dataSend = {
             type: "chat",
             data: {
                 userIdentity: room.localParticipant.participantInfo.identity,
+                name: room.localParticipant.name,
                 timeSpan: hourAndMinute,
                 inputMessage: message
             }
         };
         setListMessage([...listMessage, dataSend]);
-        const strData = JSON.stringify([...listMessage, dataSend]);
+        const strData = JSON.stringify(dataSend);
         const encoder = new TextEncoder();
         const data = encoder.encode(strData);
         room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE);
-        
         setMessage('');
         inputRef.current.focus();
     };
@@ -38,10 +40,8 @@ function FrameChat(props: any) {
             const decoder = new TextDecoder();
             room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                 const strData = decoder.decode(payload);
-                const data = JSON.parse(strData)
-                if(data.type === 'chat'){
-                    setListMessage([...message, data]);
-                }
+                const data = JSON.parse(strData);
+                data.type === 'chat' && setListMessage((prev: any) => [...prev, data]);
             });
         };
         room && receivedData()
@@ -55,7 +55,7 @@ function FrameChat(props: any) {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => setShowChat(false)}/>
+                        <CloseIcon onClick={() => clickButtonMessage()} />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
@@ -71,7 +71,9 @@ function FrameChat(props: any) {
 
                         <div className="rowChat" key={index}>
                             <div className="headerRowChat">
-                                <div className="nameRowChat">{(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.userIdentity}</div>
+                                <div className="nameRowChat">
+                                    {(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.name}
+                                </div>
                                 <div className="timeRowChat">{infoMessage.data.timeSpan}</div>
                             </div>
                             <div className="inputMessage">
@@ -107,4 +109,4 @@ function FrameChat(props: any) {
     );
 }
 
-export default FrameChat;
+export default memo(FrameChat);

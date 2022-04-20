@@ -2,6 +2,7 @@ import React, { createContext, useReducer } from "react";
 import { initialUserDetail, userDetailReducer } from "./";
 import { authDetailReducer, initialAuthDetail } from "./auth";
 import AuthProvider from './auth/authProvider';
+import { LoadingProvider } from './loading/loadingProvider';
 import { initialMeet, meetListReducer } from "./meet";
 import UserProvider from './user/userProvider';
 
@@ -34,11 +35,13 @@ export default function GlobalProvider(props: any) {
         meetListDispatch,
       }}
     >
-      <AuthProvider>
-        <UserProvider>
-          {props.children}
-        </UserProvider>
-      </AuthProvider>
+      <LoadingProvider>
+        <AuthProvider>
+          <UserProvider>
+            {props.children}
+          </UserProvider>
+        </AuthProvider>
+      </LoadingProvider>
     </GlobalContext.Provider>
   );
 }
