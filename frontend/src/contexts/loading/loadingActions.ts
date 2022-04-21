@@ -1,9 +1,12 @@
 import { CommonError } from '../types';
 import { LOADING_DATA, LOADING_ERROR } from './loadingConstants';
+import { IVideo } from './loadingTypes';
 
 // interface of action
 export interface LoadingData {
   type: typeof LOADING_DATA;
+  payload: IVideo[];
+
 }
 
 export interface LoadingError {
@@ -19,8 +22,10 @@ export type LoadingActions =
 
 
 export const loadingData = (
-): LoadingActions => ({
-    type: LOADING_DATA,
+ payload: LoadingData["payload"]
+): LoadingData => ({
+  type: LOADING_DATA,
+  payload,
 });
 
 export const loadingError = (

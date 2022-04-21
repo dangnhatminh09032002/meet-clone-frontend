@@ -135,10 +135,11 @@
 
 .join-participant {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 16px;
-    width: 120px;
+    width: 100%;
 }
 
 .view-participant span{
@@ -194,10 +195,6 @@
 
 .text-video {
     display: none;
-}
-
-.join-section span {
-    width: 100%;
 }
 
 /* --------------------- hover-btn ------------------------------ */

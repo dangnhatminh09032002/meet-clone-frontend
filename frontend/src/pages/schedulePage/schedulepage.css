@@ -1,0 +1,271 @@
+.schedule-page{
+    width: 100%;
+}
+
+.schedule-content{
+    width: 80%;
+    margin: 0 auto;
+    display:flex;
+    flex-direction: row;
+}
+.schedule-left{
+    width: 50%;
+    padding: 10px;
+}
+.schedule-right{
+    width: 50%;
+}
+
+.glo-add-title{
+    width: 100%;
+}
+
+.glo-btn-join-meet{
+    background: #00796B !important;
+}
+
+.btn-save{
+    background: #00796B !important;
+    float: left;
+}
+
+.spac-right{
+    margin-right: 5px !important;
+}
+
+.textarea-description{
+    width: 100%;
+    padding: unset;
+    border-width: unset;
+    border: 1px solid #C4C4C4;
+    border-radius: 4px;
+}
+
+.btn-custom-time{
+    width: 100%;
+    justify-content: left !important;
+    padding-left: 16px !important;
+    text-transform: capitalize !important;
+    font-size: 1em !important;
+    line-height: 1.5em !important;
+    font-weight: 400 !important;
+    color: inherit !important;
+}
+
+@media screen and (max-width: 1200px){
+    .schedule-right{
+        display: none;
+    }
+}
+
+@media screen and (max-width:375px){
+    .schedule-content{
+        width: 95%;
+        margin: 10px auto;
+    }
+    .schedule-left{
+        width: 100%;
+        padding: unset;
+    }
+    .schedule-start-time {
+        display:flex;
+        width: 600px;
+    }
+    .ip-dayUpper{
+        width: 100%;
+    }
+    .ip-timeUpper{
+        width: 100%;
+    }
+    .schedule-end-time {
+        display:flex;
+        width: 600px;
+    }
+    .ip-dayDown {
+        width: 100%;
+    }
+    .ip-timeDown {
+        width: 100%;
+    }
+
+    .glo-select-repeat{
+        display: flex;
+        width: 100%;
+    }
+
+    .glo-btn-join-meet{
+        width: 100%;
+    }
+
+    .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+        width: 100%;
+    }
+
+    .spac-right{
+        margin-right: 5px;
+    }
+    
+}
+
+@media screen and (min-width:376px) and (max-width:600px){
+    .schedule-content{
+        width: 95%;
+        margin: 10px auto;
+    }
+    .schedule-left{
+        width: 100%;
+        padding: unset;
+    }
+    
+    .schedule-start-time {
+        display:flex;
+        width: 600px;
+    }
+    .ip-dayUpper{
+        width: 100%;
+    }
+    .ip-timeUpper{
+        width: 100%;
+    }
+    .schedule-end-time {
+        display:flex;
+        width: 600px;
+    }
+    .ip-dayDown {
+        width: 100%;
+    }
+    .ip-timeDown {
+        width: 100%;
+    }
+
+    .glo-select-repeat{
+        display: flex;
+        width: 100%;
+    }
+
+    .glo-btn-join-meet{
+        width: 100%;
+    }
+
+
+    .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+        width: 100%;
+    }
+}
+
+
+@media screen and (min-width: 601px) and (max-width: 900px){
+    .schedule-content{
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .schedule-left{
+        width: 100%;
+        padding: unset;
+    }
+
+    .schedule-start-time {
+        display:flex;
+        width: 100%;
+    }
+    
+    .schedule-end-time {
+        display:flex;
+        width: 100%;
+    }
+
+    .glo-select-repeat{
+        display: flex;
+        width: 100%;
+    }
+
+    .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+        width: 100%;
+    }
+    .glo-btn-join-meet{
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1200px){
+    .schedule-content{
+        width: 85%;
+        margin: 10px auto;
+    }
+    .schedule-left{
+        width: 100%;
+        padding: unset;
+    }
+
+    .schedule-start-time {
+        display:flex;
+        width: 100%;
+    }
+    
+    .schedule-end-time {
+        display:flex;
+        width: 100%;
+    }
+
+    .glo-select-repeat{
+        display: flex;
+        width: 100%;
+    }
+
+    .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+        width: 50%;
+    }
+
+    .glo-btn-join-meet{
+        width: 50%;
+    }
+
+}
+
+@media screen and (min-width: 1201px) and (max-width:2000px){
+    .schedule-content{
+        width: 70%;
+        margin: 10px auto;
+    }
+
+    .schedule-left{
+        width: 70%;
+        padding: unset;
+    }
+
+    .schedule-start-time {
+        display:flex;
+        width: 100%;
+    }
+    
+    .schedule-end-time {
+        display:flex;
+        width: 100%;
+    }
+
+    .glo-select-repeat{
+        display: flex;
+        width: 100%;
+    }
+
+
+    .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+        width: 50%;
+    }
+
+    .glo-btn-join-meet{
+        width: 50%;
+    }
+
+    /* .spac-right{
+        border-right: unset;
+    } */
+
+    /* .schedule-number{
+        display:flex;
+        width: 100%;
+    } */
+
+}
+

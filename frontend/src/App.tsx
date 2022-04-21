@@ -20,3 +20,13 @@ function App() {
 }
 
 export default App;
+
+
+// export function divide(a: number, b: number): number {
+  
+//     if (b === 0) {
+//       throw new Error("You can't divide by zero.");
+//     }
+
+//     return Math.round(a / b);
+//   }

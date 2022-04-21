@@ -7,7 +7,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import HailIcon from "@mui/icons-material/Hail";
 import moment from "moment";
 import { VideoPresets, Room, RoomEvent } from "livekit-client";
-import { DisplayContext, LiveKitRoom, useRoom } from "livekit-react";
+import { DisplayContext, LiveKitRoom } from "livekit-react";
 import "livekit-react/dist/index.css";
 import "react-aspect-ratio/aspect-ratio.css";
 import "./roompage.css";
