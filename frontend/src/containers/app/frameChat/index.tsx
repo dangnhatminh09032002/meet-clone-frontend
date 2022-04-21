@@ -16,6 +16,8 @@ function FrameChat(props: any) {
     const classActiveIcon = message ? 'iconActive' : '';
     // console.log('FrameChat render.....');
 
+    const messageRef = useRef<any>();
+
     const handleSendMessage = () => {
         const dataSend = {
             type: "chat",
@@ -47,6 +49,18 @@ function FrameChat(props: any) {
         room && receivedData()
     }, [room]);
 
+    // scrollIntoView
+    useEffect(() => {
+        if (messageRef.current) {
+            messageRef.current.scrollIntoView(
+            {
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest'
+            })
+        }
+    }, [listMessage.length])
+
     return (
         <div className="frameChat">
             <div className="headerFrameChat">
@@ -68,8 +82,7 @@ function FrameChat(props: any) {
             <div className="bodyFrameChat">
                 {
                     listMessage.map((infoMessage: any, index: any) => (
-
-                        <div className="rowChat" key={index}>
+                        <div className="rowChat" key={index}  ref={messageRef}>
                             <div className="headerRowChat">
                                 <div className="nameRowChat">
                                     {(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.name}
