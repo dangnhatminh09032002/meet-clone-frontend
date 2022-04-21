@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import server from "../../configs/axios-config";
+import { server } from '../../configs/axios-config';
 import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";

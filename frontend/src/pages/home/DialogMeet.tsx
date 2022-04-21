@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { useContext, useState } from "react";
-import server from "../../configs/axios-config";
+import { server } from '../../configs/axios-config';
 import { addMeet } from "../../contexts";
 import { GlobalContext } from "../../contexts/provider";
 import "./dialogmeet.css";

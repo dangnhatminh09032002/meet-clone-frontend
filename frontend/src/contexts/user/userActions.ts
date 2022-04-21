@@ -4,7 +4,7 @@ import {
     USER_DETAIL_DATA,
     USER_DETAIL_ERROR,
 } from './userConstants';
-import { IUser, UserDetailState } from './userTypes';
+import { IUser } from './userTypes';
 
 // User detail action insterface
 export interface UserDetailFetch {

@@ -1,20 +1,20 @@
-import { Toolbar } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import server from "../../configs/axios-config";
-import { authLogout } from "../../contexts/auth";
-import { AuthContext } from "../../contexts/auth/authProvider";
-import { userDetailData } from "../../contexts/user";
-import { GlobalContext } from "./../../contexts/provider";
-import "./homeHeader.css";
+import { Toolbar } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { server } from '../../configs/axios-config';
+import { authLogout } from '../../contexts/auth';
+import { AuthContext } from '../../contexts/auth/authProvider';
+import { userDetailData } from '../../contexts/user';
+import { GlobalContext } from './../../contexts/provider';
+import './homeHeader.css';
 
 export function Header() {
   const authProvider = useContext<any>(GlobalContext);

@@ -4,7 +4,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLayoutEffect, useState } from "react";
 import { RoomEvent } from "livekit-client";
-import server from "../../../configs/axios-config";
+import { server } from "../../../configs/axios-config";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
@@ -51,9 +51,10 @@ function FrameJoinRoom(props: any) {
 
     const handleAllow = async (participant_id: string) => {
         console.log("handleAllow", participant_id);
-        await server.get(
+        const res = await server.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=true`
         );
+        console.log(res);
         handleResponseJoinRoom(participant_id);
     };
 
@@ -62,6 +63,7 @@ function FrameJoinRoom(props: any) {
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=false`
         );
         handleResponseJoinRoom(participant_id);
+        console.log(res);
     };
 
     return (

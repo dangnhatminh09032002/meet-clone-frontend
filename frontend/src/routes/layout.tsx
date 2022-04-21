@@ -1,3 +1,4 @@
+import { SchedulePage } from "../pages/schedulePage/SchedulePage";
 import React, {
   lazy,
   Suspense,
@@ -9,8 +10,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/provider";
 import { authDetailData } from "../contexts/auth";
 import { userDetailData } from "../contexts";
-import server from "../configs/axios-config";
-import { SchedulePage } from "../pages/schedulePage/SchedulePage";
+import { server } from "../configs/axios-config";
 
 const StopRoom: any = lazy(() =>
   import("../pages").then(({ StopRoom }) => ({ default: StopRoom }))
@@ -44,7 +44,7 @@ export const Layout = () => {
             })
           );
         })
-        .catch((err) => {
+        .catch(() => {
           authDetailDispatch(authDetailData({ isLogin: false }));
         });
     };
