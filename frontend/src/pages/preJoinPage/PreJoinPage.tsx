@@ -1,6 +1,6 @@
 import { createLocalVideoTrack, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
@@ -13,7 +13,7 @@ const room = new Room({
 });
 
 export const PreJoinPage = () => {
-    const [listAvatar, setListAvatar] = useState([]);
+    const [listParticipants, setListPaticipants] = useState<any>([]);
     const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
     const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
     const { room_id } = useParams();
@@ -27,10 +27,10 @@ export const PreJoinPage = () => {
     useEffect(() => {
         server
             .get(`rooms/${room_id}`)
-            .then((res) => {
+            .then(() => {
                 setLoading(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 navigate({ pathname: '/home' });
             });
     }, []);
@@ -38,9 +38,6 @@ export const PreJoinPage = () => {
     useEffect(() => {
         if (!loading) {
             const fetchToken = async () => {
-                if (videoTrack) {
-                    videoTrack.stop();
-                }
                 const res = await server.post(`rooms/${room_id}/token`);
                 await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                     autoSubscribe: false,
@@ -49,17 +46,18 @@ export const PreJoinPage = () => {
                 room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                     const strData = decoder.decode(payload);
                     const result = JSON.parse(strData);
-                    if (result.type === 'room' && result.action === 'res-join-room') {
-                        if (result?.payload.data.is_allow) {
-                            navigate('/room/' + room_id);
-                        }
+                    if (
+                        result.type === 'room' &&
+                        result.action === 'res-join-room' &&
+                        result?.payload.data.is_allow
+                    ) {
+                        navigate('/room/' + room_id);
                     } else {
                         document.querySelector('.hold-join')?.setAttribute('style', 'display:none');
                         document.querySelector('.reject')?.setAttribute('style', 'display:block');
                     }
                 });
             };
-
             fetchToken();
         }
     }, [loading]);
@@ -86,6 +84,15 @@ export const PreJoinPage = () => {
             }
         }
     }, [loading, videoDevice]);
+
+    useLayoutEffect(() => {
+        const listPaticipant = async () => {
+            await server.get(`rooms/${room_id}/participants`).then(async (result) => {
+                await setListPaticipants(result.data);
+            });
+        };
+        listPaticipant();
+    }, [room_id]);
 
     const requestJoinRoom = async () => {
         await server
@@ -152,6 +159,7 @@ export const PreJoinPage = () => {
     } else {
         videoElement = <div className='placeholder' />;
     }
+    console.log(listParticipants);
 
     if (loading) return <></>;
     return (
@@ -197,12 +205,44 @@ export const PreJoinPage = () => {
                     <div className='wapper-participant'>
                         <div className='join-section'>
                             <h3>Ready to join</h3>
-                            <span>The others are here</span>
                             <div className='view-participant'>
                                 <div className='join-participant'>
-                                    {listAvatar?.map((item: any) => (
-                                        <div></div>
-                                    ))}
+                                    <div style={{ display: 'flex' }}>
+                                        {listParticipants?.map((item: any, index: number) => (
+                                            <div key={index}>
+                                                <img
+                                                    src={item.picture}
+                                                    alt=''
+                                                    referrerPolicy='no-referrer'
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div>
+                                        {listParticipants?.length > 2 && (
+                                            <div>
+                                                <p style={{ display: 'flex' }}>
+                                                    {listParticipants[0]?.name},{' '}
+                                                    {listParticipants[1]?.name} +{' '}
+                                                    {listParticipants.length - 2} are participating
+                                                    in this meeting
+                                                </p>
+                                            </div>
+                                        )}
+                                        {listParticipants?.length <= 2 ? (
+                                            listParticipants?.length === 0 && (
+                                                <span>Nobody is here</span>
+                                            )
+                                        ) : (
+                                            <div>
+                                                <p>
+                                                    {listParticipants[0]?.name},{' '}
+                                                    {listParticipants[0]?.name} are participating in
+                                                    this meeting
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className='join-room'>

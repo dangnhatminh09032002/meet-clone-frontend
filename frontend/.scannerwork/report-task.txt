@@ -1,6 +1,0 @@
-projectKey=google_meet
-serverUrl=http://localhost:9000
-serverVersion=9.4.0.54424
-dashboardUrl=http://localhost:9000/dashboard?id=google_meet
-ceTaskId=AYBF5N9Ri8-VMtvBnQzu
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYBF5N9Ri8-VMtvBnQzu
