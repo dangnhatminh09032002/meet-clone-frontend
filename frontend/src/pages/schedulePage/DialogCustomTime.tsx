@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
-  FormGroup,
   Grid,
 } from "@mui/material";
 
@@ -23,34 +22,60 @@ export function DialogCustomTime({
   const handleCloseCustom = () => {
     setOpenDialogCustom(false);
   };
+
+  const handleSubmitScheduleMeet = async () => {};
+
   return (
-    <Dialog
-      open={openDialogCustom}
-      onClose={handleCloseCustom}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">Custom time</DialogTitle>
-      <DialogContent>
-        <p>Repeat on</p>
-        <Grid direction="row">
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T2" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T3" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T4" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T5" />
-        </Grid>
-        <Grid>
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T6" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="T7" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="CN" />
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseCustom}>Disagree</Button>
-        <Button onClick={handleCloseCustom} autoFocus>
-          Agree
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <form onSubmit={handleSubmitScheduleMeet}>
+      <Dialog
+        open={openDialogCustom}
+        onClose={handleCloseCustom}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Custom time</DialogTitle>
+        <DialogContent>
+          <p>Repeat on</p>
+          <Grid direction="row">
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T2"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T3"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T4"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T5"
+            />
+          </Grid>
+          <Grid>
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T6"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="T7"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="CN"
+            />
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCustom}>Disagree</Button>
+          <Button onClick={handleCloseCustom} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </form>
   );
 }

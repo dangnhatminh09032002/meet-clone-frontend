@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
-import { Button, TextField } from "@mui/material";
 import server from "../../configs/axios-config";
 import { AuthContext } from "../../contexts/auth/authProvider";
 import { GlobalContext } from "./../../contexts/provider";
@@ -20,14 +19,14 @@ export const textModel = {
   btnCreateMeetingLater: "Create a meeting to use later",
   btnCreateMeetingSchedule: "Create a meeting schedule",
   btnJoin: "Join",
-  aHelpText: "Learn more",
+  aHelpText: "Learn more ",
   aHelpTextAbout: "about Unicorn",
   imgContent:
     "https://res.cloudinary.com/boo-it/image/upload/v1648690218/test/fgvvdhwkoowj5xcdqqzt.png",
 };
 
 export const textPlaceholder = {
-  inputEnterCodeOrLink: "Enter a code or link",
+  inputEnterCodeOrLink: "Enter a code...",
 };
 
 export const testId = {
@@ -84,14 +83,11 @@ export function HomePage() {
     await server
       .get(`rooms/${room_name}`)
       .then((res) => {
-        console.log(res);
-
         if (res.data.is_master) {
           navigate("/room/" + room_name);
         } else {
           navigate("/prejoinroom/" + room_name);
         }
-
         if (res.data.is_participant) {
           navigate("/room/" + room_name);
         } else {
@@ -179,7 +175,7 @@ export function HomePage() {
                 <div className="input-section">
                   <FontAwesomeIcon className="icon-block" icon={faKeyboard} />
                   <input
-                    placeholder="Enter a code or link"
+                    placeholder={textPlaceholder.inputEnterCodeOrLink}
                     onChange={(e) => setRoomName(e.target.value)}
                     onKeyDown={onKeyDownCodeOrLink}
                     data-testid={testId.inputEnterCode}
@@ -213,7 +209,7 @@ export function HomePage() {
           <div className="help-text">
             <a href="##" data-testid={testId.aHelpText}>
               {textModel.aHelpText}
-            </a>{" "}
+            </a>
             about Unicorn
           </div>
           <TableRoom />
