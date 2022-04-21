@@ -80,23 +80,17 @@ export function HomePage() {
   const [textErrorWorng, setTextErrorWorng] = useState(false);
 
   const joinRoomURL = async () => {
-    await server
-      .get(`rooms/${room_name}`)
-      .then((res) => {
-        if (res.data.is_master) {
-          navigate("/room/" + room_name);
-        } else {
-          navigate("/prejoinroom/" + room_name);
-        }
-        if (res.data.is_participant) {
-          navigate("/room/" + room_name);
-        } else {
-          navigate("/prejoinroom/" + room_name);
-        }
-      })
-      .catch((error) => {
-        setTextErrorWorng(true);
-      });
+    await server.get(
+      `rooms/${room_name}`,
+    ).then((res) => {
+      if (res.data.is_master) {
+        navigate("/room/" + room_name);
+      } else {
+        navigate("/prejoinroom/" + room_name);
+      }
+    }).catch((error) => {
+      setTextErrorWorng(true);
+    })
   };
 
   const hanleJoin = async () => {

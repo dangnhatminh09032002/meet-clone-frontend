@@ -4,8 +4,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Store } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import 'animate.css';
+import { memo } from 'react';
 
-function FrameInfoRoom() {
+function FrameInfoRoom(props: any) {
+    const {setShowInfo} = props
+    console.log('FrameInfoRoom render.....');
 
     const handleCopy = () => {
         navigator.clipboard.writeText(`${window.location.href}`);
@@ -33,7 +36,7 @@ function FrameInfoRoom() {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon />
+                        <CloseIcon onClick={() => setShowInfo(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
@@ -60,4 +63,4 @@ function FrameInfoRoom() {
     );
 }
 
-export default FrameInfoRoom;
+export default memo(FrameInfoRoom);

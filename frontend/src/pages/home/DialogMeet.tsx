@@ -123,7 +123,7 @@ export default function DialogMeet({
             onClick={handleSubmitCreateMeeting}
             className="btn-color-green"
           >
-            Submit
+            Create Room
           </Button>
         </DialogActions>
       </BootstrapDialog>

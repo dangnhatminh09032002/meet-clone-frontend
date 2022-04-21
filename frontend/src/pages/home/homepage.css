@@ -297,7 +297,7 @@ body {
   }
 }
 
-@media screen and (min-width: 1201px) and (max-width: 1500px) {
+@media screen and (min-width: 1201px){
   .home-page .body {
     padding: 0px 15px;
   }
@@ -320,5 +320,8 @@ body {
   .home-page .body .right-side .content {
     width: 80%;
     margin: 0 auto;
+  }
+  .home-page .body{
+    height: calc(100vh - 110px) !important;
   }
 }

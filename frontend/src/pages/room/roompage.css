@@ -57,7 +57,7 @@
     position: absolute;
     padding: 1px 6px;
     border-radius: 10px;
-    background-color: #5f6368;
+    background-color: #484b4e;
     bottom: 58px;
     right: 146px;
     font-size: 14px;
@@ -67,7 +67,7 @@
     position: absolute;
     padding: 1px 6px;
     border-radius: 10px;
-    background-color: #5f6368;
+    background-color: #484b4e;
     bottom: 58px;
     right: 234px;
     font-size: 14px;
@@ -116,10 +116,6 @@
 ._1smc2{
     margin-bottom: -133px;
 }
-
-/* ._3rLR0 {
-    grid-template-rows: repeat(2, 1fr);
-} */
 
 .rightRoom {
     width: 360px;

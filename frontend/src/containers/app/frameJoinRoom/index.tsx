@@ -2,16 +2,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./frameJoinRoom.css";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, memo } from "react";
 import { RoomEvent } from "livekit-client";
 import { server } from "../../../configs/axios-config";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
-    const room = props.room;
-    const room_id = props.room_id;
+    const { setShowJoin, room, room_id} = props;
     const setNumberPerjoin = props.setNumberPerjoin;
-
+    console.log('FrameJoinRoom render.....');
     useLayoutEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
     }, [infoJoinRoom.length]);
@@ -50,20 +49,17 @@ function FrameJoinRoom(props: any) {
     };
 
     const handleAllow = async (participant_id: string) => {
-        console.log("handleAllow", participant_id);
-        const res = await server.get(
+        await server.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=true`
         );
-        console.log(res);
         handleResponseJoinRoom(participant_id);
     };
 
     const handleDeny = async (participant_id: string) => {
-        const res = await server.get(
+        await server.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=false`
         );
         handleResponseJoinRoom(participant_id);
-        console.log(res);
     };
 
     return (
@@ -74,7 +70,7 @@ function FrameJoinRoom(props: any) {
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip">
-                        <CloseIcon />
+                        <CloseIcon onClick={() => setShowJoin(false)}/>
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
