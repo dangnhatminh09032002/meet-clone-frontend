@@ -72,24 +72,18 @@ export default function DialogMeet({
   const { meetListDispatch } = meetProvider;
 
   const handleSubmitCreateMeeting = async () => {
-    await server
-      .post(
-        "rooms",
-        { room_name: name },
-      )
-      .then(async (result) => {
-        await meetListDispatch(addMeet(result.data));
-      });
+    await server.post("rooms", { room_name: name }).then(async (result) => {
+      await meetListDispatch(addMeet(result.data));
+    });
     setOpenDialogMeet(false);
     setAnchor(null);
   };
 
-
-  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (event.key === 'Enter') {
+  const onKeyDownName = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === "Enter") {
       handleSubmitCreateMeeting();
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmitCreateMeeting}>
@@ -101,6 +95,7 @@ export default function DialogMeet({
         <BootstrapDialogTitle
           id="customized-dialog-title"
           onClose={handleClose}
+          data-testid="inside-testid"
         >
           Create a meeting room
         </BootstrapDialogTitle>
@@ -118,15 +113,15 @@ export default function DialogMeet({
             onChange={(event) => {
               setName(event.target.value);
             }}
-            onKeyDown={onKeyDown}
+            onKeyDown={onKeyDownName}
           />
         </DialogContent>
         <DialogActions>
           <Button
             variant="contained"
-            color="success"
             type="submit"
             onClick={handleSubmitCreateMeeting}
+            className="btn-color-green"
           >
             Submit
           </Button>

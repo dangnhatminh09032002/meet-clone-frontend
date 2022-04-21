@@ -1,10 +1,12 @@
-.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+
+.btn-color-green{
+    background: #00796B !important;
     width: 500px;
-    padding: 12px 20px 25px 20px;
+    margin: 12px 0px 25px 0px !important;
 }
 
 .css-lc2yqr-MuiButtonBase-root-MuiIconButton-root{
-    top: 23px !important;
+    top: 12px !important;
 }
 .css-ke5b6m-MuiButtonBase-root-MuiButton-root{
     width: 100%;

@@ -1,9 +1,12 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from '@mui/icons-material/Delete';
-import OutputIcon from '@mui/icons-material/Output';
+import DeleteIcon from "@mui/icons-material/Delete";
+import OutputIcon from "@mui/icons-material/Output";
 import {
   Alert,
-  Button, Paper,
+  Button,
+  Card,
+  CardContent,
+  Paper,
   Snackbar,
   Table,
   TableBody,
@@ -12,7 +15,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,27 +26,22 @@ import "../TableRoom/tableroom.css";
 
 export function TableRoom() {
   const homeProvider = useContext<any>(GlobalContext);
-  const { authDetailState, meetListState, meetListDispatch } =
-    homeProvider;
+  const { authDetailState, meetListState, meetListDispatch } = homeProvider;
   const navigate = useNavigate();
 
   const [openSnackbarCode, setOpenSnackbarCode] = React.useState(false);
 
   useEffect(() => {
     const getListRoom = async () => {
-      await server
-        .get('rooms')
-        .then(async (result) => {
-          await meetListDispatch(meetListData(result.data));
-        });
+      await server.get("rooms").then(async (result) => {
+        await meetListDispatch(meetListData(result.data));
+      });
     };
     getListRoom();
   }, [authDetailState]);
 
   const handleDeleteRoom = async () => {
-    await server.delete(
-      "rooms"
-    );
+    await server.delete("rooms");
   };
 
   const handleCopyLink = (nameRoom: any) => {
@@ -63,25 +61,37 @@ export function TableRoom() {
 
   return (
     <div className="tableroom-content">
-      {authDetailState.payload.isLogin === true ? (
+      {authDetailState?.payload?.isLogin === true ? (
         <TableContainer component={Paper} sx={{ maxHeight: 330 }}>
           <Table stickyHeader>
-            <TableHead className="bg-table-header">
-              <TableRow>
-                <TableCell className="text-while-table-header" width="150px">
-                  Name
-                </TableCell>
-                <TableCell className="text-while-table-header glo-text-center" width="500px">
-                  Action
-                </TableCell>
-              </TableRow>
-            </TableHead>
+            {meetListState.payload.length == 0 ? (
+              <TableHead>
+                <TableRow>
+                  <TableCell>There are no meeting rooms</TableCell>
+                </TableRow>
+              </TableHead>
+            ) : (
+              <TableHead className="bg-table-header">
+                <TableRow>
+                  <TableCell className="text-while-table-header" width="150px">
+                    Name
+                  </TableCell>
+                  <TableCell
+                    className="text-while-table-header glo-text-center"
+                    width="500px"
+                  >
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            )}
+
             <TableBody>
               {meetListState.payload.map((meet: any, index: any) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>
-                      {meet.room_name.length > 25 ? (
+                      {meet.room_name.length > 10 ? (
                         <Typography noWrap>{`${meet.room_name.slice(
                           0,
                           10
@@ -93,7 +103,12 @@ export function TableRoom() {
 
                     <TableCell className="glo-text-center">
                       <Tooltip title="Copy">
-                        <Button variant="outlined" startIcon={<ContentCopyIcon />} className="link-room" onClick={() => handleCopyLink(meet?.friendly_id)}>
+                        <Button
+                          variant="outlined"
+                          startIcon={<ContentCopyIcon />}
+                          className="link-room"
+                          onClick={() => handleCopyLink(meet?.friendly_id)}
+                        >
                           Copy
                         </Button>
                       </Tooltip>
@@ -137,7 +152,13 @@ export function TableRoom() {
           </Table>
         </TableContainer>
       ) : (
-        <p>Chưa có phòng họp</p>
+        <Card sx={{ minWidth: 275 }}>
+          <CardContent>
+            <Typography color="text.secondary">
+              Create your own meeting room
+            </Typography>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
