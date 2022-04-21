@@ -7,9 +7,9 @@ import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
 
-    const { setShowUsers, room_id, room } = props;
+    const { setShowUsers, room_id, room, numParticipants, isHost } = props;
     const [listParticipant, setListParticipant] = useState<any>(null);
-    console.log(listParticipant);
+    console.log(isHost);
 
     // get Participant of room
     useEffect(() => {
@@ -18,7 +18,7 @@ function FrameShowUsers(props: any) {
                 .then(res => setListParticipant(res.data))
         }
         getParticipant();
-    }, [room_id, room]);
+    }, [room_id, room, numParticipants]);
 
     return (
         <div className="frameUsers">
@@ -57,7 +57,9 @@ function FrameShowUsers(props: any) {
                         <div className="bodyInfo">
                             <div className="nameUser">{user.name}</div>
                             {/* check if === host => add class */}
-                            {/* <div className="description">Meeting organizer</div> */}
+                            {isHost &&
+                                <div className="description">Meeting organizer</div>
+                            }
                         </div>
 
                         <div className="infoIcon">

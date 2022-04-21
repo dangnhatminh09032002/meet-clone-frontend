@@ -93,25 +93,31 @@ export function RoomPage() {
     // check host
     useEffect(() => {
         const isHost = async () => {
-            const res = await server.get(`rooms/${room_id}`);
-            setIsHost(res.data.is_master);
+            await server.get(`rooms/${room_id}`)
+                .then((res) => {
+                    if(res.data.is_master) {
+                        setIsHost(res.data.is_master);
+                    } else if(res.data.is_participant) {
+                        setIsHost(false)
+                    }
+                })
         };
         isHost();
     }, [room_id]);
 
     // check Participant
-    // useEffect(() => {
-    //     const isParticipant = async () => {
-    //         await server.get(`rooms/${room_id}`).then((res) => {
-    //             res.data.is_participant === false &&
-    //                 navigate({
-    //                     pathname: `/prejoinroom/${room_id}`
-    //                 });
-    //             }
-    //         )
-    //     }
-    //     isParticipant();
-    // }, [room_id, navigate])
+    useEffect(() => {
+        const isParticipant = async () => {
+            await server.get(`rooms/${room_id}`).then((res) => {
+                res.data.is_participant === false &&
+                    navigate({
+                        pathname: `/prejoinroom/${room_id}`
+                    });
+                }
+            )
+        }
+        isParticipant();
+    }, [room_id, navigate])
 
     // get Time
     useEffect(() => {
@@ -256,6 +262,8 @@ export function RoomPage() {
                             setShowUsers={setShowUsers}
                             room_id={room_id}
                             room={room}
+                            numParticipants={numParticipants}
+                            isHost= {isHost}
                         />
                     </div>
 
