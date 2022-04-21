@@ -1,64 +1,115 @@
-import { createLocalVideoTrack, DataPacket_Kind, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
+import { createLocalVideoTrack, LocalVideoTrack, Room, RoomEvent } from 'livekit-client';
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
-import React, { ReactElement, useEffect, useState, useContext } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-import server from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import './prejoinpage.css';
 
+const room = new Room({
+    adaptiveStream: true,
+    dynacast: true,
+});
+
 export const PreJoinPage = () => {
-    const [videoEnabled, setVideoEnabled] = useState(false);
-    const [audioEnabled, setAudioEnabled] = useState(true);
+    const [listParticipants, setListPaticipants] = useState<any>([]);
+    const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
+    const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
     const { room_id } = useParams();
+    const [loading, setLoading] = useState(true);
     const [videoTrack, setVideoTrack] = useState<LocalVideoTrack>();
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
-    const room = new Room({
-        adaptiveStream: true,
-        dynacast: true,
-    });
+    const navigate = useNavigate();
+    let location = useLocation();
 
     useEffect(() => {
-        async function fetchToken() {
-            const res = await server.post(`rooms/${room_id}/token`);
-            console.log(res);
-            await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
-                autoSubscribe: true,
+        server
+            .get(`rooms/${room_id}`)
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(() => {
+                navigate({ pathname: '/home' });
             });
-            console.log(room);
+    }, []);
+
+    useEffect(() => {
+        if (!loading) {
+            const fetchToken = async () => {
+                const res = await server.post(`rooms/${room_id}/token`);
+                await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
+                    autoSubscribe: false,
+                });
+                const decoder = new TextDecoder();
+                room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
+                    const strData = decoder.decode(payload);
+                    const result = JSON.parse(strData);
+                    if (
+                        result.type === 'room' &&
+                        result.action === 'res-join-room' &&
+                        result?.payload.data.is_allow
+                    ) {
+                        navigate('/room/' + room_id);
+                    } else {
+                        document.querySelector('.hold-join')?.setAttribute('style', 'display:none');
+                        document.querySelector('.reject')?.setAttribute('style', 'display:block');
+                    }
+                });
+            };
+            fetchToken();
         }
-        fetchToken();
+    }, [loading]);
+
+    useEffect(() => {
+        return () => {
+            if (!loading) {
+                setVideoEnabled(false);
+                setAudioEnabled(false);
+                videoTrack?.stop();
+            }
+        };
+    }, [loading, videoTrack]);
+
+    useEffect(() => {
+        if (!loading) {
+            if (location.pathname.includes('/prejoinroom')) {
+                createLocalVideoTrack({
+                    deviceId: videoDevice?.deviceId,
+                }).then((track) => {
+                    setVideoEnabled(true);
+                    setVideoTrack(track);
+                });
+            }
+        }
+    }, [loading, videoDevice]);
+
+    useLayoutEffect(() => {
+        const listPaticipant = async () => {
+            await server.get(`rooms/${room_id}/participants`).then(async (result) => {
+                await setListPaticipants(result.data);
+            });
+        };
+        listPaticipant();
     }, [room_id]);
 
-    useEffect(() => {
-        const listenResponse = () => {
-            const decoder = new TextDecoder();
-            room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
-                const strData = decoder.decode(payload)
-                const data = JSON.parse(strData)
-                if (data.type === 'room')
-                    console.log(strData);
+    const requestJoinRoom = async () => {
+        await server
+            .get(`rooms/${room_id}/req-join-room`)
+            .then(() => {
+                document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
             })
-        }
-        listenResponse();
-    })
-
-    useEffect(() => {
-        createLocalVideoTrack({
-            deviceId: videoDevice?.deviceId,
-        }).then((track) => {
-            setVideoEnabled(true)
-            setVideoTrack(track)
-        })
-    }, [videoDevice])
+            .catch((err) => {
+                throw err;
+            });
+    };
 
     const toggleVideo = async () => {
         if (videoTrack) {
-            videoTrack.stop()
-            setVideoEnabled(false)
-            setVideoTrack(undefined)
-            setAudioEnabled(false)
+            videoTrack.stop();
+            setVideoEnabled(false);
+            setVideoTrack(undefined);
             document.querySelector('.text-video')?.setAttribute('style', 'display:block');
             setTimeout(() => {
                 document.querySelector('.text-video')?.setAttribute('style', 'display:none');
@@ -66,113 +117,71 @@ export const PreJoinPage = () => {
         } else {
             const track = await createLocalVideoTrack({
                 deviceId: videoDevice?.deviceId,
-            })
-            setVideoEnabled(true)
-            setVideoTrack(track)
+            });
+            setVideoEnabled(true);
+            setVideoTrack(track);
             document.querySelector('.text-video')?.setAttribute('style', 'display:block');
             setTimeout(() => {
                 document.querySelector('.text-video')?.setAttribute('style', 'display:none');
             }, 5000);
         }
-    }
+    };
 
     const toggleAudio = () => {
         if (audioEnabled) {
-            setAudioEnabled(false)
+            setAudioEnabled(false);
             document.querySelector('.text-audio')?.setAttribute('style', 'display:block');
             setTimeout(() => {
                 document.querySelector('.text-audio')?.setAttribute('style', 'display:none');
             }, 5000);
         } else {
-            setAudioEnabled(true)
+            setAudioEnabled(true);
             document.querySelector('.text-audio')?.setAttribute('style', 'display:block');
             setTimeout(() => {
                 document.querySelector('.text-audio')?.setAttribute('style', 'display:none');
             }, 5000);
         }
-    }
+    };
 
     const selectVideoDevice = (device: MediaDeviceInfo) => {
         setVideoDevice(device);
         if (videoTrack) {
             if (videoTrack.mediaStreamTrack.getSettings().deviceId === device.deviceId) {
-                return
+                return;
             }
-            videoTrack.stop()
+            videoTrack.stop();
         }
-    }
+    };
 
-    let videoElement: ReactElement;
+    let videoElement;
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
-        room.localParticipant.setCameraEnabled(false);
-        videoElement = <div className="placeholder" />
+        videoElement = <div className='placeholder' />;
     }
+    console.log(listParticipants);
 
-    const requestJoinRoom = async () => {
-        await server.get(`rooms/${room_id}/req-join-room`)
-            .then((result) => {
-                document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
-                console.log(result);
-                room.on(RoomEvent.ParticipantConnected, (participant) => {
-                    console.log(room);
-                    console.log('participant: ' + participant);
-                })
-                // const strData = JSON.stringify({
-                //     type: 'room',
-                //     data: {
-                //         message: 'req_join_room',
-                //         data: {
-                //             participant_name: userDetailState.payload.full_name,
-                //             participant_id: userDetailState.payload.uid_google,
-                //         },
-                //     },
-                // });
-                // const encoder = new TextEncoder();
-                // const data = encoder.encode(strData);
-                // room.localParticipant.publishData(data, DataPacket_Kind.RELIABLE)
-                // console.log('aaaaaaaaaaaa', room);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    };
-
-    window.addEventListener('resize', function () {
-        if (window.outerWidth < 900) {
-            this.document.querySelector('.wapper-videoSection')?.setAttribute('style', `width: ${window.outerWidth - 64}px`)
-        } else {
-            this.document.querySelector('.wapper-videoSection')?.setAttribute('style', 'width: 100%')
-        }
-    });
-
+    if (loading) return <></>;
     return (
-        <div className="prejoin">
+        <div className='prejoin'>
             <main>
                 <Header />
                 <div className='wapper-content'>
                     <div className='wapper-videoSection'>
-                        <div className="videoSection">
+                        <div className='videoSection'>
                             {videoEnabled ? (
-                                <span className="text-video">Máy ảnh đang bật</span>
+                                <span className='text-video'>Camera is enabled</span>
                             ) : (
-                                <span className="text-video">Máy ảnh đang tắt</span>
+                                <span className='text-video'>Camera is disabled</span>
                             )}
                             {audioEnabled ? (
-                                <h3 className='text-audio'>Mic đang bật</h3>
+                                <h3 className='text-audio'>Mic is enabled</h3>
                             ) : (
-                                <h3 className='text-audio'>Mic đang tắt</h3>
+                                <h3 className='text-audio'>Mic is disabled</h3>
                             )}
-                            {videoEnabled ? (
-                                <div className='videoFrame'>
-                                    <AspectRatio  ratio={16 / 9}>
-                                        {videoElement }
-                                    </AspectRatio>
-                                </div>
-                            ) : (
-                                <div className='videoInvisible' ></div>
-                            )}
+                            <div className='videoFrame'>
+                                <AspectRatio ratio={16 / 9}>{videoElement}</AspectRatio>
+                            </div>
                             <div className='controlMicCam'>
                                 <div>
                                     <AudioSelectButton
@@ -190,43 +199,66 @@ export const PreJoinPage = () => {
                                         onSourceSelected={selectVideoDevice}
                                     />
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div className='wapper-participant'>
                         <div className='join-section'>
-                            <h3>Sẵn sàng tham gia</h3>
-                            <span>Những người khác ở đây</span>
+                            <h3>Ready to join</h3>
                             <div className='view-participant'>
                                 <div className='join-participant'>
-                                    <img
-                                        src='https://res.cloudinary.com/boo-it/image/upload/v1639308280/test/i0nstrxf9xgkux4mjucd.png'
-                                        alt=''
-                                    />
-                                    <img
-                                        src='https://res.cloudinary.com/boo-it/image/upload/v1639308280/test/i0nstrxf9xgkux4mjucd.png'
-                                        alt=''
-                                    />
-                                    <img
-                                        src='https://res.cloudinary.com/boo-it/image/upload/v1639308280/test/i0nstrxf9xgkux4mjucd.png'
-                                        alt=''
-                                    />
+                                    <div style={{ display: 'flex' }}>
+                                        {listParticipants?.map((item: any, index: number) => (
+                                            <div key={index}>
+                                                <img
+                                                    src={item.picture}
+                                                    alt=''
+                                                    referrerPolicy='no-referrer'
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div>
+                                        {listParticipants?.length > 2 && (
+                                            <div>
+                                                <p style={{ display: 'flex' }}>
+                                                    {listParticipants[0]?.name},{' '}
+                                                    {listParticipants[1]?.name} +{' '}
+                                                    {listParticipants.length - 2} are participating
+                                                    in this meeting
+                                                </p>
+                                            </div>
+                                        )}
+                                        {listParticipants?.length <= 2 ? (
+                                            listParticipants?.length === 0 && (
+                                                <span>Nobody is here</span>
+                                            )
+                                        ) : (
+                                            <div>
+                                                <p>
+                                                    {listParticipants[0]?.name},{' '}
+                                                    {listParticipants[0]?.name} are participating in
+                                                    this meeting
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                <span>Ai đang ở đây</span>
                             </div>
                             <div className='join-room'>
-                                <button onClick={requestJoinRoom}>Tham gia ngay</button>
+                                <button onClick={requestJoinRoom}>Join Now</button>
                             </div>
                             <div className='hold-join'>
-                                <span>Đang chờ tham gia...</span>
+                                <span>Waiting to join...</span>
+                            </div>
+                            <div className='reject'>
+                                <span>Request has been rejected</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <footer>
-            </footer>
+            <footer></footer>
         </div>
     );
 };

@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import server from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import { authLogout } from '../../contexts/auth';
 import { AuthContext } from '../../contexts/auth/authProvider';
 import { userDetailData } from '../../contexts/user';
