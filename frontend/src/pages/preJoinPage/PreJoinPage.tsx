@@ -2,7 +2,7 @@ import { createLocalVideoTrack, LocalVideoTrack, Room, RoomEvent } from 'livekit
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 import { server } from '../../configs/axios-config';
 import './prejoinpage.css';
@@ -22,7 +22,6 @@ export const PreJoinPage = () => {
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
     const navigate = useNavigate();
-    let location = useLocation();
 
     useEffect(() => {
         server
@@ -46,6 +45,7 @@ export const PreJoinPage = () => {
                 room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                     const strData = decoder.decode(payload);
                     const result = JSON.parse(strData);
+                    console.log(result);
                     if (
                         result.type === 'room' &&
                         result.action === 'res-join-room' &&
@@ -62,6 +62,8 @@ export const PreJoinPage = () => {
         }
     }, [loading]);
 
+    console.log(room);
+
     useEffect(() => {
         return () => {
             if (!loading) {
@@ -74,14 +76,12 @@ export const PreJoinPage = () => {
 
     useEffect(() => {
         if (!loading) {
-            if (location.pathname.includes('/prejoinroom')) {
-                createLocalVideoTrack({
-                    deviceId: videoDevice?.deviceId,
-                }).then((track) => {
-                    setVideoEnabled(true);
-                    setVideoTrack(track);
-                });
-            }
+            createLocalVideoTrack({
+                deviceId: videoDevice?.deviceId,
+            }).then((track) => {
+                setVideoEnabled(true);
+                setVideoTrack(track);
+            });
         }
     }, [loading, videoDevice]);
 
@@ -204,7 +204,7 @@ export const PreJoinPage = () => {
                     </div>
                     <div className='wapper-participant'>
                         <div className='join-section'>
-                            <h3>Ready to join</h3>
+                            <span>Ready to join</span>
                             <div className='view-participant'>
                                 <div className='join-participant'>
                                     <div style={{ display: 'flex' }}>
@@ -218,28 +218,19 @@ export const PreJoinPage = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div>
-                                        {listParticipants?.length > 2 && (
+                                    <div className='show-participants'>
+                                        {listParticipants?.length > 1 && (
                                             <div>
                                                 <p style={{ display: 'flex' }}>
-                                                    {listParticipants[0]?.name},{' '}
-                                                    {listParticipants[1]?.name} +{' '}
-                                                    {listParticipants.length - 2} are participating
-                                                    in this meeting
+                                                    {listParticipants[0]?.name} and
+                                                    {listParticipants.length - 1} people are
+                                                    participating in this meeting
                                                 </p>
                                             </div>
                                         )}
-                                        {listParticipants?.length <= 2 ? (
-                                            listParticipants?.length === 0 && (
-                                                <span>Nobody is here</span>
-                                            )
-                                        ) : (
+                                        {listParticipants?.length < 1 && (
                                             <div>
-                                                <p>
-                                                    {listParticipants[0]?.name},{' '}
-                                                    {listParticipants[0]?.name} are participating in
-                                                    this meeting
-                                                </p>
+                                                <span>Nobody is here</span>
                                             </div>
                                         )}
                                     </div>
