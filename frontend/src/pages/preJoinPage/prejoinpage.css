@@ -194,6 +194,7 @@
 
 .hold-join span {
     font-size: 18px;
+    font-weight: normal;
 }
 
 .reject{
@@ -210,7 +211,7 @@
     display: none;
 }
 
-/* --------------------- hover-btn ------------------------------ */
+/* --------------------- responsive ------------------------------ */
 
 @media only screen and (min-width: 375px) and (max-width:600px){
     .wapper-participant h3{

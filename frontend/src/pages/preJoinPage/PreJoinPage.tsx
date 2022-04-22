@@ -36,6 +36,7 @@ export const PreJoinPage = () => {
 
     useEffect(() => {
         if (!loading) {
+            setTimeout(() => {}, 1000);
             const fetchToken = async () => {
                 const res = await server.post(`rooms/${room_id}/token`);
                 await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
@@ -219,16 +220,22 @@ export const PreJoinPage = () => {
                                         ))}
                                     </div>
                                     <div className='show-participants'>
-                                        {listParticipants?.length > 1 && (
+                                        {listParticipants?.length > 2 && (
                                             <div>
-                                                <p style={{ display: 'flex' }}>
+                                                <span>
                                                     {listParticipants[0]?.name} and
                                                     {listParticipants.length - 1} people are
                                                     participating in this meeting
-                                                </p>
+                                                </span>
                                             </div>
                                         )}
-                                        {listParticipants?.length < 1 && (
+                                        {listParticipants?.length === 1 && (
+                                            <div>
+                                                {listParticipants[0]?.name} is participating in this
+                                                meeting
+                                            </div>
+                                        )}
+                                        {listParticipants?.length === 0 && (
                                             <div>
                                                 <span>Nobody is here</span>
                                             </div>
