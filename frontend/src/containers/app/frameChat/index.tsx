@@ -2,11 +2,7 @@ import React, { useState, useEffect, useRef, memo } from 'react';
 import './frameChat.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
-import {
-    RoomEvent,
-    DataPacket_Kind,
-    Participant
-} from 'livekit-client';
+import { RoomEvent, DataPacket_Kind, Participant } from 'livekit-client';
 
 function FrameChat(props: any) {
     const [message, setMessage] = useState<any>(null);
@@ -14,17 +10,16 @@ function FrameChat(props: any) {
     const { hourAndMinute, clickButtonMessage, room } = props;
     const inputRef = useRef<any>();
     const classActiveIcon = message ? 'iconActive' : '';
-    // console.log('FrameChat render.....');
 
     const handleSendMessage = () => {
         const dataSend = {
-            type: "chat",
+            type: 'chat',
             data: {
                 userIdentity: room.localParticipant.participantInfo.identity,
                 name: room.localParticipant.name,
                 timeSpan: hourAndMinute,
-                inputMessage: message
-            }
+                inputMessage: message,
+            },
         };
         setListMessage([...listMessage, dataSend]);
         const strData = JSON.stringify(dataSend);
@@ -44,63 +39,61 @@ function FrameChat(props: any) {
                 data.type === 'chat' && setListMessage((prev: any) => [...prev, data]);
             });
         };
-        room && receivedData()
+        room && receivedData();
     }, [room]);
 
     return (
-        <div className="frameChat">
-            <div className="headerFrameChat">
-                <div className="headerTitleWrap">
-                    <div className="headerTitle">Message in call</div>
+        <div className='frameChat'>
+            <div className='headerFrameChat'>
+                <div className='headerTitleWrap'>
+                    <div className='headerTitle'>Message in call</div>
                 </div>
-                <div className="headerIcon">
-                    <div className="glo-icon-close tooltip">
+                <div className='headerIcon'>
+                    <div className='glo-icon-close tooltip'>
                         <CloseIcon onClick={() => clickButtonMessage()} />
-                        <span className="tooltiptext">Close</span>
+                        <span className='tooltiptext'>Close</span>
                     </div>
                 </div>
             </div>
 
-            <div className="notificationChat">
-                The message will only be visible to the call participants and will be deleted when the call ends.
+            <div className='notificationChat'>
+                The message will only be visible to the call participants and will be deleted when
+                the call ends.
             </div>
 
-            <div className="bodyFrameChat">
-                {
-                    listMessage.map((infoMessage: any, index: any) => (
-
-                        <div className="rowChat" key={index}>
-                            <div className="headerRowChat">
-                                <div className="nameRowChat">
-                                    {(room.localParticipant.participantInfo.identity === infoMessage.data.userIdentity) ? 'You' : infoMessage.data.name}
-                                </div>
-                                <div className="timeRowChat">{infoMessage.data.timeSpan}</div>
+            <div className='bodyFrameChat'>
+                {listMessage.map((infoMessage: any, index: any) => (
+                    <div className='rowChat' key={index}>
+                        <div className='headerRowChat'>
+                            <div className='nameRowChat'>
+                                {room.localParticipant.participantInfo.identity ===
+                                infoMessage.data.userIdentity
+                                    ? 'You'
+                                    : infoMessage.data.name}
                             </div>
-                            <div className="inputMessage">
-                                {infoMessage.data.inputMessage}
-                            </div>
+                            <div className='timeRowChat'>{infoMessage.data.timeSpan}</div>
                         </div>
-                    ))
-                }
+                        <div className='inputMessage'>{infoMessage.data.inputMessage}</div>
+                    </div>
+                ))}
             </div>
 
-
-            <div className="footerFrameChat">
-                <div className="formSendMessage">
-                    <div className="footerInputChat">
+            <div className='footerFrameChat'>
+                <div className='formSendMessage'>
+                    <div className='footerInputChat'>
                         <input
                             ref={inputRef}
                             value={message || ''}
-                            placeholder="Send message for everybody"
-                            onChange={e => setMessage(e.target.value)}
-                            onKeyPress={event => {
+                            placeholder='Send message for everybody'
+                            onChange={(e) => setMessage(e.target.value)}
+                            onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
                                     handleSendMessage();
                                 }
                             }}
                         />
                     </div>
-                    <div className={`footerChatIconSend ${classActiveIcon}`} >
+                    <div className={`footerChatIconSend ${classActiveIcon}`}>
                         <SendIcon onClick={handleSendMessage} />
                     </div>
                 </div>

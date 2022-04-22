@@ -12,6 +12,28 @@ const room = new Room({
     dynacast: true,
 });
 
+export const modelPrejoinroom = {
+    textSpanCamera1: 'Camera is enabled',
+    textSpanCamera2: 'Camera is disabled',
+    textSpanMic1: 'Mic is enabled',
+    textSpanMic2: 'Mic is disabled',
+    textSpanReady: 'Ready to join',
+    textSpanWaitting: 'Waiting to join...',
+    textSpanReject: 'Request has been rejected',
+    btnJoin: 'Join Now',
+};
+
+export const testIdPrejoinroom = {
+    textSpanCamera1: 'text-span-camera-1',
+    textSpanCamera2: 'text-span-camera-2',
+    textSpanMic1: 'text-span-mic-1',
+    textSpanMic2: 'text-span-mic-2',
+    textSpanReady: 'text-span-ready',
+    textSpanWaitting: 'text-span-waitting',
+    textSpanReject: 'text-span-reject',
+    btnJoin: 'btn-join',
+};
+
 export const PreJoinPage = () => {
     const [listParticipants, setListPaticipants] = useState<any>([]);
     const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
@@ -23,20 +45,26 @@ export const PreJoinPage = () => {
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
     const navigate = useNavigate();
 
+    // Check exist room
     useEffect(() => {
         server
             .get(`rooms/${room_id}`)
-            .then(() => {
+            .then((res) => {
                 setLoading(false);
+                if (res.data.is_participant) {
+                    navigate(`/room/${room_id}`);
+                }
             })
             .catch(() => {
                 navigate({ pathname: '/home' });
             });
     }, []);
 
+    // Connect server and listen response
     useEffect(() => {
         if (!loading) {
-            setTimeout(() => {}, 1000);
+            // setTimeout(() => {
+            // }, 1000);
             const fetchToken = async () => {
                 const res = await server.post(`rooms/${room_id}/token`);
                 await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
@@ -46,7 +74,6 @@ export const PreJoinPage = () => {
                 room.on(RoomEvent.DataReceived, (payload: Uint8Array) => {
                     const strData = decoder.decode(payload);
                     const result = JSON.parse(strData);
-                    console.log(result);
                     if (
                         result.type === 'room' &&
                         result.action === 'res-join-room' &&
@@ -63,8 +90,7 @@ export const PreJoinPage = () => {
         }
     }, [loading]);
 
-    console.log(room);
-
+    // Clean up video
     useEffect(() => {
         return () => {
             if (!loading) {
@@ -75,6 +101,7 @@ export const PreJoinPage = () => {
         };
     }, [loading, videoTrack]);
 
+    // Set enabled video default
     useEffect(() => {
         if (!loading) {
             createLocalVideoTrack({
@@ -86,6 +113,7 @@ export const PreJoinPage = () => {
         }
     }, [loading, videoDevice]);
 
+    // Show participants in room
     useLayoutEffect(() => {
         const listPaticipant = async () => {
             await server.get(`rooms/${room_id}/participants`).then(async (result) => {
@@ -95,6 +123,7 @@ export const PreJoinPage = () => {
         listPaticipant();
     }, [room_id]);
 
+    // Request join room
     const requestJoinRoom = async () => {
         await server
             .get(`rooms/${room_id}/req-join-room`)
@@ -106,6 +135,7 @@ export const PreJoinPage = () => {
             });
     };
 
+    // On off video
     const toggleVideo = async () => {
         if (videoTrack) {
             videoTrack.stop();
@@ -128,6 +158,7 @@ export const PreJoinPage = () => {
         }
     };
 
+    // On off audio
     const toggleAudio = () => {
         if (audioEnabled) {
             setAudioEnabled(false);
@@ -144,6 +175,7 @@ export const PreJoinPage = () => {
         }
     };
 
+    // Select video device options
     const selectVideoDevice = (device: MediaDeviceInfo) => {
         setVideoDevice(device);
         if (videoTrack) {
@@ -154,13 +186,13 @@ export const PreJoinPage = () => {
         }
     };
 
+    // Show video element
     let videoElement;
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
         videoElement = <div className='placeholder' />;
     }
-    console.log(listParticipants);
 
     if (loading) return <></>;
     return (
@@ -171,14 +203,34 @@ export const PreJoinPage = () => {
                     <div className='wapper-videoSection'>
                         <div className='videoSection'>
                             {videoEnabled ? (
-                                <span className='text-video'>Camera is enabled</span>
+                                <span
+                                    className='text-video'
+                                    data-testid={testIdPrejoinroom.textSpanCamera1}
+                                >
+                                    {modelPrejoinroom.textSpanCamera1}
+                                </span>
                             ) : (
-                                <span className='text-video'>Camera is disabled</span>
+                                <span
+                                    className='text-video'
+                                    data-testid={testIdPrejoinroom.textSpanCamera2}
+                                >
+                                    {modelPrejoinroom.textSpanCamera2}
+                                </span>
                             )}
                             {audioEnabled ? (
-                                <h3 className='text-audio'>Mic is enabled</h3>
+                                <span
+                                    className='text-audio'
+                                    data-testid={testIdPrejoinroom.textSpanMic1}
+                                >
+                                    {modelPrejoinroom.textSpanMic1}
+                                </span>
                             ) : (
-                                <h3 className='text-audio'>Mic is disabled</h3>
+                                <span
+                                    className='text-audio'
+                                    data-testid={testIdPrejoinroom.textSpanMic2}
+                                >
+                                    {modelPrejoinroom.textSpanMic2}
+                                </span>
                             )}
                             <div className='videoFrame'>
                                 <AspectRatio ratio={16 / 9}>{videoElement}</AspectRatio>
@@ -205,7 +257,9 @@ export const PreJoinPage = () => {
                     </div>
                     <div className='wapper-participant'>
                         <div className='join-section'>
-                            <span>Ready to join</span>
+                            <span data-testid={testIdPrejoinroom.textSpanReady}>
+                                {modelPrejoinroom.textSpanReady}
+                            </span>
                             <div className='view-participant'>
                                 <div className='join-participant'>
                                     <div style={{ display: 'flex' }}>
@@ -244,13 +298,23 @@ export const PreJoinPage = () => {
                                 </div>
                             </div>
                             <div className='join-room'>
-                                <button onClick={requestJoinRoom}>Join Now</button>
+                                <button
+                                    className='btn-join-now'
+                                    data-testid={testIdPrejoinroom.btnJoin}
+                                    onClick={requestJoinRoom}
+                                >
+                                    {modelPrejoinroom.btnJoin}
+                                </button>
                             </div>
                             <div className='hold-join'>
-                                <span>Waiting to join...</span>
+                                <span data-testid={testIdPrejoinroom.textSpanWaitting}>
+                                    {modelPrejoinroom.textSpanWaitting}
+                                </span>
                             </div>
                             <div className='reject'>
-                                <span>Request has been rejected</span>
+                                <span data-testid={testIdPrejoinroom.textSpanReject}>
+                                    {modelPrejoinroom.textSpanReject}
+                                </span>
                             </div>
                         </div>
                     </div>
