@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "react-chat-widget/lib/styles.css";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import GroupIcon from "@mui/icons-material/Group";
 import InfoIcon from "@mui/icons-material/Info";
 import HailIcon from "@mui/icons-material/Hail";
@@ -23,10 +23,12 @@ export function RoomPage() {
     const navigate = useNavigate();
     const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>(null);
+    const [roomData, setRoomData] = useState<any>({});
     const [showChat, setShowChat] = useState<boolean>(true);
     const [showUsers, setShowUsers] = useState<boolean>(false);
     const [showInfo, setShowInfo] = useState<boolean>(false);
     const [showJoin, setShowJoin] = useState<boolean>(false);
+    const [iconNotify, setIconNotify] = useState<boolean>(false);
     const [hourAndMinute, setHourAndMinute] = useState<any>("");
     const [numParticipants, setNumParticipants] = useState<any>(0);
     const [type, setType] = useState<any>("chat");
@@ -52,7 +54,7 @@ export function RoomPage() {
 
     const onLeave = () => {
         navigate({
-            pathname: "/home",
+            pathname: `/stoproom/${room_id}`,
         });
     };
 
@@ -69,12 +71,16 @@ export function RoomPage() {
         color: "#fff",
     };
 
-    // check room not exist => negative to home
     useEffect(() => {
         server
             .get(`rooms/${room_id}`)
-            .then((res) => {
-                setLoading(false);
+            .then(async (res) => {
+                console.log(res);
+                if (!res.data.is_master && !res.data.is_participant) {
+                    await navigate({ pathname: `/prejoinroom/${room_id}` });
+                }
+                await setRoomData(res.data);
+                await setLoading(false);
             })
             .catch((err) => {
                 navigate({ pathname: "/home" });
@@ -87,37 +93,24 @@ export function RoomPage() {
             const res = await server.post(`rooms/${room_id}/token`);
             setToken(res.data);
         };
-        getToken();
-    }, [room_id]);
+        if (!loading) {
+            getToken();
+        }
+    }, [room_id, loading]);
 
     // check host
     useEffect(() => {
         const isHost = async () => {
-            await server.get(`rooms/${room_id}`)
-                .then((res) => {
-                    if(res.data.is_master) {
-                        setIsHost(res.data.is_master);
-                    } else if(res.data.is_participant) {
-                        setIsHost(false)
-                    }
-                })
+            await server.get(`rooms/${room_id}`).then((res) => {
+                if (res.data.is_master) {
+                    setIsHost(res.data.is_master);
+                } else {
+                    setIsHost(false);
+                }
+            });
         };
         isHost();
-    }, [room_id]);
-
-    // check Participant
-    useEffect(() => {
-        const isParticipant = async () => {
-            await server.get(`rooms/${room_id}`).then((res) => {
-                res.data.is_participant === false &&
-                    navigate({
-                        pathname: `/prejoinroom/${room_id}`
-                    });
-                }
-            )
-        }
-        isParticipant();
-    }, [room_id, navigate])
+    }, [loading]);
 
     // get Time
     useEffect(() => {
@@ -210,7 +203,6 @@ export function RoomPage() {
                             {hourAndMinute} | {room_id}
                         </p>
                     </div>
-
                 </div>
             </div>
 
@@ -243,9 +235,11 @@ export function RoomPage() {
                     >
                         <div className="glo-checkChat">
                             <FrameChat
+                                type={type}
                                 room={room}
                                 hourAndMinute={hourAndMinute}
                                 setShowChat={setShowChat}
+                                setIconNotify={setIconNotify}
                             />
                         </div>
                     </div>
@@ -263,7 +257,8 @@ export function RoomPage() {
                             room_id={room_id}
                             room={room}
                             numParticipants={numParticipants}
-                            isHost= {isHost}
+                            isHost={isHost}
+                            roomData={roomData}
                         />
                     </div>
 
@@ -323,7 +318,7 @@ export function RoomPage() {
                         </span>
                     </div>
                     <div className="controlItem" onClick={clickButtonMessage}>
-                        <ChatBubbleIcon
+                        <ChatOutlinedIcon
                             style={
                                 type === "chat" && showChat
                                     ? controlItemActive
@@ -331,6 +326,9 @@ export function RoomPage() {
                             }
                             className="controlItem"
                         />
+                        {iconNotify &&(
+                            <div className="controlNumberChat"></div>
+                        )}
                     </div>
                 </div>
             </div>

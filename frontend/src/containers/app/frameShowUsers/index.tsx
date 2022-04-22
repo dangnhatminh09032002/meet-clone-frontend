@@ -7,11 +7,10 @@ import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
 
-    const { setShowUsers, room_id, room, numParticipants, isHost } = props;
+    const { setShowUsers, room_id, room, numParticipants, roomData } = props;
     const [listParticipant, setListParticipant] = useState<any>(null);
-    console.log(isHost);
+    const [searchUser, setSearchUser] = useState<any>("");
 
-    // get Participant of room
     useEffect(() => {
         const getParticipant = async () => {
             await server.get(`rooms/${room_id}/participants`)
@@ -19,6 +18,19 @@ function FrameShowUsers(props: any) {
         }
         getParticipant();
     }, [room_id, room, numParticipants]);
+
+
+    const handleSearch = (e: any) => {
+        setSearchUser(e.target.value);
+
+        if(searchUser !== ""){
+            const results = listParticipant?.filter((user: any) => {
+                return user.name.toLowerCase().includes(searchUser.toLowerCase());
+            })
+            console.log("results: ", results);
+            setListParticipant(results);
+        }
+    }
 
     return (
         <div className="frameUsers">
@@ -40,7 +52,9 @@ function FrameShowUsers(props: any) {
                 </div>
                 <input className="glo-input"
                     type="text"
+                    value={searchUser}
                     placeholder="Find person"
+                    onChange={handleSearch}
                 />
             </div>
 
@@ -57,7 +71,7 @@ function FrameShowUsers(props: any) {
                         <div className="bodyInfo">
                             <div className="nameUser">{user.name}</div>
                             {/* check if === host => add class */}
-                            {isHost &&
+                            {user.id === roomData.user_id && 
                                 <div className="description">Meeting organizer</div>
                             }
                         </div>
@@ -73,4 +87,4 @@ function FrameShowUsers(props: any) {
     );
 }
 
-export default memo(FrameShowUsers);
+export default FrameShowUsers;

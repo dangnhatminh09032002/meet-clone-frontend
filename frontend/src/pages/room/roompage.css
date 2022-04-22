@@ -73,6 +73,17 @@
     font-size: 14px;
 }
 
+.frameControlRight .controlItem .controlNumberChat {
+    height: 10px;
+    width: 10px;
+    background-color: #8ab4f8;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 58px;
+    right: 108px;
+    border: 2px solid #181616;
+}
+
 .glo-checkChat{
     height: 100%;
     animation-duration: 0.2s;
