@@ -2,7 +2,7 @@ import './frameUsers.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
@@ -22,15 +22,11 @@ function FrameShowUsers(props: any) {
 
     const handleSearch = (e: any) => {
         setSearchUser(e.target.value);
-
-        if(searchUser !== ""){
-            const results = listParticipant?.filter((user: any) => {
-                return user.name.toLowerCase().includes(searchUser.toLowerCase());
-            })
-            console.log("results: ", results);
-            setListParticipant(results);
-        }
     }
+
+    let dataSearch = listParticipant?.filter((user: any) => {
+        return user.name.toLowerCase().includes(searchUser.toLowerCase());
+    })
 
     return (
         <div className="frameUsers">
@@ -62,7 +58,7 @@ function FrameShowUsers(props: any) {
                 In a meeting
             </div>
             <div className="listUser">
-                {listParticipant?.map((user: any, index: any) => (
+                {dataSearch?.map((user: any, index: any) => (
                     <div className="infoUsers" key={index}>
                         <div className="avatarUser">
                             <img src={user.picture} referrerPolicy="no-referrer" alt="avatar" />
@@ -71,7 +67,7 @@ function FrameShowUsers(props: any) {
                         <div className="bodyInfo">
                             <div className="nameUser">{user.name}</div>
                             {/* check if === host => add class */}
-                            {user.id === roomData.user_id && 
+                            {user.id === roomData.user_id &&
                                 <div className="description">Meeting organizer</div>
                             }
                         </div>

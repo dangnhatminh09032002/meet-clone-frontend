@@ -326,7 +326,7 @@ export function RoomPage() {
                             }
                             className="controlItem"
                         />
-                        {iconNotify &&(
+                        {iconNotify && (
                             <div className="controlNumberChat"></div>
                         )}
                     </div>
