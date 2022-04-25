@@ -274,10 +274,10 @@ export const PreJoinPage = () => {
                                         ))}
                                     </div>
                                     <div className='show-participants'>
-                                        {listParticipants?.length > 2 && (
+                                        {listParticipants?.length >= 2 && (
                                             <div>
                                                 <span>
-                                                    {listParticipants[0]?.name} and
+                                                    {listParticipants[0]?.name} and{' '}
                                                     {listParticipants.length - 1} people are
                                                     participating in this meeting
                                                 </span>

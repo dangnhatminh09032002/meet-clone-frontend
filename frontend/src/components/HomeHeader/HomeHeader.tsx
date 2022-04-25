@@ -49,7 +49,7 @@ export function Header() {
         authDetailDispatch(authLogout());
         userDetailDispatch(
             userDetailData({
-                uid_google: '',
+                user_id: '',
                 full_name: '',
                 ava_url: '',
             })
@@ -63,7 +63,7 @@ export function Header() {
     };
 
     return (
-        <Container maxWidth={false}>
+        <Container maxWidth={false} sx={{ pl: { xs: 0, lg: 0 } }}>
             <Toolbar disableGutters>
                 <div className='header' onClick={() => toHome()}>
                     <div className='logo'>

@@ -1,7 +1,7 @@
 import { CommonState } from '../types';
 
 export interface IUser {
-  uid_google?: string;
+  user_id?: string;
   full_name?: string;
   ava_url?: string;
 }

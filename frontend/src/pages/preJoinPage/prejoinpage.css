@@ -107,7 +107,7 @@
     height: 100%;
     width: 100%;
     margin-top: 4%;
-    padding-left: 48px;
+    /* padding-left: 48px; */
 }
 
 .wapper-participant h3 {
@@ -263,7 +263,7 @@
 @media only screen and (min-width:80em) and (max-width: 87.5em){
     .wapper-content {
         flex-direction: row;
-        margin: 10% 0 5% 5%;
+        margin: 14% 0 5% 5%;
     }
 
     .wapper-videoSection {
@@ -288,4 +288,17 @@
     .wapper-videoSection {
         width: 100%;
     }   
+}
+
+@media only screen and (min-width: 87.5625em) and (max-height: 45em) {
+    .wapper-content {
+        flex-direction: row;
+        margin: 5% 0 0 5%;
+    }
+}
+
+@media (max-height: 45em) {
+    .wapper-participant {
+        margin-top: 2%;
+}
 }

@@ -31,7 +31,7 @@ export const Layout = () => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(
                         userDetailData({
-                            uid_google: result.data.id,
+                            user_id: result.data.id,
                             full_name: result.data.name,
                             ava_url: result.data.picture,
                         })
