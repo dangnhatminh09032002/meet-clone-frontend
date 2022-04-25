@@ -1,3 +1,85 @@
+.room-page {
+    width: 100%;
+}
+
+.glo-video-chat {
+    background: #202124;
+}
+
+.frame-bottom {
+    display: flex;
+    width: 100%;
+}
+
+.infor-room {
+    margin-left: 15px;
+    color: #fff;
+}
+
+.control-video {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.show-mic,
+.show-camera,
+.show-share {
+    margin-right: 5px;
+}
+
+
+.btn-micro-on,
+.btn-camera-on,
+.btn-share {
+    background: #3c4043;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+.btn-micro-on:hover,
+.btn-camera-on:hover,
+.btn-share:hover {
+    background: #6c7074;
+}
+
+.btn-micro-off,
+.btn-camera-off {
+    background: #ea4335;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-end {
+    background: #ea4335;
+    border-radius: 100px;
+    width: 56px;
+    height: 40px;
+}
+.btn-end:hover {
+    background: #df675c;
+}
+
+.icon-mic {
+    color: white;
+    margin-top: 12px;
+    margin-left: 12px;
+}
+
+.icon-end {
+    color: white;
+
+    margin-top: 12px;
+    margin-left: 20px;
+}
+
+.controlItemIcon{
+    font-size: 40px;
+    margin-top: -5px;
+}
+
+
 .roomPageWrapper {
     height: 100vh;
     width: 100%;
@@ -40,117 +122,95 @@
 }
 
 .frameControlRight {
-    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
+    position: absolute;
+    top: 93.5%;
+    right: 80px;
 }
 
-.frameControlRight .controlItem{
+.frameControlRight .controlItem {
     color: #fff;
     margin: 0 8px;
     font-size: 20px;
 }
 
-.frameControlRight .controlItem .controlNumberCount {
-    position: absolute;
-    padding: 1px 6px;
-    border-radius: 10px;
-    background-color: #484b4e;
-    bottom: 58px;
-    right: 146px;
-    font-size: 14px;
-}
 
-.frameControlRight .controlItem .controlNumberJoin {
-    position: absolute;
-    padding: 1px 6px;
-    border-radius: 10px;
-    background-color: #484b4e;
-    bottom: 58px;
-    right: 234px;
-    font-size: 14px;
-}
 
-.frameControlRight .controlItem .controlNumberChat {
-    height: 10px;
-    width: 10px;
-    background-color: #8ab4f8;
-    border-radius: 10px;
-    position: absolute;
-    bottom: 58px;
-    right: 108px;
-    border: 2px solid #181616;
-}
-
-.glo-checkChat{
+.glo-checkChat {
     height: 100%;
     animation-duration: 0.2s;
-    animation-name: mymove;
 }
 
 @keyframes mymove {
-    0%   {right: -2%;}
-    50%  {right: -1%;}
-    100% {right: 0%;}
+    0% {
+        right: -2%;
+    }
+    50% {
+        right: -1%;
+    }
+    100% {
+        right: 0%;
+    }
 }
-.glo-page{
+.glo-page {
     display: flex;
     flex-direction: row;
     height: 98.9vh;
-    background:#000;
+    background: #000;
     padding: 10px 10px 0px 10px;
     width: 98.95%;
 }
-.glo-button{
+.glo-button {
     height: 100px;
 }
-.glo-video-chat{
+.glo-video-chat {
     display: flex;
     flex-direction: column;
-    width: 81%;
+    width: 100%;
     position: relative;
 }
-.glo-test{
+.glo-test {
     height: 100%;
 }
-.glo-chat{
+.glo-chat {
     width: 360px;
     height: 100%;
 }
-.glo-video{
-    height: calc( 98.8vh - 100px);
+.glo-video {
+    height: calc(98.8vh - 100px);
     width: 100%;
 }
 
-._1smc2{
+._1smc2 {
     margin-bottom: -133px;
 }
 
 .rightRoom {
+    right: 10px;
+    position: absolute;
+    top: 10px;
     width: 360px;
     display: flex;
     flex-direction: column;
 }
 
 .rightRoom .containerFrame {
-    height: calc( 98.8vh - 100px);
+    height: calc(98.8vh - 100px);
 }
 
 .rightRoom .containerFrame .wrapChat,
 .rightRoom .containerFrame .wrapUser,
 .rightRoom .containerFrame .wrapInfo,
-.rightRoom .containerFrame .wrapJoin
-{
-    height: calc( 98.8vh - 100px);
+.rightRoom .containerFrame .wrapJoin {
+    height: calc(98.8vh - 100px);
 }
 
-.backgroundVideo {
-    height: calc( 98.8vh - 100px);
-    width: 100%;
-    position: absolute;
-    background: blue;
-    top: 0;
-    z-index: 1000;
+@media screen and (min-width: 375px) and (max-width: 600px) {
+    .infor-room{
+        display: none;
+    }
+    
 }

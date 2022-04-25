@@ -71,10 +71,6 @@ function FrameShowUsers(props: any) {
                                 <div className="description">Meeting organizer</div>
                             }
                         </div>
-
-                        <div className="infoIcon">
-                            <ManageAccountsIcon />
-                        </div>
                     </div>
                 ))}
             </div>
