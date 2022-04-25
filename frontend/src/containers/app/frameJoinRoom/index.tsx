@@ -2,18 +2,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import './frameJoinRoom.css';
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useLayoutEffect, useState, memo } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { RoomEvent } from 'livekit-client';
 import { server } from '../../../configs/axios-config';
 import { Howl, Howler } from 'howler';
-// import { useSpeechSynthesis } from 'react-speech-kit';
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
     const { setShowJoin, room, room_id } = props;
     const setNumberPerjoin = props.setNumberPerjoin;
-    const [value, setValue] = useState('');
-    // const { speak } = useSpeechSynthesis();
     useLayoutEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
     }, [infoJoinRoom.length]);
@@ -34,7 +31,6 @@ function FrameJoinRoom(props: any) {
                     sound.once('load', function () {
                         sound.play();
                     });
-                    // setValue('aaa');
                     setInfoJoinRoom((prev: any) => {
                         const check = prev.some(
                             (user: any) =>
@@ -44,7 +40,6 @@ function FrameJoinRoom(props: any) {
                         return prev;
                     });
                 }
-                // speak(value);
             });
         };
         room && receivedDataJoin();

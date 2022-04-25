@@ -52,7 +52,7 @@ export const Layout = () => {
                         <Fragment>
                             <Route path='/prejoinroom/:room_id' element={<PreJoinPage />} />
                             <Route path='/room/:room_id' element={<RoomPage />} />
-                            <Route path='/stoproom:room_id' element={<StopRoom />} />
+                            <Route path='/stoproom/:room_id' element={<StopRoom />} />
                             <Route path='/schedule' element={<SchedulePage />} />
                         </Fragment>
                     )}
