@@ -1,10 +1,10 @@
-import { SchedulePage } from '../pages/schedulePage/SchedulePage';
-import React, { lazy, Suspense, useContext, useLayoutEffect, Fragment } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { GlobalContext } from '../contexts/provider';
-import { authDetailData } from '../contexts/auth';
+import React, { Fragment, lazy, Suspense, useContext, useLayoutEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { serverAuthen } from '../configs/axios-config';
 import { userDetailData } from '../contexts';
-import { server } from '../configs/axios-config';
+import { authDetailData } from '../contexts/auth';
+import { GlobalContext } from '../contexts/provider';
+import { SchedulePage } from '../pages/schedulePage/SchedulePage';
 
 const StopRoom: any = lazy(() =>
     import('../pages').then(({ StopRoom }) => ({ default: StopRoom }))
@@ -25,8 +25,8 @@ export const Layout = () => {
 
     useLayoutEffect(() => {
         const checkVerify = async () => {
-            await server
-                .get('auth/verify')
+            await serverAuthen
+                .get(`auth/validate?id_token=${sessionStorage.getItem('token')}`)
                 .then((result) => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(

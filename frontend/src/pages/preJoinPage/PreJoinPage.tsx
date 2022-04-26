@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-import { server } from '../../configs/axios-config';
+import { serverAuthen } from '../../configs/axios-config';
 import './prejoinpage.css';
 
 const room = new Room({
@@ -47,7 +47,7 @@ export const PreJoinPage = () => {
 
     // Check exist room
     useEffect(() => {
-        server
+        serverAuthen
             .get(`rooms/${room_id}`)
             .then((res) => {
                 setLoading(false);
@@ -60,13 +60,13 @@ export const PreJoinPage = () => {
             });
     }, []);
 
-    // Connect server and listen response
+    // Connect serverAuthen and listen response
     useEffect(() => {
         if (!loading) {
             // setTimeout(() => {
             // }, 1000);
             const fetchToken = async () => {
-                const res = await server.post(`rooms/${room_id}/token`);
+                const res = await serverAuthen.post(`rooms/${room_id}/token`);
                 await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                     autoSubscribe: false,
                 });
@@ -116,7 +116,7 @@ export const PreJoinPage = () => {
     // Show participants in room
     useLayoutEffect(() => {
         const listPaticipant = async () => {
-            await server.get(`rooms/${room_id}/participants`).then(async (result) => {
+            await serverAuthen.get(`rooms/${room_id}/participants`).then(async (result) => {
                 await setListPaticipants(result.data);
             });
         };
@@ -125,7 +125,7 @@ export const PreJoinPage = () => {
 
     // Request join room
     const requestJoinRoom = async () => {
-        await server
+        await serverAuthen
             .get(`rooms/${room_id}/req-join-room`)
             .then(() => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');

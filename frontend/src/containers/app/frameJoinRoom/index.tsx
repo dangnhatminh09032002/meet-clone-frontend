@@ -4,7 +4,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useLayoutEffect, useState } from 'react';
 import { RoomEvent } from 'livekit-client';
-import { server } from '../../../configs/axios-config';
+import { serverAuthen } from '../../../configs/axios-config';
 import { Howl, Howler } from 'howler';
 
 function FrameJoinRoom(props: any) {
@@ -52,14 +52,14 @@ function FrameJoinRoom(props: any) {
     };
 
     const handleAllow = async (participant_id: string) => {
-        await server.get(
+        await serverAuthen.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=true`
         );
         handleResponseJoinRoom(participant_id);
     };
 
     const handleDeny = async (participant_id: string) => {
-        await server.get(
+        await serverAuthen.get(
             `rooms/${room_id}/res-join-room?participant_id=${participant_id}&is_allow=false`
         );
         handleResponseJoinRoom(participant_id);

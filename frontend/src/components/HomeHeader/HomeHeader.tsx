@@ -9,10 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { server } from '../../configs/axios-config';
-import { authLogout } from '../../contexts/auth';
 import { AuthContext } from '../../contexts/auth/authProvider';
-import { userDetailData } from '../../contexts/user';
 import { GlobalContext } from './../../contexts/provider';
 import './homeHeader.css';
 
@@ -29,10 +26,9 @@ export const testId = {
 
 export function Header() {
     const authProvider = useContext<any>(GlobalContext);
-    const { authDetailState, authDetailDispatch, userDetailState, userDetailDispatch } =
-        authProvider;
+    const { authDetailState, userDetailState } = authProvider;
     const authContext = useContext<any>(AuthContext);
-    const { signInWithGoogle } = authContext;
+    const { signInWithGoogle, logout } = authContext;
     const navigate = useNavigate();
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -46,15 +42,7 @@ export function Header() {
     };
 
     const handleLogout = async () => {
-        authDetailDispatch(authLogout());
-        userDetailDispatch(
-            userDetailData({
-                user_id: '',
-                full_name: '',
-                ava_url: '',
-            })
-        );
-        await server.get('auth/logout');
+        await logout();
         navigate('/home');
     };
 
@@ -131,7 +119,7 @@ export function Header() {
                                         sx={{ color: '#0288d1' }}
                                         variant='outlined'
                                         color='info'
-                                        onClick={() => signInWithGoogle()}
+                                        onClick={async () => await signInWithGoogle()}
                                     >
                                         Login
                                     </Button>
