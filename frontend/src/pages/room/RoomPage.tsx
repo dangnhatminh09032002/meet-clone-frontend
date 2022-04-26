@@ -32,7 +32,7 @@ export function RoomPage() {
     const [iconNotify, setIconNotify] = useState<boolean>(false);
     const [hourAndMinute, setHourAndMinute] = useState<any>("");
     const [numParticipants, setNumParticipants] = useState<any>(0);
-    const [type, setType] = useState<any>("chat");
+    const [type, setType] = useState<any>("");
     const [token, setToken] = useState<any>(null);
     const [isHost, setIsHost] = useState<boolean>(false);
     const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
