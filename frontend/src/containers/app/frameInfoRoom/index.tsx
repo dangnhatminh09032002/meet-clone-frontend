@@ -7,7 +7,7 @@ import 'animate.css';
 import { memo } from 'react';
 
 function FrameInfoRoom(props: any) {
-    const {setShowInfo} = props
+    const {setShowInfo, setType} = props
     console.log('FrameInfoRoom render.....');
 
     const handleCopy = () => {
@@ -35,8 +35,8 @@ function FrameInfoRoom(props: any) {
                     <div className="headerTitle">Details of the meeting</div>
                 </div>
                 <div className="headerIcon">
-                    <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => setShowInfo(false)}/>
+                    <div className="glo-icon-close tooltip" onClick={() => setType("")}>
+                        <CloseIcon />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>

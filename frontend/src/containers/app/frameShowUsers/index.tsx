@@ -7,7 +7,7 @@ import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
 
-    const { setShowUsers, room_id, room, numParticipants, roomData } = props;
+    const { setShowUsers, room_id, room, numParticipants, setType, roomData } = props;
     const [listParticipant, setListParticipant] = useState<any>(null);
     const [searchUser, setSearchUser] = useState<any>("");
 
@@ -35,8 +35,8 @@ function FrameShowUsers(props: any) {
                     <div className="headerTitle">Everyone</div>
                 </div>
                 <div className="headerIcon">
-                    <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => setShowUsers(false)} />
+                    <div className="glo-icon-close tooltip" onClick={() => setType("")}>
+                        <CloseIcon />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>

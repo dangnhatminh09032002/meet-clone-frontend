@@ -20,15 +20,14 @@ import { server } from "../../configs/axios-config";
 import { Badge, Grid, IconButton, Typography } from "@mui/material";
 
 export function RoomPage() {
+    const [widthVideoElement, setWidthVideoElement] = useState<any>(
+        window.innerWidth
+    );
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { room_id = "" } = useParams();
     const [room, setRoom] = useState<any>(null);
     const [roomData, setRoomData] = useState<any>({});
-    const [showChat, setShowChat] = useState<boolean>(false);
-    const [showUsers, setShowUsers] = useState<boolean>(false);
-    const [showInfo, setShowInfo] = useState<boolean>(false);
-    const [showJoin, setShowJoin] = useState<boolean>(false);
     const [iconNotify, setIconNotify] = useState<boolean>(false);
     const [hourAndMinute, setHourAndMinute] = useState<any>("");
     const [numParticipants, setNumParticipants] = useState<any>(0);
@@ -39,6 +38,8 @@ export function RoomPage() {
     const [audio, setAudio] = useState(true);
     const [camera, setCamera] = useState(true);
     const [share, setShare] = useState(true);
+
+    console.log("first: ", type);
 
     const displayStyle = {
         display: "block",
@@ -75,11 +76,120 @@ export function RoomPage() {
         color: "#fff",
     };
 
+    const positionRight = () => {
+        switch (type) {
+            case "":
+                if (widthVideoElement <= 1520) {
+                    // cho phep tắt navbar
+
+                    // handler ui video
+                    document
+                        .querySelector("._2HbZ0")
+                        ?.setAttribute("style", "width: width: 100%");
+                }
+
+                if (widthVideoElement > 1520) {
+                    // cho cố định không cho tắt navbar
+                    // handler ui video
+                    document
+                        .querySelector("._2HbZ0")
+                        ?.setAttribute("style", "width: width: 100%");
+                }
+                break;
+            default:
+                if (widthVideoElement <= 1520) {
+                    // navbar fixed
+
+                    // handler ui video
+                    document
+                        .querySelector("._2HbZ0")
+                        ?.setAttribute("style", "width: 100%");
+                }
+
+                if (widthVideoElement > 1520) {
+                    document
+                        .querySelector(".containerFrame")
+                        ?.setAttribute("style", "postion: fixed");
+                    document
+                        .querySelector("._2HbZ0")
+                        ?.setAttribute("style", "width: calc(100% - 380px)");
+                }
+        }
+    };
+
+    const clickButtonMessage = () => {
+        setType("chat");
+    };
+
+    const clickButtonUser = () => {
+        setType("user");
+    };
+
+    const clickButtonInfo = () => {
+        setType("info");
+    };
+
+    const clickButtonJoin = () => {
+        setType("join");
+    };
+
+    // get Time
+    useEffect(() => {
+        const realTime = setInterval(() => {
+            setHourAndMinute(moment(new Date()).format("LTS"));
+        }, 1000);
+        return () => clearInterval(realTime);
+    }, []);
+
+    async function onConnected(room: Room) {
+        setRoom(room);
+        await room.localParticipant.setCameraEnabled(true);
+        await room.localParticipant.setMicrophoneEnabled(true);
+    }
+
+    const handleMic = () => {
+        if (audio === true) {
+            setAudio(false);
+            room.localParticipant.setMicrophoneEnabled(false);
+        } else {
+            setAudio(true);
+            room.localParticipant.setMicrophoneEnabled(true);
+        }
+    };
+
+    const handleCamera = () => {
+        if (camera === true) {
+            setCamera(false);
+            room.localParticipant.setCameraEnabled(false);
+        } else {
+            setCamera(true);
+            room.localParticipant.setCameraEnabled(true);
+        }
+    };
+
+    const handleShare = () => {
+        if (share === true) {
+            setShare(false);
+            room.localParticipant.setScreenShareEnabled(false);
+        } else {
+            setShare(true);
+            room.localParticipant.setScreenShareEnabled(true);
+        }
+    };
+
+    useEffect(() => {
+        if (!loading) {
+            window.addEventListener("resize", () => {
+                console.log(window.innerWidth);
+                setWidthVideoElement(window.innerWidth);
+            });
+        }
+    }, [loading]);
+
     useEffect(() => {
         server
             .get(`rooms/${room_id}`)
             .then(async (res) => {
-                console.log(res);
                 if (!res.data.is_master && !res.data.is_participant) {
                     await navigate({ pathname: `/prejoinroom/${room_id}` });
                 }
@@ -116,102 +226,9 @@ export function RoomPage() {
         isHost();
     }, [loading]);
 
-    const positionRight = () => {
-        let widthOwl = document.querySelectorAll("._2HbZ0");
-        for (let index = 0; index < widthOwl.length; index++) {
-            const widthOwlCarousel = widthOwl[index];
-            console.log(widthOwlCarousel.clientWidth);
-            if (widthOwlCarousel.clientWidth <= 1520) {
-                document
-                    .querySelector("._2HbZ0")
-                    ?.setAttribute("style", "width:100%");
-            } else {
-                document
-                    .querySelector("._2HbZ0")
-                    ?.setAttribute("style", "width: calc( 100% - 380px)");
-            }
-        }
-    };
-
-    // get Time
     useEffect(() => {
-        const realTime = setInterval(() => {
-            setHourAndMinute(moment(new Date()).format("LTS"));
-        }, 1000);
-        return () => clearInterval(realTime);
-    }, []);
-
-    async function onConnected(room: Room) {
-        setRoom(room);
-        await room.localParticipant.setCameraEnabled(true);
-        await room.localParticipant.setMicrophoneEnabled(true);
-    }
-
-    const clickButtonMessage = () => {
-        setType("chat");
-        setShowChat(!showChat);
-        setShowUsers(false);
-        setShowInfo(false);
-        setShowJoin(false);
         positionRight();
-    };
-
-    const clickButtonUser = () => {
-        setType("user");
-        setShowUsers(!showUsers);
-        setShowChat(false);
-        setShowInfo(false);
-        setShowJoin(false);
-        positionRight();
-    };
-
-    const clickButtonInfo = () => {
-        setType("info");
-        setShowInfo(!showInfo);
-        setShowUsers(false);
-        setShowChat(false);
-        setShowJoin(false);
-        positionRight();
-    };
-
-    const clickButtonJoin = () => {
-        setType("join");
-        setShowJoin(!showJoin);
-        setShowChat(false);
-        setShowInfo(false);
-        setShowUsers(false);
-        positionRight();
-    };
-
-    const handleMic = () => {
-        if (audio === true) {
-            setAudio(false);
-            room.localParticipant.setMicrophoneEnabled(false);
-        } else {
-            setAudio(true);
-            room.localParticipant.setMicrophoneEnabled(true);
-        }
-    };
-
-    const handleCamera = () => {
-        if (camera === true) {
-            setCamera(false);
-            room.localParticipant.setCameraEnabled(false);
-        } else {
-            setCamera(true);
-            room.localParticipant.setCameraEnabled(true);
-        }
-    };
-
-    const handleShare = () => {
-        if (share === true) {
-            setShare(false);
-            room.localParticipant.setScreenShareEnabled(false);
-        } else {
-            setShare(true);
-            room.localParticipant.setScreenShareEnabled(true);
-        }
-    };
+    }, [type]);
 
     if (loading) return <></>;
 
@@ -351,13 +368,13 @@ export function RoomPage() {
                                 <div
                                     className="wrapJoin"
                                     style={
-                                        type === "join" && showJoin
+                                        type === "join"
                                             ? displayStyle
                                             : displayNoneStyle
                                     }
                                 >
                                     <FrameJoinRoom
-                                        setShowJoin={setShowJoin}
+                                        setType={setType}
                                         setNumberPerjoin={setNumberPerjoin}
                                         room={room}
                                         room_id={room_id}
@@ -367,17 +384,17 @@ export function RoomPage() {
                             <div
                                 className="wrapChat"
                                 style={
-                                    type === "chat" && showChat
+                                    type === "chat"
                                         ? displayStyle
                                         : displayNoneStyle
                                 }
                             >
                                 <div className="glo-checkChat">
                                     <FrameChat
+                                        setType={setType}
                                         type={type}
                                         room={room}
                                         hourAndMinute={hourAndMinute}
-                                        setShowChat={setShowChat}
                                         setIconNotify={setIconNotify}
                                     />
                                 </div>
@@ -386,13 +403,13 @@ export function RoomPage() {
                             <div
                                 className="wrapUser"
                                 style={
-                                    type === "user" && showUsers
+                                    type === "user"
                                         ? displayStyle
                                         : displayNoneStyle
                                 }
                             >
                                 <FrameShowUsers
-                                    setShowUsers={setShowUsers}
+                                    setType={setType}
                                     room_id={room_id}
                                     room={room}
                                     numParticipants={numParticipants}
@@ -404,12 +421,12 @@ export function RoomPage() {
                             <div
                                 className="wrapInfo"
                                 style={
-                                    type === "info" && showInfo
+                                    type === "info"
                                         ? displayStyle
                                         : displayNoneStyle
                                 }
                             >
-                                <FrameInfoRoom setShowInfo={setShowInfo} />
+                                <FrameInfoRoom setType={setType} />
                             </div>
                         </div>
                     </div>
@@ -424,7 +441,7 @@ export function RoomPage() {
                                 >
                                     <PersonAddIcon
                                         style={
-                                            type === "join" && showJoin
+                                            type === "join"
                                                 ? controlItemActive
                                                 : controlItemNoActive
                                         }
@@ -437,7 +454,7 @@ export function RoomPage() {
                     <div className="controlItem" onClick={clickButtonInfo}>
                         <InfoIcon
                             style={
-                                type === "info" && showInfo
+                                type === "info"
                                     ? controlItemActive
                                     : controlItemNoActive
                             }
@@ -451,7 +468,7 @@ export function RoomPage() {
                             >
                                 <GroupIcon
                                     style={
-                                        type === "user" && showUsers
+                                        type === "user"
                                             ? controlItemActive
                                             : controlItemNoActive
                                     }
@@ -462,7 +479,7 @@ export function RoomPage() {
                     <div className="controlItem" onClick={clickButtonMessage}>
                         <ChatOutlinedIcon
                             style={
-                                type === "chat" && showChat
+                                type === "chat"
                                     ? controlItemActive
                                     : controlItemNoActive
                             }

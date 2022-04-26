@@ -5,7 +5,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { RoomEvent, DataPacket_Kind } from "livekit-client";
 
 function FrameChat(props: any) {
-    const { hourAndMinute, setShowChat, room, type, setIconNotify } = props;
+    const { hourAndMinute, setShowChat, setType, room, type, setIconNotify } = props;
     const [message, setMessage] = useState<any>(null);
     const [listMessage, setListMessage] = useState<any>([]);
     const inputRef = useRef<any>();
@@ -80,8 +80,8 @@ function FrameChat(props: any) {
                     <div className="headerTitle">Message in call</div>
                 </div>
                 <div className="headerIcon">
-                    <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => setShowChat(false)} />
+                    <div className="glo-icon-close tooltip"onClick={() => setType("")}>
+                        <CloseIcon  />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>

@@ -8,9 +8,9 @@ import { server } from "../../../configs/axios-config";
 
 function FrameJoinRoom(props: any) {
     const [infoJoinRoom, setInfoJoinRoom] = useState<any>([]);
-    const { setShowJoin, room, room_id} = props;
+    const { room, room_id, setType, isShow } = props;
     const setNumberPerjoin = props.setNumberPerjoin;
-    console.log('FrameJoinRoom render.....');
+
     useLayoutEffect(() => {
         setNumberPerjoin(infoJoinRoom.length);
     }, [infoJoinRoom.length]);
@@ -69,8 +69,11 @@ function FrameJoinRoom(props: any) {
                     <div className="headerTitle">Waiting Room</div>
                 </div>
                 <div className="headerIcon">
-                    <div className="glo-icon-close tooltip">
-                        <CloseIcon onClick={() => setShowJoin(false)}/>
+                    <div
+                        className="glo-icon-close tooltip"
+                        onClick={() => setType("")}
+                    >
+                        <CloseIcon />
                         <span className="tooltiptext">Close</span>
                     </div>
                 </div>
