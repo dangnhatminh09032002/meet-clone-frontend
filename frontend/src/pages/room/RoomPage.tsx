@@ -395,7 +395,7 @@ export function RoomPage() {
             {/* {showMobileControl } */}
             <div className="wrap-side-pc">
                 <div className="sideBarPage">
-                    <div className="rightRoom">
+                    <div className="rightRoom" style={!!type ? displayStyle : displayNoneStyle}>
                         <div className="containerFrame">
                             {isHost && (
                                 <div
@@ -472,6 +472,7 @@ export function RoomPage() {
                                 display: "flex",
                                 alignItems: "center",
                                 textAlign: "center",
+                                justifyContent: "end"
                             }}
                         >
                             <div className="info-chat">
@@ -497,32 +498,80 @@ export function RoomPage() {
                                 horizontal: "right",
                                 vertical: "top",
                             }}
+                            sx={{
+                                width: "120px"
+                            }}
                         >
                             <MenuItem>
-                                <div
-                                    className="wrapChat"
-                                    style={
-                                        type === "chat"
-                                            ? displayStyle
-                                            : displayNoneStyle
-                                    }
-                                >
-                                    <div className="glo-checkChat">
-                                        <FrameChat
-                                            type={type}
-                                            room={room}
-                                            hourAndMinute={hourAndMinute}
-                                            setIconNotify={setIconNotify}
-                                        />
+                                {isHost && (
+                                    <div
+                                        className="controlItem"
+                                        onClick={clickButtonJoin}
+                                    >
+                                        <IconButton aria-label="join room">
+                                            <Badge
+                                                badgeContent={numberPrejoin}
+                                                color="primary"
+                                            >
+                                                <PersonAddIcon
+                                                    style={
+                                                        type === "join"
+                                                            ? controlItemActive
+                                                            : controlItemNoActive
+                                                    }
+                                                    className="controlItemIcon"
+                                                />
+                                            </Badge>
+                                        </IconButton>
                                     </div>
-                                    <p onClick={clickButtonMessage}>Chat</p>
+                                )}
+                            </MenuItem>
+                            <MenuItem>
+                                <div className="controlItem" onClick={clickButtonInfo}>
+                                    <InfoIcon
+                                        style={
+                                            type === "info"
+                                                ? controlItemActive
+                                                : controlItemNoActive
+                                        }
+                                    />
                                 </div>
                             </MenuItem>
                             <MenuItem>
-                                <ListItemIcon>
-                                    <Settings fontSize="small" />
-                                </ListItemIcon>
-                                Settings
+                                <div className="controlItem" onClick={clickButtonUser}>
+                                    <IconButton aria-label="join room">
+                                        <Badge
+                                            badgeContent={numParticipants}
+                                            color="primary"
+                                        >
+                                            <GroupIcon
+                                                style={
+                                                    type === "user"
+                                                        ? controlItemActive
+                                                        : controlItemNoActive
+                                                }
+                                            />
+                                        </Badge>
+                                    </IconButton>
+                                </div>
+                            </MenuItem>
+                            <MenuItem>
+                                <div
+                                    className="controlItem"
+                                    onClick={clickButtonMessage}
+                                >
+                                    <ChatOutlinedIcon
+                                        style={
+                                            type === "chat"
+                                                ? controlItemActive
+                                                : controlItemNoActive
+                                        }
+                                        className="controlItem"
+                                    />
+                                    {iconNotify && (
+                                        <div className="controlNumberChat"></div>
+                                    )}
+                                </div>
                             </MenuItem>
                         </Menu>
                     </div>
