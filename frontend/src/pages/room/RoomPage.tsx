@@ -17,7 +17,17 @@ import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
 import { server } from "../../configs/axios-config";
-import { Badge, Grid, IconButton, Typography } from "@mui/material";
+import {
+    Badge,
+    Grid,
+    IconButton,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+    Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import { Settings } from "@material-ui/icons";
 
 export function RoomPage() {
     const [widthVideoElement, setWidthVideoElement] = useState<any>(
@@ -39,7 +49,15 @@ export function RoomPage() {
     const [camera, setCamera] = useState(true);
     const [share, setShare] = useState(true);
 
-    console.log("first: ", type);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleClickMenuControl = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleCloseMenuControl = () => {
+        setAnchorEl(null);
+    };
 
     const displayStyle = {
         display: "block",
@@ -180,7 +198,6 @@ export function RoomPage() {
     useEffect(() => {
         if (!loading) {
             window.addEventListener("resize", () => {
-                console.log(window.innerWidth);
                 setWidthVideoElement(window.innerWidth);
             });
         }
@@ -230,10 +247,12 @@ export function RoomPage() {
         positionRight();
     }, [type]);
 
+    const a = window.innerWidth;
+
     if (loading) return <></>;
 
     return (
-        <div className="glo-page">
+        <div className="room-page">
             <ReactNotifications />
             <div className="row glo-row glo-video-chat">
                 <div className="glo-video">
@@ -271,7 +290,18 @@ export function RoomPage() {
                                     return (
                                         <div className="frame-bottom">
                                             <Grid container spacing={2}>
-                                                <Grid item xs={3}>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    sm={0}
+                                                    md={3}
+                                                    sx={{
+                                                        display: {
+                                                            sm: "none",
+                                                            md: "block",
+                                                        },
+                                                    }}
+                                                >
                                                     <div className="infor-room">
                                                         <Typography>
                                                             {hourAndMinute} |{" "}
@@ -282,6 +312,8 @@ export function RoomPage() {
                                                 <Grid
                                                     item
                                                     xs={6}
+                                                    sm={9}
+                                                    md={6}
                                                     justifyContent="center"
                                                     alignItems="center"
                                                 >
@@ -350,7 +382,7 @@ export function RoomPage() {
                                                         </div>
                                                     </div>
                                                 </Grid>
-                                                <Grid item xs={3}></Grid>
+                                                <Grid item></Grid>
                                             </Grid>
                                         </div>
                                     );
@@ -360,7 +392,8 @@ export function RoomPage() {
                     </DisplayContext.Provider>
                 </div>
             </div>
-            <div className="wrap-side">
+            {/* {showMobileControl } */}
+            <div className="wrap-side-pc">
                 <div className="sideBarPage">
                     <div className="rightRoom">
                         <div className="containerFrame">
@@ -431,65 +464,135 @@ export function RoomPage() {
                         </div>
                     </div>
                 </div>
-                <div className="frameControlRight">
-                    {isHost && (
-                        <div className="controlItem" onClick={clickButtonJoin}>
+                {a < 600 ? (
+                    <div className="wrap-side-mobile">
+                        <Box
+                            className="bg-red"
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                textAlign: "center",
+                            }}
+                        >
+                            <div className="info-chat">
+                                <div
+                                    className="btn-dotcom"
+                                    onClick={handleClickMenuControl}
+                                >
+                                    <i className="bx bx-dots-vertical-rounded icon-dot"></i>
+                                </div>
+                            </div>
+                        </Box>
+                        <Menu
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleCloseMenuControl}
+                            onClick={handleCloseMenuControl}
+                            transformOrigin={{
+                                horizontal: "right",
+                                vertical: "bottom",
+                            }}
+                            anchorOrigin={{
+                                horizontal: "right",
+                                vertical: "top",
+                            }}
+                        >
+                            <MenuItem>
+                                <div
+                                    className="wrapChat"
+                                    style={
+                                        type === "chat"
+                                            ? displayStyle
+                                            : displayNoneStyle
+                                    }
+                                >
+                                    <div className="glo-checkChat">
+                                        <FrameChat
+                                            type={type}
+                                            room={room}
+                                            hourAndMinute={hourAndMinute}
+                                            setIconNotify={setIconNotify}
+                                        />
+                                    </div>
+                                    <p onClick={clickButtonMessage}>Chat</p>
+                                </div>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon>
+                                    <Settings fontSize="small" />
+                                </ListItemIcon>
+                                Settings
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                ) : (
+                    <div className="frameControlRight">
+                        {isHost && (
+                            <div
+                                className="controlItem"
+                                onClick={clickButtonJoin}
+                            >
+                                <IconButton aria-label="join room">
+                                    <Badge
+                                        badgeContent={numberPrejoin}
+                                        color="primary"
+                                    >
+                                        <PersonAddIcon
+                                            style={
+                                                type === "join"
+                                                    ? controlItemActive
+                                                    : controlItemNoActive
+                                            }
+                                            className="controlItemIcon"
+                                        />
+                                    </Badge>
+                                </IconButton>
+                            </div>
+                        )}
+                        <div className="controlItem" onClick={clickButtonInfo}>
+                            <InfoIcon
+                                style={
+                                    type === "info"
+                                        ? controlItemActive
+                                        : controlItemNoActive
+                                }
+                            />
+                        </div>
+                        <div className="controlItem" onClick={clickButtonUser}>
                             <IconButton aria-label="join room">
                                 <Badge
-                                    badgeContent={numberPrejoin}
+                                    badgeContent={numParticipants}
                                     color="primary"
                                 >
-                                    <PersonAddIcon
+                                    <GroupIcon
                                         style={
-                                            type === "join"
+                                            type === "user"
                                                 ? controlItemActive
                                                 : controlItemNoActive
                                         }
-                                        className="controlItemIcon"
                                     />
                                 </Badge>
                             </IconButton>
                         </div>
-                    )}
-                    <div className="controlItem" onClick={clickButtonInfo}>
-                        <InfoIcon
-                            style={
-                                type === "info"
-                                    ? controlItemActive
-                                    : controlItemNoActive
-                            }
-                        />
-                    </div>
-                    <div className="controlItem" onClick={clickButtonUser}>
-                        <IconButton aria-label="join room">
-                            <Badge
-                                badgeContent={numParticipants}
-                                color="primary"
-                            >
-                                <GroupIcon
-                                    style={
-                                        type === "user"
-                                            ? controlItemActive
-                                            : controlItemNoActive
-                                    }
-                                />
-                            </Badge>
-                        </IconButton>
-                    </div>
-                    <div className="controlItem" onClick={clickButtonMessage}>
-                        <ChatOutlinedIcon
-                            style={
-                                type === "chat"
-                                    ? controlItemActive
-                                    : controlItemNoActive
-                            }
+                        <div
                             className="controlItem"
-                        />
-                        {iconNotify && (
-                            <div className="controlNumberChat"></div>
-                        )}
+                            onClick={clickButtonMessage}
+                        >
+                            <ChatOutlinedIcon
+                                style={
+                                    type === "chat"
+                                        ? controlItemActive
+                                        : controlItemNoActive
+                                }
+                                className="controlItem"
+                            />
+                            {iconNotify && (
+                                <div className="controlNumberChat"></div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
