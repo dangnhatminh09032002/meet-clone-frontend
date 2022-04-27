@@ -16,6 +16,7 @@
 }
 
 .infor-room {
+  margin-top: 10px;
   margin-left: 15px;
   color: #fff;
 }
@@ -301,14 +302,14 @@
   }
 
   .frameControlRight {
-    top: 92.5% !important;
+    top: 91% !important;
   }
 
   .frameJoinRoom,
   .frameInfo,
   .frameUsers,
   .frameChat {
-    height: 88.5vh !important;
+    height: 85.5vh !important;
   }
 }
 
@@ -317,12 +318,12 @@
     margin-bottom: unset;
   }
   .frameControlRight {
-    top: 92.5% !important;
+    top: 91% !important;
   }
   .frameJoinRoom,
   .frameInfo,
   .frameUsers,
   .frameChat {
-    height: 86.5vh !important;
+    height: 86.1vh !important
   }
 }

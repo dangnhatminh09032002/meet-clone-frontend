@@ -247,8 +247,6 @@ export function RoomPage() {
     positionRight();
   }, [type]);
 
-  const a = window.innerWidth;
-
   if (loading) return <></>;
 
   return (
@@ -301,7 +299,7 @@ export function RoomPage() {
                           }}
                         >
                           <div className="infor-room">
-                            <Typography>
+                            <Typography >
                               {hourAndMinute} | {room_id}
                             </Typography>
                           </div>
@@ -311,8 +309,8 @@ export function RoomPage() {
                           xs={6}
                           sm={9}
                           md={6}
-                          justifyContent="center"
-                          alignItems="center"
+                          // justifyContent="center"
+                          // alignItems="center"
                         >
                           <div className="control-video">
                             <div className="show-mic">
@@ -399,15 +397,13 @@ export function RoomPage() {
                 className="wrapChat"
                 style={type === "chat" ? displayStyle : displayNoneStyle}
               >
-                <div className="glo-checkChat">
-                  <FrameChat
-                    setType={setType}
-                    type={type}
-                    room={room}
-                    hourAndMinute={hourAndMinute}
-                    setIconNotify={setIconNotify}
-                  />
-                </div>
+                <FrameChat
+                  setType={setType}
+                  type={type}
+                  room={room}
+                  hourAndMinute={hourAndMinute}
+                  setIconNotify={setIconNotify}
+                />
               </div>
 
               <div
@@ -433,7 +429,7 @@ export function RoomPage() {
             </div>
           </div>
         </div>
-        {a < 800 ? (
+        {window.innerWidth <= 800 ? (
           <div className="wrap-side-mobile">
             <Box
               className="bg-red"
