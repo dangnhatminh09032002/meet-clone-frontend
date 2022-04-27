@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { useContext, useState } from 'react';
-import { serverAuthen } from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import { addMeet } from '../../contexts';
 import { GlobalContext } from '../../contexts/provider';
 import './dialogmeet.css';
@@ -68,9 +68,11 @@ export default function DialogMeet({ openDialogMeet, setOpenDialogMeet, setAncho
     const { meetListDispatch } = meetProvider;
 
     const handleSubmitCreateMeeting = async () => {
-        await serverAuthen.post('rooms', { room_name: name }).then(async (result) => {
-            await meetListDispatch(addMeet(result.data));
-        });
+        await server()
+            .post('rooms', { room_name: name })
+            .then(async (result) => {
+                await meetListDispatch(addMeet(result.data));
+            });
         setOpenDialogMeet(false);
         setAnchor(null);
     };

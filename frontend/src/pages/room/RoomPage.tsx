@@ -16,7 +16,7 @@ import FrameShowUsers from '../../containers/app/frameShowUsers';
 import FrameInfoRoom from '../../containers/app/frameInfoRoom';
 import FrameJoinRoom from '../../containers/app/frameJoinRoom';
 import { ReactNotifications } from 'react-notifications-component';
-import { serverAuthen } from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 
 export function RoomPage() {
     const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ export function RoomPage() {
 
     // check room not exist => negative to home
     useEffect(() => {
-        serverAuthen
+        server()
             .get(`rooms/${room_id}`)
             .then(() => {
                 setLoading(false);
@@ -84,7 +84,7 @@ export function RoomPage() {
     // get Token
     useEffect(() => {
         const getToken = async () => {
-            const res = await serverAuthen.post(`rooms/${room_id}/token`);
+            const res = await server().post(`rooms/${room_id}/token`);
             setToken(res.data);
         };
         getToken();
@@ -93,13 +93,15 @@ export function RoomPage() {
     // check host
     useEffect(() => {
         const isHost = async () => {
-            await serverAuthen.get(`rooms/${room_id}`).then((res) => {
-                if (res.data.is_master) {
-                    setIsHost(res.data.is_master);
-                } else if (res.data.is_participant) {
-                    setIsHost(false);
-                }
-            });
+            await server()
+                .get(`rooms/${room_id}`)
+                .then((res) => {
+                    if (res.data.is_master) {
+                        setIsHost(res.data.is_master);
+                    } else if (res.data.is_participant) {
+                        setIsHost(false);
+                    }
+                });
         };
         isHost();
     }, [room_id]);
@@ -107,7 +109,7 @@ export function RoomPage() {
     // check Participant
     // useEffect(() => {
     //     const isParticipant = async () => {
-    //         await serverAuthen.get(`rooms/${room_id}`).then((res) => {
+    //         await server.get(`rooms/${room_id}`).then((res) => {
     //             res.data.is_participant === false &&
     //                 navigate({
     //                     pathname: `/prejoinroom/${room_id}`,

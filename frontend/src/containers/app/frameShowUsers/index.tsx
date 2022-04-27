@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { memo, useEffect, useState } from 'react';
-import { serverAuthen } from '../../../configs/axios-config';
+import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
     const { setShowUsers, room_id, room, numParticipants, isHost } = props;
@@ -12,7 +12,7 @@ function FrameShowUsers(props: any) {
     // get Participant of room
     useEffect(() => {
         const getParticipant = async () => {
-            await serverAuthen
+            await server()
                 .get(`rooms/${room_id}/participants`)
                 .then((res) => setListParticipant(res.data));
         };

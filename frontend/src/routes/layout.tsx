@@ -1,6 +1,6 @@
 import React, { Fragment, lazy, Suspense, useContext, useLayoutEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { serverAuthen } from '../configs/axios-config';
+import { server } from '../configs/axios-config';
 import { userDetailData } from '../contexts';
 import { authDetailData } from '../contexts/auth';
 import { GlobalContext } from '../contexts/provider';
@@ -25,8 +25,8 @@ export const Layout = () => {
 
     useLayoutEffect(() => {
         const checkVerify = async () => {
-            await serverAuthen
-                .get(`auth/validate?id_token=${sessionStorage.getItem('token')}`)
+            await server()
+                .get(`auth/validate?id_token=${sessionStorage.getItem('id_token')}`)
                 .then((result) => {
                     authDetailDispatch(authDetailData({ isLogin: true }));
                     userDetailDispatch(

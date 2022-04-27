@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
 import { TableRoom } from '../../components/TableRoom/TableRoom';
-import { serverAuthen } from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import { AuthContext } from '../../contexts/auth/authProvider';
 import { GlobalContext } from './../../contexts/provider';
 import DialogMeet from './DialogMeet';
@@ -75,7 +75,7 @@ export function HomePage() {
     const [textErrorWorng, setTextErrorWorng] = useState(false);
 
     const joinRoomURL = async () => {
-        await serverAuthen
+        await server()
             .get(`rooms/${room_name}`)
             .then((res) => {
                 if (res.data.is_master) {

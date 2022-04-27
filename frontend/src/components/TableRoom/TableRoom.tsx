@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { serverAuthen } from '../../configs/axios-config';
+import { server } from '../../configs/axios-config';
 import { meetListData } from '../../contexts/meet';
 import { GlobalContext } from '../../contexts/provider';
 import '../TableRoom/tableroom.css';
@@ -33,15 +33,17 @@ export function TableRoom() {
 
     useEffect(() => {
         const getListRoom = async () => {
-            await serverAuthen.get('rooms').then(async (result) => {
-                await meetListDispatch(meetListData(result.data));
-            });
+            await server()
+                .get('rooms')
+                .then(async (result) => {
+                    await meetListDispatch(meetListData(result.data));
+                });
         };
         getListRoom();
     }, [authDetailState]);
 
     const handleDeleteRoom = async () => {
-        await serverAuthen.delete('rooms');
+        await server().delete('rooms');
     };
 
     const handleCopyLink = (nameRoom: any) => {
