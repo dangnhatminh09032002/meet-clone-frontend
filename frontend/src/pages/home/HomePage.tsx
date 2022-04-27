@@ -5,8 +5,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
-import { server } from '../../configs/axios-config';
-import { AuthContext } from '../../contexts/auth/authProvider';
+import { server } from "../../configs/axios-config";
+import { AuthContext } from "../../contexts/auth/authProvider";
 import { GlobalContext } from "./../../contexts/provider";
 import DialogMeet from "./DialogMeet";
 import "./homepage.css";
@@ -80,17 +80,18 @@ export function HomePage() {
   const [textErrorWorng, setTextErrorWorng] = useState(false);
 
   const joinRoomURL = async () => {
-    await server.get(
-      `rooms/${room_name}`,
-    ).then((res) => {
-      if (res.data.is_master) {
-        navigate("/room/" + room_name);
-      } else {
-        navigate("/prejoinroom/" + room_name);
-      }
-    }).catch((error) => {
-      setTextErrorWorng(true);
-    })
+    await server
+      .get(`rooms/${room_name}`)
+      .then((res) => {
+        if (res.data.is_master) {
+          navigate("/room/" + room_name);
+        } else {
+          navigate("/prejoinroom/" + room_name);
+        }
+      })
+      .catch((error) => {
+        setTextErrorWorng(true);
+      });
   };
 
   const hanleJoin = async () => {

@@ -1,18 +1,58 @@
-.css-y8ay40-MuiTableCell-root{
-    border-bottom: unset !important;
+.css-y8ay40-MuiTableCell-root {
+  border-bottom: unset !important;
 }
 
-.text-while-table-header{
-    color: white !important;
-    font-size: 16px !important;
-    line-height: 1.2px;
-    background: #00796B !important;
+.text-while-table-header {
+  color: white !important;
+  font-size: 16px !important;
+  line-height: 1.2px;
+  background: #00796b !important;
 }
 
-.link-room{
-    margin-right: 5px !important;
+.link-copy-room {
+  margin-right: 5px !important;
+}
+.link-room {
+  margin-right: 5px !important;
 }
 
-.glo-text-center{
-    text-align: center !important;
+.glo-text-center {
+  text-align: center !important;
+}
+
+@media screen and (min-width: 375px) and (max-width: 600px) {
+  td.group-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .link-copy-room {
+    width: 65px;
+    font-size: 12px !important;
+  }
+  .link-copy-room svg {
+    font-size: 12px !important;
+  }
+  .link-room {
+    width: 95px;
+    font-size: 12px !important;
+  }
+  .link-room svg {
+    font-size: 12px !important;
+  }
+  .btn-delete {
+    width: 80px;
+    font-size: 12px !important;
+  }
+  .btn-delete svg {
+    font-size: 12px !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1920px) {
+  td.group-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 }

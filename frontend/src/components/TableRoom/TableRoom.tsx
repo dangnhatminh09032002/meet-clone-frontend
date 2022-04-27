@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { server } from '../../configs/axios-config';
+import { server } from "../../configs/axios-config";
 import { meetListData } from "../../contexts/meet";
 import { GlobalContext } from "../../contexts/provider";
 import "../TableRoom/tableroom.css";
@@ -101,13 +101,14 @@ export function TableRoom() {
                       )}
                     </TableCell>
 
-                    <TableCell className="glo-text-center">
+                    <TableCell className="glo-text-center group-btn">
                       <Tooltip title="Copy">
                         <Button
                           variant="outlined"
                           startIcon={<ContentCopyIcon />}
-                          className="link-room"
+                          className="link-copy-room"
                           onClick={() => handleCopyLink(meet?.friendly_id)}
+                          sx={{ color: { sm: "red !importtant" } }}
                         >
                           Copy
                         </Button>
@@ -137,6 +138,7 @@ export function TableRoom() {
                         Redirect
                       </Button>
                       <Button
+                        className="btn-delete"
                         variant="outlined"
                         color="error"
                         startIcon={<DeleteIcon />}
