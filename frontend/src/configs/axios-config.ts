@@ -5,18 +5,17 @@ export const server = axios.create({
   headers: {
 		'Access-Control-Allow-Origin': '*',
 		'Content-Type': 'application/json',
+    'Set-Cookie': 'a=1; Path=/'
 	},
   withCredentials: true,
 });
-
-const token = sessionStorage.getItem('token');
 
 export const serverAuthen = axios.create({
   baseURL: process.env.BASE_URL || 'http://localhost:8080',
   headers: {
 		'Access-Control-Allow-Origin': '*',
 		'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
 	},
   withCredentials: true,
 });
