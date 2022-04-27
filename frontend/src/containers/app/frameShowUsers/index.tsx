@@ -2,8 +2,8 @@ import './frameUsers.css';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { useEffect, useState } from 'react';
-import {serverAuthen } from '../../../configs/axios-config';
+import { memo, useEffect, useState } from 'react';
+import { server } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
 
@@ -13,7 +13,7 @@ function FrameShowUsers(props: any) {
 
     useEffect(() => {
         const getParticipant = async () => {
-            await serverAuthen
+            await server()
                 .get(`rooms/${room_id}/participants`)
                 .then((res) => setListParticipant(res.data));
         };

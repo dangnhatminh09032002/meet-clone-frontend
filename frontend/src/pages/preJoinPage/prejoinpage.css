@@ -200,6 +200,10 @@
     display: none;
 }
 
+.reject span {
+    font-size: 18px;
+}
+
 .text-audio {
     display: none;
 }

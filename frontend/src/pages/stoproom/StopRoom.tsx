@@ -9,7 +9,7 @@ export function StopRoom() {
     const numberCount = 60;
 
     const rejoinRoom = () => {
-        navigate(`/prejoinroom/${room_id}`);
+        navigate(`/room/${room_id.room_id}`);
     };
 
     const returnHome = () => {

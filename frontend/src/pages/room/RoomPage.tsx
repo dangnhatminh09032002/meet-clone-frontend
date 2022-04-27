@@ -16,7 +16,7 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import { serverAuthen } from "../../configs/axios-config";
+import { server } from '../../configs/axios-config';
 import {
   Badge,
   Grid,
@@ -186,13 +186,8 @@ export function RoomPage() {
   };
 
   const handleShare = () => {
-    if (share === true) {
-      setShare(false);
-      room.localParticipant.setScreenShareEnabled(false);
-    } else {
       setShare(true);
       room.localParticipant.setScreenShareEnabled(true);
-    }
   };
 
   useEffect(() => {
@@ -204,24 +199,24 @@ export function RoomPage() {
   }, [loading]);
 
   useEffect(() => {
-    serverAuthen
+    server()
       .get(`rooms/${room_id}`)
       .then(async (res) => {
-        if (!res.data.is_master && !res.data.is_participant) {
-          await navigate({ pathname: `/prejoinroom/${room_id}` });
-        }
+        // if (!res.data.is_master && !res.data.is_participant) {
+        //   await navigate({ pathname: `/prejoinroom/${room_id}` });
+        // }
         await setRoomData(res.data);
         await setLoading(false);
       })
       .catch((err) => {
-        navigate({ pathname: "/home" });
+        // navigate({ pathname: "/home" });
       });
   }, []);
 
   // get Token
   useEffect(() => {
     const getToken = async () => {
-      const res = await serverAuthen.post(`rooms/${room_id}/token`);
+      const res = await server().post(`rooms/${room_id}/token`);
       setToken(res.data);
     };
     if (!loading) {
@@ -232,7 +227,7 @@ export function RoomPage() {
   // check host
   useEffect(() => {
     const isHost = async () => {
-      await serverAuthen.get(`rooms/${room_id}`).then((res) => {
+      await server().get(`rooms/${room_id}`).then((res) => {
         if (res.data.is_master) {
           setIsHost(res.data.is_master);
         } else {

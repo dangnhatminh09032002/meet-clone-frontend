@@ -3,6 +3,7 @@ import {
   MEET_LIST_DATA,
   MEET_LIST_ERROR,
   ADD_MEET,
+  DELETE_MEET
 } from "./meetConstants";
 import { IMeet } from "./meetTypes";
 import { CommonError } from "../types";
@@ -26,11 +27,17 @@ export interface AddMeet {
   payload: IMeet;
 }
 
+export interface DeleteMeet {
+  type: typeof DELETE_MEET;
+  payload: {id: IMeet['id']};
+}
+
 export type MeetListActions =
   | MeetListFetch
   | MeetListData
   | MeetListError
-  | AddMeet;
+  | AddMeet
+  | DeleteMeet;
 
 export const meetListFetch = (): MeetListFetch => ({
   type: MEET_LIST_FETCH,
@@ -56,3 +63,13 @@ export const addMeet = (
   type: ADD_MEET,
   payload,
 });
+
+export const deleteMeet = (
+  payload: DeleteMeet["payload"]
+): DeleteMeet => ({
+  type: DELETE_MEET,
+  payload,
+});
+
+
+
