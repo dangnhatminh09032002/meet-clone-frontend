@@ -257,7 +257,7 @@ export function RoomPage() {
           <DisplayContext.Provider value={displayOptions}>
             {token && (
               <LiveKitRoom
-                url={process.env.REACT_APP_LIVEKIT_API_URL || ""}
+                url={process.env.REACT_APP_LIVEKIT_API_URL || "ws://localhost:7880"}
                 token={token}
                 onConnected={(room) => {
                   onConnected(room);

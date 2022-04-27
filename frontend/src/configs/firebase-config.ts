@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: `AIzaSyBeZ4_ymJv3ftBet7MWQ8MTFU0r_W-uYgk`,
-    authDomain: `meet-clone-v1.firebaseapp.com`,
-    projectId: `meet-clone-v1`,
-    storageBucket: `meet-clone-v1.appspot.com`,
-    messagingSenderId: `825820055456`,
-    appId: `1:825820055456:web:a2c0047f05d0ddadcf86c5`,
-    measurementId: `G-E4QHWH6E3K`,
+    apiKey: `AIzaSyDzWDumzS3BdbgSDviwoMq-Lpe5s2fevBU`,
+    authDomain: `meet-clone-v2.firebaseapp.com`,
+    projectId: `meet-clone-v2`,
+    storageBucket: `meet-clone-v2.appspot.com`,
+    messagingSenderId: `741670495932`,
+    appId: `1:741670495932:web:acd74c1b4b6559f32492b9`,
+    measurementId: `G-BNPDPTT669`,
 };
 
 const app = initializeApp(firebaseConfig);
