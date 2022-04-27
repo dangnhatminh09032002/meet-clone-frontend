@@ -16,7 +16,7 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import { server } from "../../configs/axios-config";
+import { serverAuthen } from "../../configs/axios-config";
 import {
   Badge,
   Grid,
@@ -204,7 +204,7 @@ export function RoomPage() {
   }, [loading]);
 
   useEffect(() => {
-    server
+    serverAuthen
       .get(`rooms/${room_id}`)
       .then(async (res) => {
         if (!res.data.is_master && !res.data.is_participant) {
@@ -221,7 +221,7 @@ export function RoomPage() {
   // get Token
   useEffect(() => {
     const getToken = async () => {
-      const res = await server.post(`rooms/${room_id}/token`);
+      const res = await serverAuthen.post(`rooms/${room_id}/token`);
       setToken(res.data);
     };
     if (!loading) {
@@ -232,7 +232,7 @@ export function RoomPage() {
   // check host
   useEffect(() => {
     const isHost = async () => {
-      await server.get(`rooms/${room_id}`).then((res) => {
+      await serverAuthen.get(`rooms/${room_id}`).then((res) => {
         if (res.data.is_master) {
           setIsHost(res.data.is_master);
         } else {
@@ -257,7 +257,7 @@ export function RoomPage() {
           <DisplayContext.Provider value={displayOptions}>
             {token && (
               <LiveKitRoom
-                url={"ws://localhost:7880"}
+                url={process.env.REACT_APP_LIVEKIT_API_URL || ""}
                 token={token}
                 onConnected={(room) => {
                   onConnected(room);

@@ -4,6 +4,8 @@
     height: 100vh;
     width: 100%;
     margin: 0;
+    overflow: hidden;
+    background-image: radial-gradient( circle farthest-corner at 1.3% 2.8%,  rgba(239,249,249,1) 0%, rgba(182,199,226,1) 100.2% );
 }
 
 .prejoin main {
@@ -15,16 +17,17 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 5% 16px 0 16px;
+    margin: 48px 16px 0 16px;
+    
 }
 
 .wapper-videoSection {
     display: flex;
-    width: 100%;
+    width: 80%;
     justify-content: center;
     align-items: center;
     min-height: 100%;
-    max-width: 800px;
+    max-width: 750px;
     margin-left: 32px;
     margin-right: 32px;
 }
@@ -49,17 +52,11 @@
 }
 
 .videoSection span {
-    position: absolute;
-    top: 50%;
-    left:40%;
-    z-index: 10000;
-    color: white;
-}
-
-.videoSection h3 {
+    font-size: 18px;
+    font-weight: bold;
     position: absolute;
     top: 10%;
-    left: 40%;
+    left:40%;
     z-index: 10000;
     color: white;
 }
@@ -110,7 +107,7 @@
     height: 100%;
     width: 100%;
     margin-top: 4%;
-    padding-left: 48px;
+    /* padding-left: 48px; */
 }
 
 .wapper-participant h3 {
@@ -125,6 +122,15 @@
     justify-content: center;
     align-items: center;
     font-size: 16px;
+}
+
+.join-section span {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.show-participants span {
+    font-size: 18px;
 }
 
 .view-participant {
@@ -165,7 +171,7 @@
 .join-room button {
     width: 150px;
     height: 40px;
-    background: #1a73e8;
+    background: #00796b;
     color: white;
     border-radius: 24px;
     border: none;
@@ -183,6 +189,11 @@
     display: none;
 }
 
+.hold-join span {
+    font-size: 18px;
+    font-weight: normal;
+}
+
 .reject{
     text-align: center;
     margin-top: 8px;
@@ -197,48 +208,97 @@
     display: none;
 }
 
-/* --------------------- hover-btn ------------------------------ */
 
-@media only screen and (min-width: 375px) and (max-width:600px){
+
+/* --------------------- responsive ------------------------------ */
+
+@media only screen and (min-width: 23.4375em) and (max-width:37.5em){
     .wapper-participant h3{
         font-size: 20px;
     }
+
     .controlMicCam {
-        top: 82%;
+        top: 80%;
         left: 0%;
     }
 
     .controlMicCam button {
-        padding: 6px 8px 6px 8px;
-    }
-    .wapper-participant {
-        padding-left: 0;
+        font-size: 16px;
+        padding: 6px 8px 0 8px;
     }
 
-    .videoSection h3 {
-        left: 35%;
+    .wapper-participant {
+        padding-left: 0;
     }
 
     .videoSection span {
-        left: 35%;
+        font-size: 14px;
+        left: 37%;
+    }
+
+    .wapper-participant {
+        margin-top: 10%;
     }
 }
 
-@media only screen and (min-width: 601px) and (max-width:740px){
+@media only screen and (min-width: 37.5625em) and (max-width:46.25em){
     .wapper-participant h3{
         font-size: 24px;
     }
+
+    .controlMicCam {
+        top: 80%;
+        left: 0%;
+    }
+
+    .videoSection span {
+        left: 39%;
+    }
+
     .wapper-participant {
         padding-left: 0;
     }
 }
 
-@media only screen and (min-width:1280px){
+@media only screen and (min-width:80em) and (max-width: 87.5em){
     .wapper-content {
         flex-direction: row;
-        margin: 10% 0 5% 5%;
+        margin: 14% 0 5% 5%;
     }
+
+    .wapper-videoSection {
+        width: 100%;
+    }
+
     .wapper-participant {
         padding-left: 0;
     }
+
+    .videoSection span {
+        left: 38%;
+    }
+}
+
+@media only screen and (min-width: 87.5625em) {
+    .wapper-content {
+        flex-direction: row;
+        margin: 10% 0 0 5%;
+    }
+
+    .wapper-videoSection {
+        width: 100%;
+    }   
+}
+
+@media only screen and (min-width: 87.5625em) and (max-height: 45em) {
+    .wapper-content {
+        flex-direction: row;
+        margin: 5% 0 0 5%;
+    }
+}
+
+@media (max-height: 45em) {
+    .wapper-participant {
+        margin-top: 2%;
+}
 }

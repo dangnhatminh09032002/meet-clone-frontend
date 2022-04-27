@@ -30,7 +30,7 @@ function FrameChat(props: any) {
 
     const handleSendMessage = () => {
         const dataSend = {
-            type: "chat",
+            type: 'chat',
             data: {
                 userIdentity: room.localParticipant.participantInfo.identity,
                 name: room.localParticipant.name,
@@ -74,10 +74,10 @@ function FrameChat(props: any) {
     }, [listMessage.length]);
 
     return (
-        <div className="frameChat">
-            <div className="headerFrameChat">
-                <div className="headerTitleWrap">
-                    <div className="headerTitle">Message in call</div>
+        <div className='frameChat'>
+            <div className='headerFrameChat'>
+                <div className='headerTitleWrap'>
+                    <div className='headerTitle'>Message in call</div>
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip"onClick={() => setType("")}>
@@ -102,9 +102,7 @@ function FrameChat(props: any) {
                                     ? "You"
                                     : infoMessage.data.name}
                             </div>
-                            <div className="timeRowChat">
-                                {infoMessage.data.timeSpan}
-                            </div>
+                            <div className='timeRowChat'>{infoMessage.data.timeSpan}</div>
                         </div>
                         <div className="inputMessage">
                             {infoMessage.data.inputMessage}

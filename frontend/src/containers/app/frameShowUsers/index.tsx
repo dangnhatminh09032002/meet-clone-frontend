@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { useEffect, useState } from 'react';
-import { server } from '../../../configs/axios-config';
+import {serverAuthen } from '../../../configs/axios-config';
 
 function FrameShowUsers(props: any) {
 
@@ -13,9 +13,10 @@ function FrameShowUsers(props: any) {
 
     useEffect(() => {
         const getParticipant = async () => {
-            await server.get(`rooms/${room_id}/participants`)
-                .then(res => setListParticipant(res.data))
-        }
+            await serverAuthen
+                .get(`rooms/${room_id}/participants`)
+                .then((res) => setListParticipant(res.data));
+        };
         getParticipant();
     }, [room_id, room, numParticipants]);
 
@@ -29,10 +30,10 @@ function FrameShowUsers(props: any) {
     })
 
     return (
-        <div className="frameUsers">
-            <div className="headerFrameUser">
-                <div className="headerTitleWrap">
-                    <div className="headerTitle">Everyone</div>
+        <div className='frameUsers'>
+            <div className='headerFrameUser'>
+                <div className='headerTitleWrap'>
+                    <div className='headerTitle'>Everyone</div>
                 </div>
                 <div className="headerIcon">
                     <div className="glo-icon-close tooltip" onClick={() => setType("")}>
@@ -42,8 +43,8 @@ function FrameShowUsers(props: any) {
                 </div>
             </div>
 
-            <div className="inputFindUser">
-                <div className="iconSearch">
+            <div className='inputFindUser'>
+                <div className='iconSearch'>
                     <SearchIcon />
                 </div>
                 <input className="glo-input"
@@ -64,8 +65,8 @@ function FrameShowUsers(props: any) {
                             <img src={user.picture} referrerPolicy="no-referrer" alt="avatar" />
                         </div>
 
-                        <div className="bodyInfo">
-                            <div className="nameUser">{user.name}</div>
+                        <div className='bodyInfo'>
+                            <div className='nameUser'>{user.name}</div>
                             {/* check if === host => add class */}
                             {user.id === roomData.user_id &&
                                 <div className="description">Meeting organizer</div>
@@ -74,7 +75,6 @@ function FrameShowUsers(props: any) {
                     </div>
                 ))}
             </div>
-
         </div>
     );
 }

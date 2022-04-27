@@ -2,15 +2,37 @@ import { createLocalVideoTrack, LocalVideoTrack, Room, RoomEvent } from 'livekit
 import { AudioSelectButton, VideoRenderer, VideoSelectButton } from 'livekit-react';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/HomeHeader/HomeHeader';
-import { server } from '../../configs/axios-config';
+import { serverAuthen } from '../../configs/axios-config';
 import './prejoinpage.css';
 
 const room = new Room({
     adaptiveStream: true,
     dynacast: true,
 });
+
+export const modelPrejoinroom = {
+    textSpanCamera1: 'Camera is enabled',
+    textSpanCamera2: 'Camera is disabled',
+    textSpanMic1: 'Mic is enabled',
+    textSpanMic2: 'Mic is disabled',
+    textSpanReady: 'Ready to join',
+    textSpanWaitting: 'Waiting to join...',
+    textSpanReject: 'Request has been rejected',
+    btnJoin: 'Join Now',
+};
+
+export const testIdPrejoinroom = {
+    textSpanCamera1: 'text-span-camera-1',
+    textSpanCamera2: 'text-span-camera-2',
+    textSpanMic1: 'text-span-mic-1',
+    textSpanMic2: 'text-span-mic-2',
+    textSpanReady: 'text-span-ready',
+    textSpanWaitting: 'text-span-waitting',
+    textSpanReject: 'text-span-reject',
+    btnJoin: 'btn-join',
+};
 
 export const PreJoinPage = () => {
     const [listParticipants, setListPaticipants] = useState<any>([]);
@@ -22,23 +44,29 @@ export const PreJoinPage = () => {
     const [audioDevice, setAudioDevice] = useState<MediaDeviceInfo>();
     const [videoDevice, setVideoDevice] = useState<MediaDeviceInfo>();
     const navigate = useNavigate();
-    let location = useLocation();
 
+    // Check exist room
     useEffect(() => {
-        server
+        serverAuthen
             .get(`rooms/${room_id}`)
-            .then(() => {
+            .then((res) => {
                 setLoading(false);
+                if (res.data.is_participant) {
+                    navigate(`/room/${room_id}`);
+                }
             })
             .catch(() => {
                 navigate({ pathname: '/home' });
             });
     }, []);
 
+    // Connect serverAuthen and listen response
     useEffect(() => {
         if (!loading) {
+            // setTimeout(() => {
+            // }, 1000);
             const fetchToken = async () => {
-                const res = await server.post(`rooms/${room_id}/token`);
+                const res = await serverAuthen.post(`rooms/${room_id}/token`);
                 await room.connect(process.env.LIVEKIT_URL || 'ws://localhost:7880', res.data, {
                     autoSubscribe: false,
                 });
@@ -62,6 +90,7 @@ export const PreJoinPage = () => {
         }
     }, [loading]);
 
+    // Clean up video
     useEffect(() => {
         return () => {
             if (!loading) {
@@ -72,30 +101,31 @@ export const PreJoinPage = () => {
         };
     }, [loading, videoTrack]);
 
+    // Set enabled video default
     useEffect(() => {
         if (!loading) {
-            if (location.pathname.includes('/prejoinroom')) {
-                createLocalVideoTrack({
-                    deviceId: videoDevice?.deviceId,
-                }).then((track) => {
-                    setVideoEnabled(true);
-                    setVideoTrack(track);
-                });
-            }
+            createLocalVideoTrack({
+                deviceId: videoDevice?.deviceId,
+            }).then((track) => {
+                setVideoEnabled(true);
+                setVideoTrack(track);
+            });
         }
     }, [loading, videoDevice]);
 
+    // Show participants in room
     useLayoutEffect(() => {
         const listPaticipant = async () => {
-            await server.get(`rooms/${room_id}/participants`).then(async (result) => {
+            await serverAuthen.get(`rooms/${room_id}/participants`).then(async (result) => {
                 await setListPaticipants(result.data);
             });
         };
         listPaticipant();
     }, [room_id]);
 
+    // Request join room
     const requestJoinRoom = async () => {
-        await server
+        await serverAuthen
             .get(`rooms/${room_id}/req-join-room`)
             .then(() => {
                 document.querySelector('.hold-join')?.setAttribute('style', 'display:block');
@@ -105,6 +135,7 @@ export const PreJoinPage = () => {
             });
     };
 
+    // On off video
     const toggleVideo = async () => {
         if (videoTrack) {
             videoTrack.stop();
@@ -127,6 +158,7 @@ export const PreJoinPage = () => {
         }
     };
 
+    // On off audio
     const toggleAudio = () => {
         if (audioEnabled) {
             setAudioEnabled(false);
@@ -143,6 +175,7 @@ export const PreJoinPage = () => {
         }
     };
 
+    // Select video device options
     const selectVideoDevice = (device: MediaDeviceInfo) => {
         setVideoDevice(device);
         if (videoTrack) {
@@ -153,13 +186,13 @@ export const PreJoinPage = () => {
         }
     };
 
+    // Show video element
     let videoElement;
     if (videoTrack) {
         videoElement = <VideoRenderer track={videoTrack} isLocal={true} />;
     } else {
         videoElement = <div className='placeholder' />;
     }
-    console.log(listParticipants);
 
     if (loading) return <></>;
     return (
@@ -170,14 +203,34 @@ export const PreJoinPage = () => {
                     <div className='wapper-videoSection'>
                         <div className='videoSection'>
                             {videoEnabled ? (
-                                <span className='text-video'>Camera is enabled</span>
+                                <span
+                                    className='text-video'
+                                    data-testid={testIdPrejoinroom.textSpanCamera1}
+                                >
+                                    {modelPrejoinroom.textSpanCamera1}
+                                </span>
                             ) : (
-                                <span className='text-video'>Camera is disabled</span>
+                                <span
+                                    className='text-video'
+                                    data-testid={testIdPrejoinroom.textSpanCamera2}
+                                >
+                                    {modelPrejoinroom.textSpanCamera2}
+                                </span>
                             )}
                             {audioEnabled ? (
-                                <h3 className='text-audio'>Mic is enabled</h3>
+                                <span
+                                    className='text-audio'
+                                    data-testid={testIdPrejoinroom.textSpanMic1}
+                                >
+                                    {modelPrejoinroom.textSpanMic1}
+                                </span>
                             ) : (
-                                <h3 className='text-audio'>Mic is disabled</h3>
+                                <span
+                                    className='text-audio'
+                                    data-testid={testIdPrejoinroom.textSpanMic2}
+                                >
+                                    {modelPrejoinroom.textSpanMic2}
+                                </span>
                             )}
                             <div className='videoFrame'>
                                 <AspectRatio ratio={16 / 9}>{videoElement}</AspectRatio>
@@ -204,7 +257,9 @@ export const PreJoinPage = () => {
                     </div>
                     <div className='wapper-participant'>
                         <div className='join-section'>
-                            <h3>Ready to join</h3>
+                            <span data-testid={testIdPrejoinroom.textSpanReady}>
+                                {modelPrejoinroom.textSpanReady}
+                            </span>
                             <div className='view-participant'>
                                 <div className='join-participant'>
                                     <div style={{ display: 'flex' }}>
@@ -218,41 +273,48 @@ export const PreJoinPage = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div>
-                                        {listParticipants?.length > 2 && (
+                                    <div className='show-participants'>
+                                        {listParticipants?.length >= 2 && (
                                             <div>
-                                                <p style={{ display: 'flex' }}>
-                                                    {listParticipants[0]?.name},{' '}
-                                                    {listParticipants[1]?.name} +{' '}
-                                                    {listParticipants.length - 2} are participating
-                                                    in this meeting
-                                                </p>
+                                                <span>
+                                                    {listParticipants[0]?.name} and{' '}
+                                                    {listParticipants.length - 1} people are
+                                                    participating in this meeting
+                                                </span>
                                             </div>
                                         )}
-                                        {listParticipants?.length <= 2 ? (
-                                            listParticipants?.length === 0 && (
-                                                <span>Nobody is here</span>
-                                            )
-                                        ) : (
+                                        {listParticipants?.length === 1 && (
                                             <div>
-                                                <p>
-                                                    {listParticipants[0]?.name},{' '}
-                                                    {listParticipants[0]?.name} are participating in
-                                                    this meeting
-                                                </p>
+                                                {listParticipants[0]?.name} is participating in this
+                                                meeting
+                                            </div>
+                                        )}
+                                        {listParticipants?.length === 0 && (
+                                            <div>
+                                                <span>Nobody is here</span>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
                             <div className='join-room'>
-                                <button onClick={requestJoinRoom}>Join Now</button>
+                                <button
+                                    className='btn-join-now'
+                                    data-testid={testIdPrejoinroom.btnJoin}
+                                    onClick={requestJoinRoom}
+                                >
+                                    {modelPrejoinroom.btnJoin}
+                                </button>
                             </div>
                             <div className='hold-join'>
-                                <span>Waiting to join...</span>
+                                <span data-testid={testIdPrejoinroom.textSpanWaitting}>
+                                    {modelPrejoinroom.textSpanWaitting}
+                                </span>
                             </div>
                             <div className='reject'>
-                                <span>Request has been rejected</span>
+                                <span data-testid={testIdPrejoinroom.textSpanReject}>
+                                    {modelPrejoinroom.textSpanReject}
+                                </span>
                             </div>
                         </div>
                     </div>
