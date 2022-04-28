@@ -1,7 +1,7 @@
 import { faKeyboard, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Popover from "@mui/material/Popover";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/HomeHeader/HomeHeader";
 import { TableRoom } from "../../components/TableRoom/TableRoom";
@@ -74,6 +74,7 @@ export function HomePage() {
 
     const [textErrorWorng, setTextErrorWorng] = useState(false);
 
+
     const joinRoomURL = async () => {
         await server()
             .get(`rooms/${room_name}`)
@@ -86,6 +87,9 @@ export function HomePage() {
             })
             .catch(() => {
                 setTextErrorWorng(true);
+                setTimeout(() => {
+                    setTextErrorWorng(false);
+                }, 5000);
             });
     };
 
@@ -192,7 +196,8 @@ export function HomePage() {
                             </div>
                         </div>
                         <div className='glo-notify'>
-                            {textErrorWorng && <p className='text-notice'>{myError.error.worng}</p>}
+                            {textErrorWorng && 
+                            <p className='text-notice'>{myError.error.worng}</p>}
                         </div>
                     </div>
                     <div className='help-text'>
