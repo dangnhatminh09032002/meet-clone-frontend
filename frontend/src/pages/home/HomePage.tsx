@@ -151,6 +151,7 @@ export function HomePage() {
                                         className='btn-conversations'
                                         onClick={createMeetingSchedule}
                                         data-testid={testId.btnCreateMeetingSchedule}
+                                        disabled
                                     >
                                         {textModel.btnCreateMeetingSchedule}
                                     </button>

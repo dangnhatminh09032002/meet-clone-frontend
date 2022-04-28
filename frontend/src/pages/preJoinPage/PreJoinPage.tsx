@@ -81,6 +81,7 @@ export const PreJoinPage = () => {
                     ) {
                         navigate('/room/' + room_id);
                     } else {
+                        document.querySelector('.join-room')?.setAttribute('style', 'display:none');
                         document.querySelector('.hold-join')?.setAttribute('style', 'display:none');
                         document.querySelector('.reject')?.setAttribute('style', 'display:block');
                     }

@@ -68,8 +68,6 @@ export function TableRoom() {
         });
     };
 
-    console.log(meetListState.payload.map((item: any) => item));
-
     const handleCopyLink = (nameRoom: any) => {
         navigator.clipboard.writeText(nameRoom);
         setOpenSnackbarCode(true);
@@ -125,6 +123,7 @@ export function TableRoom() {
                                             <TableCell>
                                                 {meet.room_name.length > 10 ? (
                                                     <Typography
+                                                        className="cell-name"
                                                         noWrap
                                                     >{`${meet.room_name.slice(
                                                         0,
@@ -136,6 +135,8 @@ export function TableRoom() {
                                                     </Typography>
                                                 )}
                                             </TableCell>
+
+
 
                                             <TableCell className="glo-text-center group-btn">
                                                 <Tooltip title="Copy">

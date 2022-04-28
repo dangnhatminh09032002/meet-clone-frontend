@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "react-chat-widget/lib/styles.css";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
@@ -47,7 +47,7 @@ export function RoomPage() {
   const [numberPrejoin, setNumberPerjoin] = useState<any>(0);
   const [audio, setAudio] = useState(true);
   const [camera, setCamera] = useState(true);
-  const [share, setShare] = useState(true);
+  const [share, setShare] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -75,10 +75,49 @@ export function RoomPage() {
     updateParticipantSize(room);
   };
 
-  const onLeave = () => {
-    navigate({
-      pathname: `/stoproom/${room_id}`,
-    });
+  useEffect(() => {
+    server()
+      .get(`rooms/${room_id}`)
+      .then(async (res) => {
+        if (!res.data.is_master && !res.data.is_participant) {
+          await navigate({ pathname: `/prejoinroom/${room_id}` });
+        }
+        await setRoomData(res.data);
+        await setLoading(false);
+
+        if (res.data.is_master) {
+          setIsHost(res.data.is_master);
+        } else {
+          setIsHost(false);
+        }
+      })
+      .catch((err) => {
+        navigate({ pathname: "/home" });
+      });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if(room) room.disconnect();
+    }
+  }, [loading, room])
+
+  const onLeave = async () => {
+    if(numParticipants < 2) {
+      await room.disconnect();
+      await server()
+        .delete(`rooms/${room_id}`);
+
+      navigate({
+        pathname: `/home`,
+      });
+    } else{
+      await room.disconnect();
+
+      navigate({
+        pathname: `/stoproom/${room_id}`,
+      });
+    }
   };
 
   const displayOptions = {
@@ -198,21 +237,6 @@ export function RoomPage() {
     }
   }, [loading]);
 
-  useEffect(() => {
-    server()
-      .get(`rooms/${room_id}`)
-      .then(async (res) => {
-        // if (!res.data.is_master && !res.data.is_participant) {
-        //   await navigate({ pathname: `/prejoinroom/${room_id}` });
-        // }
-        await setRoomData(res.data);
-        await setLoading(false);
-      })
-      .catch((err) => {
-        // navigate({ pathname: "/home" });
-      });
-  }, []);
-
   // get Token
   useEffect(() => {
     const getToken = async () => {
@@ -224,19 +248,6 @@ export function RoomPage() {
     }
   }, [room_id, loading]);
 
-  // check host
-  useEffect(() => {
-    const isHost = async () => {
-      await server().get(`rooms/${room_id}`).then((res) => {
-        if (res.data.is_master) {
-          setIsHost(res.data.is_master);
-        } else {
-          setIsHost(false);
-        }
-      });
-    };
-    isHost();
-  }, [loading]);
 
   useEffect(() => {
     positionRight();
