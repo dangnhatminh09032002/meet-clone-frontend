@@ -16,7 +16,7 @@ import FrameShowUsers from "../../containers/app/frameShowUsers";
 import FrameInfoRoom from "../../containers/app/frameInfoRoom";
 import FrameJoinRoom from "../../containers/app/frameJoinRoom";
 import { ReactNotifications } from "react-notifications-component";
-import { server } from '../../configs/axios-config';
+import { server } from "../../configs/axios-config";
 import {
   Badge,
   Grid,
@@ -98,20 +98,19 @@ export function RoomPage() {
 
   useEffect(() => {
     return () => {
-      if(room) room.disconnect();
-    }
-  }, [loading, room])
+      if (room) room.disconnect();
+    };
+  }, [loading, room]);
 
   const onLeave = async () => {
-    if(numParticipants < 2) {
+    if (numParticipants < 2) {
       await room.disconnect();
-      await server()
-        .delete(`rooms/${room_id}`);
+      await server().delete(`rooms/${room_id}`);
 
       navigate({
         pathname: `/home`,
       });
-    } else{
+    } else {
       await room.disconnect();
 
       navigate({
@@ -225,8 +224,8 @@ export function RoomPage() {
   };
 
   const handleShare = () => {
-      setShare(true);
-      room.localParticipant.setScreenShareEnabled(true);
+    setShare(true);
+    room.localParticipant.setScreenShareEnabled(true);
   };
 
   useEffect(() => {
@@ -248,7 +247,6 @@ export function RoomPage() {
     }
   }, [room_id, loading]);
 
-
   useEffect(() => {
     positionRight();
   }, [type]);
@@ -263,7 +261,10 @@ export function RoomPage() {
           <DisplayContext.Provider value={displayOptions}>
             {token && (
               <LiveKitRoom
-                url={process.env.REACT_APP_LIVEKIT_API_URL || "ws://localhost:7880"}
+                url={
+                  process.env.REACT_APP_LIVEKIT_API_URL ||
+                  "http://128.199.112.76:7880"
+                }
                 token={token}
                 onConnected={(room) => {
                   onConnected(room);
@@ -305,7 +306,7 @@ export function RoomPage() {
                           }}
                         >
                           <div className="infor-room">
-                            <Typography >
+                            <Typography>
                               {hourAndMinute} | {room_id}
                             </Typography>
                           </div>
