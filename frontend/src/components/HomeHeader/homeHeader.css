@@ -3,7 +3,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding-top: 20px;
   box-sizing: border-box;
 }
 .header .logo {

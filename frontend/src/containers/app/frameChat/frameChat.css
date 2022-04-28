@@ -1,179 +1,208 @@
 .frameChat {
-    height: 100%;
-    background: #fff;
-    width: 360px;
-    border-radius:8px;
-    border-left: 1px solid #f1f3f4;
+  height: 100%;
+  background: #fff;
+  width: 360px;
+  border-radius: 8px;
+  border-left: 1px solid #f1f3f4;
 }
 
 .headerFrameChat {
-    align-items: center;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    height: 64px;
-    min-height: 64px;
-    padding-left: 24px;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 64px;
+  min-height: 64px;
+  padding-left: 24px;
 }
 
 .headerTitle {
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.5rem;
-    flex-grow: 1;
-    white-space: nowrap;
-    font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5rem;
+  flex-grow: 1;
+  white-space: nowrap;
+  font-size: 18px;
 }
 
 .headerIcon {
-    color: #5f6368;
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 4px;
-    padding: 0 0 0 100px;
+  color: #5f6368;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 4px;
+  padding: 0 0 0 100px;
 }
-.headerTitleWrap{
-    width: 50%;
+.headerTitleWrap {
+  width: 50%;
 }
-.headerIcon{
-    width: 50%;
+.headerIcon {
+  width: 50%;
 }
-.glo-icon-close{
-    height: 40px;
-    width: 40px;
-    display: flex;
-    justify-content:center;
-    align-items: center;
+.glo-icon-close {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.glo-icon-close:hover{
-    background-color: #F1F3F4;
-    border-radius: 100%;
+.glo-icon-close:hover {
+  background-color: #f1f3f4;
+  border-radius: 100%;
 }
 .tooltip {
-    position: relative;
+  position: relative;
 }
 
 .tooltip .tooltiptext {
-visibility: hidden;
-background-color: #555;
-color: #fff;
-text-align: center;
-border-radius: 4px;
-padding: 5px;
-position: absolute;
-z-index: 1;
-top: 110%;
-right: 1px;
-opacity: 0;
-transition: opacity 0.3s;
-font-size: 12px;
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 110%;
+  right: 1px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
 }
 
 .tooltip:hover .tooltiptext {
-visibility: visible;
-opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 .bodyFrameChat {
-    box-sizing: border-box;
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 8px;
-    -webkit-user-select: text;
-    width: 100%;
-    height: 609px;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 8px;
+  -webkit-user-select: text;
+  width: 100%;
+  height: calc(100% - 232px);
 }
 
-.footerFrameChat{
-    align-items: center;
-    background: #f1f3f4;
-    border-radius: 25px;
-    display: flex;
-    flex-direction: row;
-    min-height: 47px;
-    margin: 15px;
+.footerFrameChat {
+  align-items: center;
+  background: #f1f3f4;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: row;
+  min-height: 47px;
+  margin: 15px;
 }
 
 .footerFrameChat .formSendMessage {
-    display: flex;
+  display: flex;
 }
 
 .footerFrameChat .footerInputChat input {
-    display: inline-flex;
-    flex-direction: column;
-    position: relative;
-    flex: 1;
-    border-radius: 25px;
-    border: 1px solid #F1F3F4;
-    padding: 0;
-    height: 100px;
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  border-radius: 25px;
+  border: 1px solid #f1f3f4;
+  padding: 0;
+  height: 100px;
 }
 
 .footerFrameChat .footerInputChat input {
-    border: none;
-    background: #f1f3f4;
-    height: 100%;
-    width: 280px;
-    padding-left: 20px;
+  border: none;
+  background: #f1f3f4;
+  height: 100%;
+  width: 280px;
+  padding-left: 20px;
 }
 
-.footerFrameChat .footerInputChat input:focus{
-    outline: none;
+.footerFrameChat .footerInputChat input:focus {
+  outline: none;
 }
 
 .footerFrameChat .formSendMessage .footerChatIconSend {
-    display: inline-flex;
-    color: #ACAFB0;
+  display: inline-flex;
+  color: #acafb0;
 }
 
 .footerFrameChat .formSendMessage .iconActive {
-    color: #1a73e8;
+  color: #1a73e8;
 }
 
 .footerInputChat {
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    height: auto;
-    padding: 0;
-    transition: none;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  height: auto;
+  padding: 0;
+  transition: none;
 }
 
 .notificationChat {
-    background: #f1f3f4;
-    border-radius: 8px;
-    margin: 12px;
-    padding: 12px;
-    font-size: 12px;
-    text-align: center;
+  background: #f1f3f4;
+  border-radius: 8px;
+  margin: 12px;
+  padding: 12px;
+  font-size: 12px;
+  text-align: center;
 }
 
-.bodyFrameChat{
-    text-align: left;
-    display: flex;
-    flex-direction: column;
+.bodyFrameChat {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
-.bodyFrameChat .rowChat{
-    padding: 14px 24px;
+.bodyFrameChat .rowChat {
+  padding: 14px 24px;
 }
 
 .bodyFrameChat .rowChat .headerRowChat {
-    display: flex;
+  display: flex;
 }
 
 .bodyFrameChat .rowChat .inputMessage {
-    margin-top: 6px;
+  margin-top: 6px;
 }
 
 .bodyFrameChat .rowChat .headerRowChat .timeRowChat {
-    margin-left: 10px;
-    color: #5f6368;
-    font-size: 12px;
-    align-self: center;
+  margin-left: 10px;
+  color: #5f6368;
+  font-size: 12px;
+  align-self: center;
 }
 
 .bodyFrameChat .rowChat .headerRowChat .nameRowChat {
-    color: #202124;
-    font-weight: 600;
+  color: #202124;
+  font-weight: 600;
 }
+
+/* @media screen and (min-width: 375px) and (max-width: 800px) and (min-height: 100px) and (max-height: 667px) {
+  .bodyFrameChat {
+    height: 375px;
+  }
+}
+
+@media screen and (min-width: 375px) and (max-width: 800px) and (min-height: 668px) and (max-height: 844px) {
+  .bodyFrameChat {
+    height: 535px;
+  }
+}
+
+@media screen and (min-width: 375px) and (max-width: 800px) and (min-height: 845px) and (max-height: 896px) {
+  .bodyFrameChat {
+    height: 585px;
+  }
+}
+@media screen and (min-width: 375px) and (max-width: 800px) and (min-height: 897px) {
+  .bodyFrameChat {
+    height: 700px;
+  }
+}
+
+@media screen and (min-width: 801px) and (max-width: 1200px) {
+  .bodyFrameChat {
+    height: 820px;
+  }
+} */

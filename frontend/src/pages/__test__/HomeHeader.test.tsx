@@ -1,10 +1,10 @@
-import "@testing-library/jest-dom/extend-expect";
-import { render, waitFor } from "@testing-library/react";
+import '@testing-library/jest-dom/extend-expect';
+import { render, waitFor } from '@testing-library/react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Header } from './HomeHeader';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Header } from '../../components/HomeHeader/HomeHeader';
 
 const logoLabel = 'Unicorn';
 configure({ adapter: new Adapter() });
@@ -25,7 +25,5 @@ describe('Name of the group', () => {
     //     button.find('button').simulate('click');
     //     expect(mockCallBack.mock.calls.length).toEqual(1);
     // });
-    test('show sub-menu when user logged click avatar', () => {
-
-    });
+    test('show sub-menu when user logged click avatar', () => {});
 });

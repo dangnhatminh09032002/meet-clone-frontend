@@ -143,6 +143,11 @@ body {
   background-color: #eee;
 }
 
+.btn-conversations:disabled {
+  color: gray;
+  background-color: unset;
+}
+
 .glo-notify {
   width: 100%;
   text-align: center;
@@ -154,7 +159,30 @@ body {
   margin-left: 15px;
 }
 
-@media screen and (min-width: 375px) and (max-width: 1200px) {
+@media screen and (min-width: 23.4375em) and (max-width: 37.5em) {
+  .home-page .body .left-side .content .action-btn .btn {
+    width: 100%;
+    height: unset !important;
+  }
+  .home-page
+    .body
+    .left-side
+    .content
+    .action-btn
+    .input-block
+    .input-section
+    input {
+    height: 50px !important;
+  }
+  .right-side {
+    display: none;
+  }
+  .home-page .body .left-side {
+    margin-top: 10%;
+  }
+}
+
+@media screen and (min-width: 23.4375em) and (max-width: 75em) {
   .home-page .body {
     flex-direction: column;
     height: unset;
@@ -185,9 +213,7 @@ body {
   .home-page {
     height: auto;
   }
-  .right-side {
-    margin-top: 10px;
-  }
+
   .home-page
     .body
     .left-side
@@ -200,7 +226,7 @@ body {
   }
 }
 
-@media screen and (min-width: 577px) and (max-width: 992px) {
+@media screen and (min-width: 36.0625em) and (max-width: 62em) {
   .home-page .body {
     padding: 20px;
   }
@@ -223,7 +249,7 @@ body {
   }
 }
 
-@media screen and (min-width: 769px) and (max-width: 992px) {
+@media screen and (min-width: 48.0625em) and (max-width: 62em) {
   .home-page .body .left-side .content .action-btn {
     flex-direction: row;
   }
@@ -256,7 +282,7 @@ body {
   }
 }
 
-@media screen and (min-width: 993px) and (max-width: 1200px) {
+@media screen and (min-width: 62.0625em) and (max-width: 75em) {
   .home-page .body .left-side {
     max-width: unset;
     width: 100%;
@@ -297,7 +323,7 @@ body {
   }
 }
 
-@media screen and (min-width: 1201px){
+@media screen and (min-width: 75.0625em) {
   .home-page .body {
     padding: 0px 15px;
   }
@@ -321,7 +347,7 @@ body {
     width: 80%;
     margin: 0 auto;
   }
-  .home-page .body{
+  .home-page .body {
     height: calc(100vh - 110px) !important;
   }
 }
