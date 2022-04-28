@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const server = () =>
   axios.create({
-    baseURL: process.env.BASE_URL || "http://128.199.112.76:8080",
+    baseURL: "https://glomeet.glotechvn.com",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
